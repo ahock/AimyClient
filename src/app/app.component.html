@@ -1,21 +1,87 @@
-<!--The content below is only a placeholder and can be replaced.-->
-<div style="text-align:center">
-  <h1>
-    Welcome to {{ title }}!
-  </h1>
-  <img width="300" alt="Angular Logo" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNTAgMjUwIj4KICAgIDxwYXRoIGZpbGw9IiNERDAwMzEiIGQ9Ik0xMjUgMzBMMzEuOSA2My4ybDE0LjIgMTIzLjFMMTI1IDIzMGw3OC45LTQzLjcgMTQuMi0xMjMuMXoiIC8+CiAgICA8cGF0aCBmaWxsPSIjQzMwMDJGIiBkPSJNMTI1IDMwdjIyLjItLjFWMjMwbDc4LjktNDMuNyAxNC4yLTEyMy4xTDEyNSAzMHoiIC8+CiAgICA8cGF0aCAgZmlsbD0iI0ZGRkZGRiIgZD0iTTEyNSA1Mi4xTDY2LjggMTgyLjZoMjEuN2wxMS43LTI5LjJoNDkuNGwxMS43IDI5LjJIMTgzTDEyNSA1Mi4xem0xNyA4My4zaC0zNGwxNy00MC45IDE3IDQwLjl6IiAvPgogIDwvc3ZnPg==">
-</div>
-<h2>Here are some links to help you start: </h2>
-<ul>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://angular.io/tutorial">Tour of Heroes</a></h2>
-  </li>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://angular.io/cli">CLI Documentation</a></h2>
-  </li>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://blog.angular.io/">Angular blog</a></h2>
-  </li>
-</ul>
+<nav class="navbar navbar-dark bg-dark">
+  <div class="container-fluid">
+      <a class="navbar-brand" href="#">Aimy - Deine Kompetenzen</a>
+      <form class="form-inline">
 
-<router-outlet></router-outlet>
+        <button class="btn btn-primary my-2 my-sm-0 mr-2"
+          routerLink="/" type="button">
+            Home
+        </button>
+
+<div class="btn-group" dropdown>
+  <button id="button-basic" dropdownToggle type="button" class="btn btn-primary my-2 my-sm-0 mr-2 dropdown-toggle"
+          aria-controls="dropdown-basic">
+    <i class="fas fa-address-book">&nbsp;</i>Funktionen <span class="caret"></span>
+  </button>
+  <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu"
+      role="menu" aria-labelledby="button-basic">
+    <li role="menuitem"><a class="dropdown-item" href="#" (click)="alertToggle()">Alert</a></li>
+    <li role="menuitem"><a routerLink="/comp1" routerLinkActive="active" class="dropdown-item">Kompetenz-Liste</a></li>
+    <li role="menuitem"><a routerLink="/comp2" class="dropdown-item">Kompetenz-Katalog</a></li>
+    <li role="menuitem"><a routerLink="/competence" class="dropdown-item">Kompetenz-Details</a></li>
+    <li class="divider dropdown-divider"></li>
+    <li role="menuitem"><a class="dropdown-item" href="#">Separated link</a>
+    </li>
+  </ul>
+</div>
+
+        <button id="qsLoginBtn"
+          class="btn btn-primary my-2 my-sm-0"
+          *ngIf="!auth.isAuthenticated()"
+          (click)="auth.login()" type="button">
+            Log In
+        </button>
+
+        <button id="qsLogoutBtn"
+          class="btn btn-primary my-2 my-sm-0"
+          *ngIf="auth.isAuthenticated()"
+          (click)="auth.logout()" type="button">
+            Log Out
+        </button>
+
+      </form>
+  </div>
+</nav>
+
+<!--The content below is only a placeholder and can be replaced.-->
+
+<div *ngIf="!auth.isAuthenticated()">
+  <!--  You are not logged in! / guest -->
+
+  <carousel>
+    <slide>
+      <img src="assets/lucas-sankey-1339354-unsplash.jpg" alt="first slide" style="display: block; width: 100%;">
+      <div class="carousel-caption d-none d-md-block">
+        <h3>Aimy hilft</h3>
+        <p>Aimy hilft den Weg zu neuen Kompetenzen zu finden. [Photo by Lucas Sankey on <a href="https://unsplash.com">Unsplash</a>]</p>
+      </div>
+    </slide>
+    <slide>
+      <img src="assets/markus-spiske-1375298-unsplash.jpg" alt="second slide" style="display: block; width: 100%;">
+      <div class="carousel-caption d-none d-md-block">
+        <h3>Aimy nutzt</h3>
+        <p>Aimy nutz die kollektiven Lernerfahrungen, um auch dich weiter zu bringen. [Photo by Markus Spiske on <a href="https://unsplash.com">Unsplash</a>]</p>
+      </div>
+    </slide>
+    <slide>
+      <img src="assets/simon-matzinger-317150-unsplash.jpg" alt="third slide" style="display: block; width: 100%;">
+      <div class="carousel-caption d-none d-md-block">
+        <h3>Du erreichst </h3>
+        <p>Du erwirbst neue Kompetenzen, die dir neue Möglichkeiten eröffnen. [Photo by Simon Matzinger on <a href="https://unsplash.com">Unsplash</a>]</p>
+      </div>
+    </slide>
+  </carousel>
+
+</div>
+
+<alert type="success" *ngIf="alertBoxShow" id="alertbox">hello</alert>
+
+<main role="main" class="container">
+  <router-outlet></router-outlet>
+</main>
+
+<!--
+<nav class="navbar fixed-bottom navbar-light bg-light">
+  <app-status></app-status>
+</nav>
+-->

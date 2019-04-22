@@ -1,0 +1,43 @@
+<div *ngIf="auth.isAuthenticated()">
+  <!--  You are logged in! -->
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-3">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">Aktuelle Präsenz</h5>
+            <p class="card-text">Eine Aktivität bedarf deiner sofortigen Aufmerksamkeit. Nimm teil.</p>
+            <a href="#" class="btn btn-primary">Teilnehmen</a>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-3">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">Lern-Status</h5>
+            <p class="card-text">Das ist dein augenblicklicher Status beim Erwerb neuer Kompetenzen.</p>
+            <a href="#" class="btn btn-primary">Vollständig</a>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-3">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">Gute Lernquelle</h5>
+            <p class="card-text">Hier kann eine gute neue Lernquelle aufgenommen werden.</p>
+            <a href="#" class="btn btn-primary">Aufnehmen</a>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-3">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">Neue Kompetenzen</h5>
+            <p class="card-text">Diese Liste neuen Kompetenzen könnten dich interessieren.</p>
+            <a href="#" class="btn btn-primary">Zeigen</a>
+          </div>
+        </div>
+      </div>
+    </div> <!-- row -->
+  </div> <!-- container -->
+</div> <!-- End logged in -->
