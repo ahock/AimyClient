@@ -47,7 +47,6 @@
 
 <div *ngIf="!auth.isAuthenticated()">
   <!--  You are not logged in! / guest -->
-
   <carousel>
     <slide>
       <img src="assets/lucas-sankey-1339354-unsplash.jpg" alt="first slide" style="display: block; width: 100%;">
@@ -71,7 +70,18 @@
       </div>
     </slide>
   </carousel>
+</div>
 
+<div *ngIf="auth.isAuthenticated()">
+  <!--  You are logged in! -->
+  <div *ngIf="user.isRegisteredUser()">
+    <p>Angemeldet und registrier</p>
+    
+  </div>
+  <div *ngIf="!user.isRegisteredUser()">
+    <p>Angemeldet aber nicht registriert</p>
+    
+  </div>
 </div>
 
 <alert type="success" *ngIf="alertBoxShow" id="alertbox">hello</alert>

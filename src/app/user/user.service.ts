@@ -99,11 +99,11 @@ export class UserService {
         console.log("Valid User", this.user_valid);
         if(this.user_loaded&&!this.user_valid) {
           console.log("Registration");
-          this.router.navigate(['/registration']);        
+          this.router.navigate(['/registration']);
+          return false;
           }
         })
     }
     return true;
   }
-  
 }
