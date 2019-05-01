@@ -1,6 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
+import { FormsModule }   from '@angular/forms';
 
 import { AlertModule, ButtonsModule, BsDatepickerModule, BsDropdownModule, CarouselModule } from 'ngx-bootstrap';
 
@@ -29,7 +30,8 @@ import { RegistrationComponent } from './registration/registration.component';
     CarouselModule.forRoot(),
     BrowserModule,
     AppRoutingModule,
-    HttpClientModule
+    HttpClientModule,
+    FormsModule
   ],
   providers: [
     AuthServiceService,

@@ -2,43 +2,36 @@
   <div class="container-fluid">
       <a class="navbar-brand" href="#">Aimy - Deine Kompetenzen</a>
       <form class="form-inline">
-
-        <button class="btn btn-primary my-2 my-sm-0 mr-2"
-          routerLink="/" type="button">
-            Home
-        </button>
-
-<div class="btn-group" dropdown>
-  <button id="button-basic" dropdownToggle type="button" class="btn btn-primary my-2 my-sm-0 mr-2 dropdown-toggle"
-          aria-controls="dropdown-basic">
-    <i class="fas fa-address-book">&nbsp;</i>Funktionen <span class="caret"></span>
-  </button>
-  <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu"
-      role="menu" aria-labelledby="button-basic">
-    <li role="menuitem"><a class="dropdown-item" href="#" (click)="alertToggle()">Alert</a></li>
-    <li role="menuitem"><a routerLink="/comp1" routerLinkActive="active" class="dropdown-item">Kompetenz-Liste</a></li>
-    <li role="menuitem"><a routerLink="/comp2" class="dropdown-item">Kompetenz-Katalog</a></li>
-    <li role="menuitem"><a routerLink="/competence" class="dropdown-item">Kompetenz-Details</a></li>
-    <li class="divider dropdown-divider"></li>
-    <li role="menuitem"><a class="dropdown-item" href="#">Separated link</a>
-    </li>
-  </ul>
-</div>
-
+        <button class="btn btn-primary my-2 my-sm-0 mr-2" routerLink="/" type="button">Home</button>
+        <button class="btn btn-primary my-2 my-sm-0 mr-2" (click)="this.status.setStatusText('User Status: '+this.user.user_status)" type="button">Status</button>
+        <div class="btn-group" dropdown>
+          <button id="button-basic" dropdownToggle type="button" class="btn btn-primary my-2 my-sm-0 mr-2 dropdown-toggle"
+                  aria-controls="dropdown-basic">
+            <i class="fas fa-address-book">&nbsp;</i>Funktionen <span class="caret"></span>
+          </button>
+          <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu"
+              role="menu" aria-labelledby="button-basic">
+            <li role="menuitem"><a class="dropdown-item" href="#" (click)="alertToggle()">Alert</a></li>
+            <li role="menuitem"><a routerLink="/comp1" routerLinkActive="active" class="dropdown-item">Kompetenz-Liste</a></li>
+            <li role="menuitem"><a routerLink="/comp2" class="dropdown-item">Kompetenz-Katalog</a></li>
+            <li role="menuitem"><a routerLink="/competence" class="dropdown-item">Kompetenz-Details</a></li>
+            <li class="divider dropdown-divider"></li>
+            <li role="menuitem"><a routerLink="/registration" class="dropdown-item">Registrierung</a>
+            </li>
+          </ul>
+        </div>
         <button id="qsLoginBtn"
           class="btn btn-primary my-2 my-sm-0"
           *ngIf="!auth.isAuthenticated()"
           (click)="auth.login()" type="button">
             Log In
         </button>
-
         <button id="qsLogoutBtn"
           class="btn btn-primary my-2 my-sm-0"
           *ngIf="auth.isAuthenticated()"
           (click)="auth.logout()" type="button">
             Log Out
         </button>
-
       </form>
   </div>
 </nav>
@@ -74,13 +67,22 @@
 
 <div *ngIf="auth.isAuthenticated()">
   <!--  You are logged in! -->
-  <div *ngIf="user.isRegisteredUser()">
-    <p>Angemeldet und registrier</p>
-    
-  </div>
-  <div *ngIf="!user.isRegisteredUser()">
-    <p>Angemeldet aber nicht registriert</p>
-    
+  <div *ngIf="this.user.user_status==2">
+    <div class="container">
+      <div class="row">
+        <div class="col">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">Willkommen zurück {{ user.full_name }}</h5>
+              <p class="card-text">Deine letzte Anmeldung war am: {{ user.last_login }}.</p>
+              <p class="card-text">Primäre Email-Adresse: {{ user.email1 }}.</p>
+              <p class="card-text">Secundäre Email-Adresse: {{ user.email2 }}.</p>
+              <a href="#" class="btn btn-primary">Danke, alles klar</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -90,8 +92,7 @@
   <router-outlet></router-outlet>
 </main>
 
-<!--
+
 <nav class="navbar fixed-bottom navbar-light bg-light">
   <app-status></app-status>
 </nav>
--->

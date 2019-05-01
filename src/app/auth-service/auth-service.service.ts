@@ -3,10 +3,12 @@ import { AUTH_CONFIG } from './auth0-variables';
 import { Router } from '@angular/router';
 import * as auth0 from 'auth0-js';
 import { StatusService } from '../status/status.service';
+//import { UserService } from '../user/user.service';
 
 @Injectable()
 export class AuthServiceService {
 
+  private loginCallback: Function;
   private _idToken: string;
   private _accessToken: string;
   private _expiresAt: number;
@@ -21,13 +23,6 @@ export class AuthServiceService {
     family_name:"",
     locale: ""
   };
-  
-  public email: string;
-  public name: string;
-  public nickname: string;
-  public gender: string;
-  public given_name: string;
-  public family_name: string;
 
   auth0 = new auth0.WebAuth({
     clientID: AUTH_CONFIG.clientID,
@@ -51,6 +46,11 @@ export class AuthServiceService {
     return this._idToken;
   }
 
+  public setLoginCallback(callback: Function): void {
+    this.loginCallback = callback;
+//    this.loginCallback().call();
+  }
+  
   public login(): void {
     this.auth0.authorize();
   }
@@ -77,17 +77,11 @@ export class AuthServiceService {
     this._expiresAt = expiresAt;
     this._userToken = authResult.idTokenPayload.sub;
     
-    console.log("AuthService: localLogin", authResult.idTokenPayload);
-    console.log("Token:   ", this._userToken);
-    console.log("Expires: ", new Date(this._expiresAt));
-    console.log("Now:     ", new Date());
-
-    this.email = authResult.idTokenPayload['email'];
-    this.gender = authResult.idTokenPayload['gender'];
-    this.name = authResult.idTokenPayload['name'];
-    this.nickname = authResult.idTokenPayload['nickname'];
-    this.given_name = authResult.idTokenPayload['given_name'];
-    this.family_name = authResult.idTokenPayload['family_name'];
+//    console.log("AuthService: localLogin", authResult.idTokenPayload);
+//    console.log("Token:   ", this._userToken);
+//    console.log("Expires: ", new Date(this._expiresAt));
+//    console.log("Now:     ", new Date());
+    
 
     this.auth_detail.email = authResult.idTokenPayload['email'];
     this.auth_detail.name = authResult.idTokenPayload['name'];
@@ -97,17 +91,22 @@ export class AuthServiceService {
     this.auth_detail.family_name = authResult.idTokenPayload['family_name'];
     this.auth_detail.locale = authResult.idTokenPayload['locale'];
     
+    console.log("Details: ", this.auth_detail);
+    
     localStorage.setItem('user_token', authResult.idTokenPayload.sub);
     localStorage.setItem('expires_at', String(expiresAt));
     localStorage.setItem('access_token', authResult.accessToken);
     
     this.status.setStatusText(authResult.idTokenPayload.sub);
     
+    this.loginCallback();
+    
     callback.call();
   }
 
   public renewTokens(): void {
     this.auth0.checkSession({}, (err, authResult) => {
+        console.log("renewTokens", authResult);
        if (authResult && authResult.accessToken && authResult.idToken) {
          this.localLogin(authResult, ()=>{});
        } else if (err) {
@@ -145,7 +144,7 @@ export class AuthServiceService {
   }
 
   public getToken(): string {
-    return this._userToken;
+    return localStorage.getItem('user_token');
   }
   
   public getExpiration(): string {

@@ -4,7 +4,7 @@ import { Injectable } from '@angular/core';
   providedIn: 'root'
 })
 export class StatusService {
-  private status_text: string = "Ihr Status hier";
+  private status_text: string = "Nicht angemeldet";
   
   constructor() { }
   

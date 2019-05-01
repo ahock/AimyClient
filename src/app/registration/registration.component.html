@@ -8,23 +8,23 @@ id: letzter teil vom token
 lang
 -->
 
-<form>
+<form #regForm="ngForm">
   <div class="form-group row">
     <label for="inputEmail" class="col-sm-2 col-form-label">Email</label>
     <div class="col-sm-10">
-      <input type="email" class="form-control" id="inputEmail" [placeholder]="this.auth.auth_detail.email">
+      <input type="email" class="form-control" id="inputEmail" name="email1" [placeholder]="this.auth.auth_detail.email" [(ngModel)]="this.user.email1">
     </div>
   </div>
   <div class="form-group row">
     <label for="inputFirstName" class="col-sm-2 col-form-label">Vorname</label>
     <div class="col-sm-10">
-      <input type="password" class="form-control" id="inputFirstName" [placeholder]="this.auth.auth_detail.given_name">
+      <input type="text" class="form-control" id="inputFirstName" name="firstname" [(ngModel)]="this.user.firstname">
     </div>
   </div>
   <div class="form-group row">
     <label for="inputLastName" class="col-sm-2 col-form-label">Nachname</label>
     <div class="col-sm-10">
-      <input type="password" class="form-control" id="inputLastName" [placeholder]="this.auth.auth_detail.family_name">
+      <input type="text" class="form-control" id="inputLastName" name="lastname" [placeholder]="this.auth.auth_detail.family_name" [(ngModel)]="this.user.lastname">
     </div>
   </div>
   <fieldset class="form-group">
@@ -32,22 +32,16 @@ lang
       <legend class="col-form-label col-sm-2 pt-0">Geschlecht</legend>
       <div class="col-sm-10">
         <div class="form-check">
-          <input class="form-check-input" type="radio" name="gridRadios" id="gridRadios1" value="option1" checked>
-          <label class="form-check-label" for="gridRadios1">
-            Männlich
-          </label>
+          <input class="form-check-input" type="radio" name="gridRadios" id="gridRadios1" value="male" checked [(ngModel)]="this.user.gender">
+          <label class="form-check-label" for="gridRadios1">Männlich</label>
         </div>
         <div class="form-check">
-          <input class="form-check-input" type="radio" name="gridRadios" id="gridRadios2" value="option2">
-          <label class="form-check-label" for="gridRadios2">
-            Weiblich
-          </label>
+          <input class="form-check-input" type="radio" name="gridRadios" id="gridRadios2" value="female" [(ngModel)]="this.user.gender">
+          <label class="form-check-label" for="gridRadios2">Weiblich</label>
         </div>
-        <div class="form-check disabled">
-          <input class="form-check-input" type="radio" name="gridRadios" id="gridRadios3" value="option3">
-          <label class="form-check-label" for="gridRadios3">
-            Divers
-          </label>
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="gridRadios" id="gridRadios3" value="divers" [(ngModel)]="this.user.gender">
+          <label class="form-check-label" for="gridRadios3">Divers</label>
         </div>
       </div>
     </div>
@@ -55,15 +49,15 @@ lang
   <div class="form-group row">
       <label class="col-sm-2 col-form-label" for="inputLanguage">Sprache</label>
       <div class="col-sm-10">
-      <select id="inputLanguage" class="form-control">
-        <option selected>Deutsch</option>
-        <option>Englisch</option>
+      <select id="inputLanguage" class="form-control" name="language" [(ngModel)]="this.user.language">
+        <option selected value="de">Deutsch</option>
+        <option value="en">Englisch</option>
       </select>
       </div>
   </div>
   <div class="form-group row">
     <div class="col-sm-10">
-      <button type="submit" class="btn btn-primary">Registrieren</button>
+      <button type="submit" class="btn btn-primary" (click)="this.user.doRegistration()">Registrieren</button>
     </div>
   </div>
 </form>

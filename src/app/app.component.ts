@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { AuthServiceService } from './auth-service/auth-service.service';
 import { UserService } from './user/user.service';
-import { StatusComponent } from './status/status.component';
+import { StatusService } from './status/status.service';
 import { CarouselModule } from 'ngx-bootstrap';
 
 @Component({
@@ -14,7 +14,7 @@ export class AppComponent {
   singleModel = '1';
   alertBoxShow = false;
 
-  constructor(public auth: AuthServiceService, public user: UserService) {
+  constructor(public auth: AuthServiceService, public user: UserService, public status: StatusService) {
     console.log("AppComponent: constructor");
     auth.handleAuthentication();
   }
@@ -22,7 +22,7 @@ export class AppComponent {
   ngOnInit() {
     if (this.auth.isAuthenticated()) {
       console.log("AppComponent: ngOnInit - isAuthenticated");
-//      this.auth.renewTokens();
+      this.auth.renewTokens();
     }
     else {
       console.log("AppComponent: ngOnInit - NOT Authenticated");

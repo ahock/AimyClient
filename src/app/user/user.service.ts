@@ -20,34 +20,148 @@ import { StatusService } from '../status/status.service';
   providedIn: 'root'
 })
 export class UserService {
+  public static NO_USER = 0;
+  public static USER_VALID = 1;
+  public static USER_OK = 2;
+  public static USER_REGISTRATION = 3;
+  
+  public user_status = UserService.NO_USER;
+  
   private user_token: string = "";
   private user_valid: boolean = false;
   private user_loaded: boolean = false;
   private data_loadTime: Date;
 
+  public firstname: string = "";
+  public lastname: string = "";
+  public full_name: string = "";
+  public last_login: Date;
+  public email1: string = "";
+  public email2: string = "";
+  public gender: string ="";
+  public language: string = "";
+
+  private error;
+
   constructor(public router: Router, public auth: AuthServiceService, public status: StatusService, private http: HttpClient) {
-    console.log("UserService: constructor");
+    
+    this.auth.setLoginCallback(this.loginDone);
+    
+    if (this.auth.isAuthenticated()) {
+      this.user_token = this.auth.getToken();
+      this.user_status = UserService.USER_VALID;
+      this.status.setStatusText("Angemeldet");
+      console.log("UserService - constructor: isAuthenticated", this.user_status, this.user_token);
+      this.loadUserData(() => {
+        this.status.setStatusText("Daten geladen");
+        console.log("User_Status:",this.user_status)
+        if(this.user_status == UserService.USER_REGISTRATION) {this.router.navigate(['/registration'])};
+      });
+    }
+    else {
+      console.log("UserService - constructor: NOT Authenticated", this.user_status);
+    }
   }
 
+  public loginDone():void {
+    console.log("loginDone", this.user_status);
+    this.user_status = UserService.USER_VALID;
+    console.log("loginDone", this.user_status);
+  }
+  
+  public doRegistration():boolean {
+
+    console.log("doRegistration");
+    console.log("firstname", this.firstname);
+    console.log("lastname", this.lastname);
+    console.log("full_name", this.full_name);
+    console.log("email", this.email1);
+    console.log("email2", this.email2);
+    console.log("gender", this.gender);
+    console.log("language", this.language);
+    
+    var payload = {
+      token: this.auth.getToken(),
+      firstname:this.firstname,
+      lastname:this.lastname,
+      email1:this.email1,
+      email2:this.email2,
+      gender:this.gender,
+      language:this.language,
+    };
+    
+    this.http
+      .get(APP_CONFIG.storageURL+"/api/0.0.1/user/add", {params:{UserToken: this.auth.getToken(), UserData: JSON.stringify(payload)}})
+      .subscribe((data) => {
+        console.log("saveUserData", data);
+      });    
+    return true;
+  }
+  
   private loadUserData(callback): void {
     console.log("UserService: loadUserData");
     this.data_loadTime = new Date();
-    console.log("Config: ", APP_CONFIG.clientID, APP_CONFIG.storageURL, APP_CONFIG.apiVersion);
-    console.log("Token:",this.auth.getToken());
-    console.log("LoadDate: ", this.data_loadTime);
+    this.email2 = this.auth.auth_detail.email;
+    
+//    console.log("Config: ", APP_CONFIG.clientID, APP_CONFIG.storageURL, APP_CONFIG.apiVersion);
+//    console.log("Token:",this.auth.getToken());
+//    console.log("LoadDate: ", this.data_loadTime);
     if(this.auth.getToken()!="") {
       this.http
         .get(APP_CONFIG.storageURL+"/api/0.0.1/user/get", {params:{UserToken: this.auth.getToken(), ClientId: APP_CONFIG.clientID}})
-        .subscribe(data => {
+        .subscribe((data) => {
           console.log("loadUserData", data);
+          // Copy user data to service object
+          if( data['success'] ) {
+            // Valid return data for user
+            this.firstname = data['user']['firstname'];
+            this.lastname = data['user']['lastname'];
+            this.full_name = this.firstname + " " + this.lastname;
+            this.email2 = data['user']['email'];
+            this.last_login = new Date(data['user']['last_login']);
+
+            this.user_status = UserService.USER_OK;
+            /*
+            Datastructure from user database:
+            
+            email: "ahock@itondemand.eu"
+            firstname: "Andreas"
+            lastname: "Hock"
+
+            last_login: "2018-10-11T11:56:11.502Z"
+            login_history: []
+            
+            groups: (5) ["admin", "team1", "dozent1", "dswi17h", "dswi16h"]
+            lang: "hallo"
+
+            eduobjectives: (5) [{…}, {…}, {…}, {…}, {…}]
+            masteries: (4) [{…}, {…}, {…}, {…}]
+            reviews: []          
+            
+            */          
+          }
+          else {
+            this.full_name = "User not valid!";
+            this.user_status = UserService.USER_REGISTRATION;
+          }
           this.user_loaded = true;
           if(data['success'] == true) {
             this.user_valid = true;  
+            this.user_status = UserService.USER_OK;
           } else {
             this.user_valid = false;
+            this.user_status = UserService.USER_REGISTRATION;
           }
           callback.call();
-        });
+        },
+        // Error
+        error => {
+          this.error = error;
+          console.log("HTTP Error", this.error);
+          this.status.setStatusText("Database Error: " + new Date());
+          callback.call();
+        }
+        );
     }      
 //      .pipe(
 //        catchError(this.handleError),
@@ -94,11 +208,11 @@ export class UserService {
     console.log("UserService: isRegisteredUser");
     if(!this.user_loaded) { 
       this.loadUserData(() => {
-        console.log("Token: ", this.auth.getToken());
-        console.log("Loaded", this.user_loaded);
-        console.log("Valid User", this.user_valid);
+//        console.log("Token: ", this.auth.getToken());
+//        console.log("Loaded", this.user_loaded);
+//        console.log("Valid User", this.user_valid);
         if(this.user_loaded&&!this.user_valid) {
-          console.log("Registration");
+//          console.log("Registration");
           this.router.navigate(['/registration']);
           return false;
           }
