@@ -1,0 +1,25 @@
+<div class="container">
+<table class="table table-hover">
+  <thead class="thead-light">
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">First</th>
+      <th scope="col">Last</th>
+      <th scope="col">Handle</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let user of this.users.getUsers(); index as i" [ngClass]="{'table-primary' : i===this.users.selected_user_index}" (click)="selectUser(i)">
+      <th scope="row">{{ i }}</th>
+      <td>{{ user.firstname }}</td>
+      <td>{{ user.lastname }}</td>
+      <td>{{ user.token }}</td>
+    </tr>
+  </tbody>
+</table>
+
+<div>
+<!--  <h3>Token: {{ this.users.token_selected }}</h3> -->
+  
+</div>
+</div>
