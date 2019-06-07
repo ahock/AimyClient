@@ -59,7 +59,7 @@ export class AuthServiceService {
     this.auth0.parseHash((err, authResult) => {
       if (authResult && authResult.accessToken && authResult.idToken) {
         this.localLogin(authResult, () => {
-          this.router.navigate(['/']);
+          this.router.navigate(['/dialog']);
         });
       } else if (err) {
         this.router.navigate(['/']);
@@ -105,6 +105,7 @@ export class AuthServiceService {
   }
 
   public renewTokens(): void {
+    /*
     this.auth0.checkSession({}, (err, authResult) => {
         console.log("renewTokens", authResult);
        if (authResult && authResult.accessToken && authResult.idToken) {
@@ -114,6 +115,7 @@ export class AuthServiceService {
          this.logout();
        }
     });
+    */
   }
 
   public logout(): void {

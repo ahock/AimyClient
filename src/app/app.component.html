@@ -2,12 +2,9 @@
   <div class="container-fluid">
       <a class="navbar-brand" href="#">Aimy - Deine Kompetenzen</a>
       <form class="form-inline">
-        <button class="btn btn-primary my-2 my-sm-0 mr-2" routerLink="/" type="button">Home</button>
-        <button class="btn btn-primary my-2 my-sm-0 mr-2" (click)="this.status.setStatusText('User Status: '+this.user.user_status)" type="button">Status</button>
         <div class="btn-group" dropdown>
           <button id="button-basic" dropdownToggle type="button" class="btn btn-primary my-2 my-sm-0 mr-2 dropdown-toggle"
-                  aria-controls="dropdown-basic">
-            <i class="fas fa-address-book">&nbsp;</i>Funktionen <span class="caret"></span>
+                  aria-controls="dropdown-basic">Action<span class="caret"></span>
           </button>
           <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu"
               role="menu" aria-labelledby="button-basic">
@@ -17,6 +14,17 @@
             <li role="menuitem"><a routerLink="/competence" class="dropdown-item">Kompetenz-Details</a></li>
             <li class="divider dropdown-divider"></li>
             <li role="menuitem"><a routerLink="/registration" class="dropdown-item">Registrierung</a>
+            <li role="menuitem"><a routerLink="/dialog" class="dropdown-item">Dialoge</a>
+            
+        <button class="btn btn-primary my-2 my-sm-0 mr-2" routerLink="/" type="button">Home</button>
+        <button class="btn btn-primary my-2 my-sm-0 mr-2" (click)="this.status.setStatusText('User Status: '+this.user.user_status)" type="button">Status</button>
+        <button id="qsLogoutBtn"
+          class="btn btn-primary my-2 my-sm-0"
+          *ngIf="auth.isAuthenticated()"
+          (click)="auth.logout()" type="button">
+            Log Out
+        </button>
+        
             </li>
           </ul>
         </div>
@@ -26,12 +34,7 @@
           (click)="auth.login()" type="button">
             Log In
         </button>
-        <button id="qsLogoutBtn"
-          class="btn btn-primary my-2 my-sm-0"
-          *ngIf="auth.isAuthenticated()"
-          (click)="auth.logout()" type="button">
-            Log Out
-        </button>
+
       </form>
   </div>
 </nav>
@@ -65,33 +68,65 @@
   </carousel>
 </div>
 
+<main role="main" class="container">
+  <router-outlet></router-outlet>
+</main>
+<!-- User is logged in -->
+
 <div *ngIf="auth.isAuthenticated()">
-  <!--  You are logged in! -->
   <div *ngIf="this.user.user_status==2">
+    
     <div class="container">
+      <div class="row">
+        <div class="col">&nbsp;</div>
+      </div>
       <div class="row">
         <div class="col">
           <div class="card">
-            <div class="card-body">
-              <h5 class="card-title">Willkommen zurück {{ user.full_name }}</h5>
-              <p class="card-text">Deine letzte Anmeldung war am: {{ user.last_login }}.</p>
-              <p class="card-text">Primäre Email-Adresse: {{ user.email1 }}.</p>
-              <p class="card-text">Secundäre Email-Adresse: {{ user.email2 }}.</p>
-              <a href="#" class="btn btn-primary">Danke, alles klar</a>
-            </div>
+            <h5 class="card-header">Auftrag</h5>
+          </div>
+          <div class="list-group">
+            <button type="button" routerLink="assignment/{{ aref.id }}" class="list-group-item list-group-item-action" *ngFor="let aref of this.user.getUser().assignmentrefs; index as i">
+              <div class="d-flex w-100 justify-content-between">
+                <h5 class="mb-1">{{ aref.name }}</h5>
+                <small>noch 1 Tag</small>
+              </div>
+              <p class="mb-1">Typ: {{ aref.type }}</p>
+              <small>Rating: </small>
+              <span class="badge badge-primary badge-pill">0/5</span>&nbsp;
+              <small>Comments: </small>
+              <span class="badge badge-primary badge-info">1</span>&nbsp;
+              <small>Status: {{ aref.status }}</small>
+            </button>
           </div>
         </div>
+        <div class="col">
+          <div class="card">
+            <h5 class="card-header">Kompetenzen</h5>
+          </div>
+          
+<div class="list-group">
+            <button type="button" class="list-group-item list-group-item-action" *ngFor="let sref of this.user.getUser().skillref; index as i">
+              <div class="d-flex w-100 justify-content-between">
+                <h5 class="mb-1">{{ sref.name }}</h5>
+                <small>{{ sref.togo }}</small>
+              </div>
+              <p class="mb-1">{{ sref.description }}</p>
+              <small>Rating: </small>
+              <span class="badge badge-primary badge-pill">{{ sref.rating }}</span>&nbsp;
+              <small>Comments: </small>
+              <span class="badge badge-primary badge-info">1</span>&nbsp;
+              <small>Status: {{ sref.status }}</small>
+            </button>
+</div>         
+          
+        </div>        
       </div>
     </div>
   </div>
 </div>
 
 <alert type="success" *ngIf="alertBoxShow" id="alertbox">hello</alert>
-
-<main role="main" class="container">
-  <router-outlet></router-outlet>
-</main>
-
 
 <nav class="navbar fixed-bottom navbar-light bg-light">
   <app-status></app-status>

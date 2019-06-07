@@ -10,9 +10,14 @@ import { AppComponent } from './app.component';
 
 import { AuthServiceService } from './auth-service/auth-service.service';
 import { UserService } from './user/user.service';
+import { UsersService } from './users/users.service';
 import { CompetenceComponent } from './competence/competence.component';
 import { StatusComponent } from './status/status.component';
 import { RegistrationComponent } from './registration/registration.component';
+import { DialogComponent } from './dialog/dialog.component';
+import { UsersComponent } from './users/users.component';
+import { SkillComponent } from './skill/skill.component';
+import { AssignmentComponent } from './assignment/assignment.component';
 
 @NgModule({
   declarations: [
@@ -20,7 +25,11 @@ import { RegistrationComponent } from './registration/registration.component';
     routingComponents,
     CompetenceComponent,
     StatusComponent,
-    RegistrationComponent
+    RegistrationComponent,
+    DialogComponent,
+    UsersComponent,
+    SkillComponent,
+    AssignmentComponent
   ],
   imports: [
     AlertModule.forRoot(),
@@ -35,7 +44,8 @@ import { RegistrationComponent } from './registration/registration.component';
   ],
   providers: [
     AuthServiceService,
-    UserService
+    UserService,
+    UsersService
     
   ],
   bootstrap: [AppComponent]

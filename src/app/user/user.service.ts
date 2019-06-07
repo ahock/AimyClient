@@ -15,6 +15,55 @@ import { map, filter, catchError } from 'rxjs/operators';
 import { APP_CONFIG } from '../app-variables';
 import { AuthServiceService } from '../auth-service/auth-service.service';
 import { StatusService } from '../status/status.service';
+import { LogService, Log } from '../log/log.service';
+
+export interface EduObjective {
+  oid: string;
+  name: string;
+  field: string;
+  selfassess: string;
+  notes: string;
+}
+export interface AssignmentRefs {
+  id: string;
+  name: string;
+  status: string;
+  type: string; 
+  active: Date;
+  submitted: Date;
+  due: Date;
+  attempts: string; 
+  daystogo: string;
+  rating: string;
+  comments: string;
+}
+export interface SkillSetRef {
+  
+}
+export interface SkillRef {
+  id: string; 
+  name: string; 
+  description: string;
+  status: string;
+  togo: string;
+  rating: string;
+}
+export interface User {
+    _id?: string;
+    token?: string;
+    name: string;
+    email: string;
+    firstname: string;
+    lastname: string;
+    login_history?: [];
+    reviews?: [];
+    groups?: string[];
+    goals?: [];
+    masteries?: [];
+    eduobjectives?: Array<EduObjective>;
+    assignmentrefs?: Array<AssignmentRefs>;
+    skillref?: Array<SkillRef>;
+}
 
 @Injectable({
   providedIn: 'root'
@@ -31,6 +80,8 @@ export class UserService {
   private user_valid: boolean = false;
   private user_loaded: boolean = false;
   private data_loadTime: Date;
+  
+  private activeuser: User;
 
   public firstname: string = "";
   public lastname: string = "";
@@ -43,7 +94,7 @@ export class UserService {
 
   private error;
 
-  constructor(public router: Router, public auth: AuthServiceService, public status: StatusService, private http: HttpClient) {
+  constructor(public router: Router, public auth: AuthServiceService, public status: StatusService, public log:LogService, private http: HttpClient) {
     
     this.auth.setLoginCallback(this.loginDone);
     
@@ -52,8 +103,11 @@ export class UserService {
       this.user_status = UserService.USER_VALID;
       this.status.setStatusText("Angemeldet");
       console.log("UserService - constructor: isAuthenticated", this.user_status, this.user_token);
+      
+      this.log.createLog(<Log>{token:this.user_token,area:"user",message:"login",content:"AimyClient"});
+      
       this.loadUserData(() => {
-        this.status.setStatusText("Daten geladen");
+        this.status.setStatusText("Benutzerdaten geladen: "+this.firstname);
         console.log("User_Status:",this.user_status)
         if(this.user_status == UserService.USER_REGISTRATION) {this.router.navigate(['/registration'])};
       });
@@ -113,6 +167,8 @@ export class UserService {
           console.log("loadUserData", data);
           // Copy user data to service object
           if( data['success'] ) {
+            this.activeuser = {name:this.firstname + " " + this.lastname,email:data['user']['email'],firstname:data['user']['firstname'],lastname:this.lastname = data['user']['lastname']};
+
             // Valid return data for user
             this.firstname = data['user']['firstname'];
             this.lastname = data['user']['lastname'];
@@ -121,6 +177,12 @@ export class UserService {
             this.last_login = new Date(data['user']['last_login']);
 
             this.user_status = UserService.USER_OK;
+            
+            this.activeuser.assignmentrefs = data['user']['assignmentrefs'];
+            this.activeuser.skillref = data['user']['skillref'];
+            
+            console.log("active user: ", this.activeuser);
+            
             /*
             Datastructure from user database:
             
@@ -219,5 +281,11 @@ export class UserService {
         })
     }
     return true;
+  }
+  public getUserToken(): string {
+    return this.user_token;
+  }
+  public getUser(): User {
+    return this.activeuser;
   }
 }

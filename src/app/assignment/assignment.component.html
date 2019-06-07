@@ -1,0 +1,66 @@
+    <div class="container" *ngIf="this.aservice.assignment!=undefined">
+      <div class="row">
+        <div class="col">&nbsp;</div>
+      </div>
+      <div class="row">
+        <div class="col">
+          <div class="card">
+            <h5 class="card-header">
+              <span class="col text-right">
+                <!-- fontawesome.com -->
+                <i class="fas fa-times-circle" routerLink="/"></i>
+              </span>
+              {{ this.aservice.assignment.name }}
+            </h5>
+            <div class="card-body">
+              <p>
+                <a href="#" class="btn btn-primary" [ngSwitch]="this.aservice.assignment.type">
+                  <span>Ausführen</span>
+                  <span *ngSwitchCase="A">Fortsetzen</span>
+                  <span *ngSwitchCase="B">Wiederholen</span>
+                </a>&nbsp;
+                <a href="#" class="btn btn-success">Erinnerung</a>&nbsp;
+                <a href="#" class="btn btn-info">Selbsteinschätzung</a>&nbsp;
+              </p>
+              <h5 class="card-title">{{ this.aservice.assignment.modul }} / {{ this.aservice.assignment.field }}</h5>
+              <p class="card-text">{{ this.aservice.assignment.description }}</p>
+              <div class="container">
+                <div class="row">
+                  <div class="col">
+                    <p class="card-text">Offen: von <strong>{{ this.aservice.assignment.earlieststart | date : 'dd.MM.yyyy - H:mm' : '+0200' }}</strong> bis <strong>{{ this.aservice.assignment.latestend | date : 'dd.MM.yyyy - H:mm' : '+0200' }}</strong></p>
+                    <p class="card-text">Anzahl Aufgaben: {{ this.aservice.assignment.challenges.length }}</p>
+                    <p class="card-text">Zeit: {{ this.aservice.assignment.duration }} {{ this.aservice.assignment.durationunit }}</p>
+                    <p class="card-text">Minimalziel: {{ this.aservice.assignment.unitpass }} / {{ this.aservice.assignment.unitmax }} {{ this.aservice.assignment.unit }}</p>
+                    <p class="card-text">Bewertung: {{ this.aservice.assignment.rubic }}</p>
+                  </div>
+                  <div class="col">
+                    <p class="card-text">Autoren: {{ this.aservice.assignment.autor }} / {{ this.aservice.assignment.coautor }}</p>
+                    <p class="card-text">Coach: {{ this.aservice.assignment.coach }}</p>
+                    <p class="card-text">Startmode: {{ this.aservice.assignment.startmode }}</p>
+                    <p class="card-text">Gruppe: {{ this.aservice.assignment.group }}</p>
+                  </div>
+                </div>
+              </div>
+              <table class="table table-hover">
+                <thead class="thead-light">
+                  <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Lernziel</th>
+                    <th scope="col">Selbsteinschätzung</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let eduobj of this.aservice.assignment.eduobjref; index as i">
+              <!--     [ngClass]="{'table-primary' : i===this.users.selected_user_index}" (click)="selectUser(i)"> -->
+                    <th scope="row">{{ i }}</th>
+              <!--      <td>{{ eduobj.id }}</td> -->
+                    <td>{{ eduobj.name }}</td>
+                    <td>{{ eduobj.selfassessment }}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>

@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { AuthServiceService } from './auth-service/auth-service.service';
 import { UserService } from './user/user.service';
 import { StatusService } from './status/status.service';
-import { CarouselModule } from 'ngx-bootstrap';
+import * as ngxBootstrap from 'ngx-bootstrap';
 
 @Component({
   selector: 'app-root',
