@@ -26,20 +26,17 @@ export class ChallengeService {
     
   }
   
-  public loadChallenges(ch_ids: string[]){
+  public loadChallenges(ch_ids: string[]): void{
+    console.log("Challenges:", ch_ids);
     if(ch_ids != undefined && ch_ids.length>0) {
       let ida = JSON.stringify(ch_ids);
       this.http
         .get(APP_CONFIG.storageURL+"/api/0.0.1/challenge/get", {params:{id: ida}})
         .subscribe((data) => {
-          if( data['success'] ) {
-            console.log("Challenges loaded", data);
-              this.challenges = data['challenges'];
-              return this.challenges;
-        }
-      });
-    } else {
-        return this.challenges;
-    }  
+          console.log("Challenges loaded:", <[Challenge]>data);
+          this.challenges = <[Challenge]>data;
+        });
+    }
   }
+  
 }

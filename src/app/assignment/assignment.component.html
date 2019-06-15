@@ -1,3 +1,4 @@
+<div *ngIf="this.mode==0">
     <div class="container" *ngIf="this.aservice.assignment!=undefined">
       <div class="row">
         <div class="col">&nbsp;</div>
@@ -13,15 +14,19 @@
               {{ this.aservice.assignment.name }}
             </h5>
             <div class="card-body">
-              <p>
+              <div class="btn-group" role="group" aria-label="Basic example">
+                <button type="button" class="btn btn-primary" (click)="this.runAssignment()">Ausführen</button>
+                <button type="button" class="btn btn-success">Erinnerung</button>
+                <button type="button" class="btn btn-info">Selbsteinschätzung</button>
+              </div>
+<!--                
                 <a href="#" class="btn btn-primary" [ngSwitch]="this.aservice.assignment.type">
-                  <span>Ausführen</span>
+                  <span *ngSwitchCase="A">Ausführen</span>
                   <span *ngSwitchCase="A">Fortsetzen</span>
                   <span *ngSwitchCase="B">Wiederholen</span>
                 </a>&nbsp;
-                <a href="#" class="btn btn-success">Erinnerung</a>&nbsp;
-                <a href="#" class="btn btn-info">Selbsteinschätzung</a>&nbsp;
-              </p>
+-->
+              <div>&nbsp;</div>
               <h5 class="card-title">{{ this.aservice.assignment.modul }} / {{ this.aservice.assignment.field }}</h5>
               <p class="card-text">{{ this.aservice.assignment.description }}</p>
               <div class="container">
@@ -38,6 +43,7 @@
                     <p class="card-text">Coach: {{ this.aservice.assignment.coach }}</p>
                     <p class="card-text">Startmode: {{ this.aservice.assignment.startmode }}</p>
                     <p class="card-text">Gruppe: {{ this.aservice.assignment.group }}</p>
+                    <p class="card-text">Id: {{ this.aservice.assignment._id }}</p>
                   </div>
                 </div>
               </div>
@@ -50,12 +56,14 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr *ngFor="let eduobj of this.aservice.assignment.eduobjref; index as i">
+                  <tr *ngFor="let eduobj of this.aservice.assignment.eduobjref; index as i" (click)="selectEduObjective(eduobj.id)">
+                    
               <!--     [ngClass]="{'table-primary' : i===this.users.selected_user_index}" (click)="selectUser(i)"> -->
                     <th scope="row">{{ i }}</th>
-              <!--      <td>{{ eduobj.id }}</td> -->
+                    <td>{{ eduobj.id }}</td>
                     <td>{{ eduobj.name }}</td>
                     <td>{{ eduobj.selfassessment }}</td>
+                    
                   </tr>
                 </tbody>
               </table>
@@ -64,3 +72,187 @@
         </div>
       </div>
     </div>
+</div><!-- Show assignment details -->
+
+<div *ngIf="this.mode==1" class="container">
+  <div class="btn-group" role="group" aria-label="Basic example">
+    <button type="button" class="btn btn-primary" (click)="this.cancleAssignment()">Abbrechen</button>
+        <button type="button" class="btn btn-secondary"><<</button>
+        <button type="button" class="btn btn-secondary" data-toggle="collapse" data-target="#collapseExample" (click)="this.showWarning=true">Infos</button>
+        <button type="button" class="btn btn-secondary">Gemerkt</button>
+        <button type="button" class="btn btn-secondary">Mehr Zeit</button>
+        <div class="btn-group" role="group">
+          <button id="btnGroupDrop1" type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Mehr Zeit
+          </button>
+          <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+            <a class="dropdown-item" href="#">+ 1 Minute</a>
+            <a class="dropdown-item" href="#">+ 5 Minuten</a>
+            <a class="dropdown-item" href="#">+ 10 Minuten</a>
+          </div>
+        </div>        
+        <button type="button" class="btn btn-primary" (click)="this.finishAssignment()">Fertig</button>
+        <button type="button" class="btn btn-secondary">>></button>
+    </div>
+  
+  <div *ngIf="this.showWarning">
+    <div class="card">
+      <h5 class="card-header">Vor dem Start dieser Challenge</h5>
+      <div class="card-body">
+        <div class="card-text">{{ this.aservice.assignment.description }}</div>
+
+        <p>Bitte nimm Dir kurz Zeit und lasse mich wissen, wie Du Dich heute fühlst.</p>
+        
+        <h3>Körperlich</h3>
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="physical" id="exampleRadios0" value="option0" checked>
+            <label class="form-check-label" for="exampleRadios1">
+              Ich möchte hierzu heute keine Angabe machen.
+            </label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="physical" id="exampleRadios1" value="option1">
+            <label class="form-check-label" for="exampleRadios1">
+              Ich fühle mich körperlich top-fit heuet.
+            </label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="physical" id="exampleRadios2" value="option2">
+            <label class="form-check-label" for="exampleRadios2">
+              Ich fühle mich körperlich etwas ermüdet, aber im normalen Bereich.
+            </label>
+          </div>
+          <div class="form-check disabled">
+            <input class="form-check-input" type="radio" name="physical" id="exampleRadios3" value="option3">
+            <label class="form-check-label" for="exampleRadios3">
+              Heute bin ich körperlich total kaput.
+            </label>
+          </div>
+        <h3>Mental</h3>
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="mental" id="exampleRadios1" value="option0" checked>
+            <label class="form-check-label" for="exampleRadios1">
+              Ich möchte hierzu heute keine Angabe machen.
+            </label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="mental" id="exampleRadios1" value="option1">
+            <label class="form-check-label" for="exampleRadios1">
+              Ich fühle mich dem gewachsen, ggf. sogar überlegen.
+            </label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="mental" id="exampleRadios2" value="option2">
+            <label class="form-check-label" for="exampleRadios2">
+              Ich habe Respekt vor dem was kommt, sehe ihm aber gelassen entgegen.
+            </label>
+          </div>
+          <div class="form-check disabled">
+            <input class="form-check-input" type="radio" name="mental" id="exampleRadios3" value="option3">
+            <label class="form-check-label" for="exampleRadios3">
+              Ich habe Angst vor dem was kommt.
+            </label>
+          </div>
+        <h3>Vorbereitet</h3>
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="prep" id="exampleRadios1" value="option0" checked>
+            <label class="form-check-label" for="exampleRadios1">
+              Ich möchte hierzu heute keine Angabe machen.
+            </label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="prep" id="exampleRadios1" value="option1">
+            <label class="form-check-label" for="exampleRadios1">
+              Ich bin sehr gut vorbereitet.
+            </label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="prep" id="exampleRadios2" value="option2">
+            <label class="form-check-label" for="exampleRadios2">
+              Ich habe wenig oder das Nötigste vorbereitet.
+            </label>
+          </div>
+          <div class="form-check disabled">
+            <input class="form-check-input" type="radio" name="prep" id="exampleRadios3" value="option3">
+            <label class="form-check-label" for="exampleRadios3">
+              Eigentlich habe ich mich gar nicht vorbereitet.
+            </label>
+          </div>
+        
+        <p>&nbsp;</p>
+        <button type="button" class="btn btn-primary" (click)="this.showWarning=false">Ok</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="challangelist">
+        <div *ngFor="let ch of this.challenges.challenges; index as i" class="challange">
+          <div class="card">
+            <h5 class="card-header">
+              <span class="col text-right">
+                {{ i }}&nbsp;
+                <!-- fontawesome.com -->
+                <!-- <i class="fas fa-times-circle" routerLink="/"></i> -->
+              </span>
+              {{ ch.name }}
+            </h5>
+            <div class="card-body">
+              <div class="card-text">
+                <div [innerHTML]="ch.text"></div><!-- innerHTML to make HTML formating possible -->
+              </div>
+
+          
+          <table width="100%">
+            <tr>
+              <td>
+                <div [ngSwitch]="ch.type">
+                  <div *ngSwitchCase="'multi'">
+                    <div class="form-check" *ngFor="let an of ch.answers; index as j">
+                      <input class="form-check-input" type="checkbox" name="gridRadios" id="gridRadios{{ i }}{{ j }}" value="{{ j }}">
+                      <label class="form-check-label" for="gridRadios{{ i }}{{ j }}">  
+                        {{ an }}
+                      </label>
+                    </div>                    
+                  </div>
+                  <div *ngSwitchCase="'single'">
+                    <div class="form-check" *ngFor="let an of ch.answers; index as j">
+                      <input class="form-check-input" type="radio" name="challenge{{ i }}" id="gridRadios{{ i }}{{ j }}" value="{{ j }}">
+                      <label class="form-check-label" for="gridRadios{{ i }}{{ j }}">
+                        {{ an }}
+                      </label>
+                    </div>
+                  </div>
+                </div>
+                
+                <div *ngIf="this.showHint==i" class="hint">
+                  <div [innerHTML]="ch.hint"></div>
+                  <div *ngIf="ch.eduobjectives!=undefined&&ch.eduobjectives.length<2" class="ch_name">Lernziel</div>
+                  <div *ngIf="ch.eduobjectives!=undefined&&ch.eduobjectives.length>=2" class="ch_name">Lernziele</div>
+                  <div *ngFor="let eo of ch.eduobjectives" class="eolist">
+                  <a class="nav-link" routerLink="/eduobjective/{{ eo._id }}" routerLinkActive="active-link">{{ eo.name }}</a>
+                  </div>
+                </div>
+              </td>
+              <td class="ch_menue">
+                <button id="{{ i }}" type="button" class="btn btn-outline-primary btn-sm btn-block" (click)="this.markChallenge(i)">Merken</button><br />
+                <button id="{{ i }}" type="button" class="btn btn-outline-secondary btn-sm btn-block" (click)="this.toggleHint($event, i)">Hinweis</button>
+              </td>
+            </tr>
+          </table>
+          
+            </div>
+          </div>          
+          
+        </div>
+      </div>
+</div>
+
+<div *ngIf="this.mode==5"><!-- Evaluate result -->
+  <div class="card">
+    <h5 class="card-header">Abschluss dieser Challenge</h5>
+    <div class="card-body">
+      <div class="card-text">{{ this.aservice.assignment.description }}</div>
+      <button type="button" class="btn btn-primary" (click)="this.closeAssignment()">Abschliessen</button>
+    </div>
+  </div>  
+</div><!-- Evaluate result -->

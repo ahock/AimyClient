@@ -18,6 +18,7 @@ import { DialogComponent } from './dialog/dialog.component';
 import { UsersComponent } from './users/users.component';
 import { SkillComponent } from './skill/skill.component';
 import { AssignmentComponent } from './assignment/assignment.component';
+import { EduobjectiveComponent } from './eduobjective/eduobjective.component';
 
 @NgModule({
   declarations: [
@@ -29,7 +30,8 @@ import { AssignmentComponent } from './assignment/assignment.component';
     DialogComponent,
     UsersComponent,
     SkillComponent,
-    AssignmentComponent
+    AssignmentComponent,
+    EduobjectiveComponent
   ],
   imports: [
     AlertModule.forRoot(),
