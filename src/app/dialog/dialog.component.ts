@@ -14,11 +14,15 @@ export class DialogComponent implements OnInit {
   constructor(public user:UserService, public dialogs:DialogService) { }
 
   ngOnInit() {
-    console.log("Dialog ngOnInit", this.user.getUserToken(), this.user);
-    if(this.user.getUserToken()!="") {
+    console.log("Dialog ngOnInit Token", this.user.getUserToken());
+    console.log("Dialog ngOnInit UserService", this.user);
+    
+    this.user.loadUserData( () => { this.dialogs.loadByToken(this.user.getUserToken())} );
+    
+//    if(this.user.getUserToken()!="") {
       // DialogService
-      this.dialogs.loadByToken(this.user.getUserToken());
-    }
+//      this.dialogs.loadByToken(this.user.getUserToken());
+//    }
   }
   
   public react(id:string, reaction:number): void {

@@ -152,7 +152,7 @@ export class UserService {
     return true;
   }
   
-  private loadUserData(callback): void {
+  public loadUserData(callback): void {
     console.log("UserService: loadUserData");
     this.data_loadTime = new Date();
     this.email2 = this.auth.auth_detail.email;
@@ -288,4 +288,45 @@ export class UserService {
   public getUser(): User {
     return this.activeuser;
   }
+  public getUserSkillStatus(skillid: string): string {
+    if(this.activeuser.skillref) {
+//      console.log("getUserSkillStatus",this.activeuser.skillref,skillid)
+      var i: number = 0;
+      while(this.activeuser.skillref[i].id!=skillid){
+//        console.log("-", this.activeuser.skillref[i].name);
+        i++;
+      }
+      return this.activeuser.skillref[i].status;
+    } else {
+      return "n/a";
+    }
+  }
+  public getUserSkillRating(skillid: string): string {
+    if(this.activeuser.skillref) {
+//      console.log("getUserSkillStatus",this.activeuser.skillref,skillid)
+      var i: number = 0;
+      while(this.activeuser.skillref[i].id!=skillid){
+//        console.log("-", this.activeuser.skillref[i].name);
+        i++;
+      }
+      return this.activeuser.skillref[i].rating;
+    } else {
+      return "n/a";
+    }
+  }
+  public getUserSkillAging(skillid: string): string {
+    if(this.activeuser.skillref) {
+//      console.log("getUserSkillStatus",this.activeuser.skillref,skillid)
+      var i: number = 0;
+      while(this.activeuser.skillref[i].id!=skillid){
+//        console.log("-", this.activeuser.skillref[i].name);
+        i++;
+      }
+      return this.activeuser.skillref[i].togo;
+    } else {
+      return "n/a";
+    }
+  }
+
+  
 }

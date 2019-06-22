@@ -12,20 +12,14 @@
                 <i class="fas fa-times-circle" routerLink="/"></i>
               </span>
               {{ this.aservice.assignment.name }}
+
+              <span class="col text-right">
+                <i class="fas fa-play-circle" (click)="this.runAssignment()"></i>
+              </span>
+
+
             </h5>
             <div class="card-body">
-              <div class="btn-group" role="group" aria-label="Basic example">
-                <button type="button" class="btn btn-primary" (click)="this.runAssignment()">Ausführen</button>
-                <button type="button" class="btn btn-success">Erinnerung</button>
-                <button type="button" class="btn btn-info">Selbsteinschätzung</button>
-              </div>
-<!--                
-                <a href="#" class="btn btn-primary" [ngSwitch]="this.aservice.assignment.type">
-                  <span *ngSwitchCase="A">Ausführen</span>
-                  <span *ngSwitchCase="A">Fortsetzen</span>
-                  <span *ngSwitchCase="B">Wiederholen</span>
-                </a>&nbsp;
--->
               <div>&nbsp;</div>
               <h5 class="card-title">{{ this.aservice.assignment.modul }} / {{ this.aservice.assignment.field }}</h5>
               <p class="card-text">{{ this.aservice.assignment.description }}</p>
@@ -50,7 +44,7 @@
               <table class="table table-hover">
                 <thead class="thead-light">
                   <tr>
-                    <th scope="col">#</th>
+                    
                     <th scope="col">Lernziel</th>
                     <th scope="col">Selbsteinschätzung</th>
                   </tr>
@@ -59,8 +53,8 @@
                   <tr *ngFor="let eduobj of this.aservice.assignment.eduobjref; index as i" (click)="selectEduObjective(eduobj.id)">
                     
               <!--     [ngClass]="{'table-primary' : i===this.users.selected_user_index}" (click)="selectUser(i)"> -->
-                    <th scope="row">{{ i }}</th>
-                    <td>{{ eduobj.id }}</td>
+                    
+                    
                     <td>{{ eduobj.name }}</td>
                     <td>{{ eduobj.selfassessment }}</td>
                     

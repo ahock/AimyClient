@@ -1,7 +1,9 @@
 import { Component } from '@angular/core';
+import { Location } from '@angular/common';
 import { AuthServiceService } from './auth-service/auth-service.service';
 import { UserService } from './user/user.service';
 import { StatusService } from './status/status.service';
+import { ActivatedRoute, Router } from '@angular/router';
 import * as ngxBootstrap from 'ngx-bootstrap';
 
 @Component({
@@ -14,12 +16,13 @@ export class AppComponent {
   singleModel = '1';
   alertBoxShow = false;
 
-  constructor(public auth: AuthServiceService, public user: UserService, public status: StatusService) {
+  constructor(private location:Location, public auth: AuthServiceService, public user: UserService, public status: StatusService) {
     console.log("AppComponent: constructor");
     auth.handleAuthentication();
   }
 
   ngOnInit() {
+    console.log("Location: ", this.location.path());
     if (this.auth.isAuthenticated()) {
       console.log("AppComponent: ngOnInit - isAuthenticated");
       this.auth.renewTokens();

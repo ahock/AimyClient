@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { AssignmentService, Assignment } from '../assignment/assignment.service';
 import { ChallengeService } from '../challenge/challenge.service';
 
+
 @Component({
   selector: 'app-assignment',
   templateUrl: './assignment.component.html',
@@ -51,5 +52,6 @@ export class AssignmentComponent implements OnInit {
   }
   public selectEduObjective(id: string): void {
     console.log("selectEduObjective", id);
+    this.router.navigate(['/eduobjective/'+id]);
   }
 }

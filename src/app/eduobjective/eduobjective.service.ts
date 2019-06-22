@@ -24,9 +24,10 @@ export class EduobjectiveService {
         .subscribe((data) => {
           if( data['success'] ) {
             console.log("EduObjective loaded", data);
-              this.eduobjective = data['eduobjective'];
+            this.eduobjective = <EduObjective>data['eduobjective'];
+            console.log("EduObjective loaded", this.eduobjective);
           }
         });
     } 
-  }  
+  }
 }

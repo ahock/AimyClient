@@ -1,3 +1,119 @@
-<p>
-  eduobjective works!
-</p>
+<div *ngIf="this.eduobjective.eduobjective">
+    <div class="row">
+        <div class="col">&nbsp;</div>
+    </div>
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <div class="card text-white bg-primary">
+                    <div class="card-header"><h5>Lernziel</h5></div>
+                    <div class="card-text">{{ this.eduobjective.eduobjective.name }}</div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card">
+                    <div class="card-header"><h5>Lernmittel zur Zielerreichung</h5></div>
+                    <div class="card-text">
+                        <table class="table table-hover">
+                            <tbody>
+                                <tr *ngFor="let eduo of this.eduobjective.eduobjective.contentref" routerLink="/content/{{ eduo._id }}">
+                                    <td>{{ eduo.name }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>            
+        </div>
+        <div class="row">
+            <div class="col">
+                <div class="card">
+                    <div class="card-header"><h5>Zielerreichung</h5></div>
+                    <div class="card-text">
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card">
+                    <div class="card-header"><h5>Selbsteinschätzung
+                    
+                                  <span class="col text-right">
+                <i class="fas fa-play-circle" (click)="this.selfassess()"></i>
+              </span>
+
+                    
+                    </h5></div>
+                    <div class="card-text">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <div class="card">
+                    <div class="card-header"><h5>Unterstützt Kompetenzen</h5></div>
+                    <div class="card-text">
+                        <table class="table table-hover">
+                            <tbody>
+                                <tr *ngFor="let eduo of this.eduobjective.eduobjective.skillref" routerLink="/skill/{{ eduo._id }}">
+            <!--     [ngClass]="{'table-primary' : i===this.users.selected_user_index}" (click)="selectUser(i)"> -->
+                                    <td>{{ eduo.name }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card">
+                    <div class="card-header"><h5>Verifiziert durch Aufträgen</h5></div>
+                    <div class="card-text">
+                        <table class="table table-hover">
+                            <tbody>
+                                <tr *ngFor="let eduo of this.eduobjective.eduobjective.assignmentref" routerLink="/assignment/{{ eduo._id }}">
+                                    <td>{{ eduo.name }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>            
+        </div>
+
+        <div class="row">
+            <div class="col">
+                <div class="card">
+                    <div class="card-text">
+                        <table class="table table-striped">
+                          <tbody>
+                            <tr>
+                              <th scope="row">Aufgaben #</th>
+<!--                              <td>{{ this.eduobjective.eduobjective.challengeRef.length  }}</td>  -->
+                            </tr>
+                            <tr>
+                              <th scope="row">Erstellt</th>
+                              <td>{{ this.eduobjective.eduobjective.create_date  | date : 'dd.MM.yyyy - H:mm' : '+0200' }}</td>
+                            </tr>
+                            <tr>
+                              <th scope="row">Lernfeld</th>
+                              <td>{{ this.eduobjective.eduobjective.field  }}</td>
+                            </tr>
+                            <tr>
+                              <th scope="row">Modul</th>
+                              <td>{{ this.eduobjective.eduobjective.modul  }}</td>
+                            </tr>
+                              <th scope="row">Taxonomy</th>
+                              <td>{{ this.eduobjective.eduobjective.taxonomie  }}</td>
+                            <tr>
+                              <th scope="row">Typ</th>
+                              <td>{{ this.eduobjective.eduobjective.type  }}</td>
+                            </tr>
+                          </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

@@ -73,7 +73,7 @@
 </main>
 <!-- User is logged in -->
 
-<div *ngIf="auth.isAuthenticated()">
+<div *ngIf="(auth.isAuthenticated()&&this.location.path()=='')">
   <div *ngIf="this.user.user_status==2">
     
     <div class="container">
@@ -106,7 +106,7 @@
           </div>
           
 <div class="list-group">
-            <button type="button" class="list-group-item list-group-item-action" *ngFor="let sref of this.user.getUser().skillref; index as i">
+            <button type="button" routerLink="skill/{{ sref.id }}" class="list-group-item list-group-item-action" *ngFor="let sref of this.user.getUser().skillref; index as i">
               <div class="d-flex w-100 justify-content-between">
                 <h5 class="mb-1">{{ sref.name }}</h5>
                 <small>{{ sref.togo }}</small>

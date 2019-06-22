@@ -59,6 +59,7 @@ export class AuthServiceService {
     this.auth0.parseHash((err, authResult) => {
       if (authResult && authResult.accessToken && authResult.idToken) {
         this.localLogin(authResult, () => {
+//          this.users.loadUserData(() => this.router.navigate(['/dialog']));
           this.router.navigate(['/dialog']);
         });
       } else if (err) {
