@@ -18,7 +18,7 @@ import { StatusService } from '../status/status.service';
 import { LogService, Log } from '../log/log.service';
 
 export interface EduObjective {
-  oid: string;
+  id: string;
   name: string;
   field: string;
   selfassess: string;
@@ -180,6 +180,7 @@ export class UserService {
             
             this.activeuser.assignmentrefs = data['user']['assignmentrefs'];
             this.activeuser.skillref = data['user']['skillref'];
+            this.activeuser.eduobjectives = data['user']['eduobjectives'];
             
             console.log("active user: ", this.activeuser);
             
@@ -327,6 +328,34 @@ export class UserService {
       return "n/a";
     }
   }
-
+  public getUserEduOSelfassessment(eduoid: string): string {
+//    console.log("getUserEduO",eduoid,this.activeuser);
+    if(this.activeuser.eduobjectives) {
+//      console.log("getUserEduO",this.activeuser.eduobjectives);
+      var i: number;
+      for(i = 0; i<this.activeuser.eduobjectives.length; i++) {
+//        console.log(i);
+        if(this.activeuser.eduobjectives[i].id==eduoid) {
+          break;
+        }
+      }
+//      console.log(i);
+      if(i<this.activeuser.eduobjectives.length) {
+        return this.activeuser.eduobjectives[i].selfassess;  
+      } else {
+        return "n/a";
+      }
+    } else {
+      return "n/a";
+    }
+  }
+  public setUserEduOSelfassessment(eduoid: string, value: string): void {
+    console.log("UserService: Save selfassess", eduoid, value);
+    this.http
+      .get(APP_CONFIG.storageURL+"/api/0.0.1/user/seteduoselfassess", {params:{token: this.auth.getToken(), eduoid: eduoid, value: value}})
+      .subscribe((data) => {
+        console.log("saveUserData", data);
+    });   
+  } 
   
 }

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { EduobjectiveService } from '../eduobjective/eduobjective.service';
+import { UserService } from '../user/user.service';
 
 @Component({
   selector: 'app-eduobjective',
@@ -14,12 +15,15 @@ import { EduobjectiveService } from '../eduobjective/eduobjective.service';
 })
 export class EduobjectiveComponent implements OnInit {
   private eduobjectiveid: string;
+  private selfassessvalue: string;
+  private editselfassess: boolean = false;
   
-  constructor(private route:ActivatedRoute, private eduobjective: EduobjectiveService) {
+  constructor(private route:ActivatedRoute, private eduobjective: EduobjectiveService, private users:UserService) {
     this.route.params.subscribe( params => {
       console.log("EduObjective Param: ", params)
       this.eduobjectiveid = params.id;
       this.eduobjective.getEduObjectives(this.eduobjectiveid);
+      this.selfassessvalue = this.users.getUserEduOSelfassessment(this.eduobjectiveid);
     })
   }
 
@@ -29,5 +33,13 @@ export class EduobjectiveComponent implements OnInit {
 
   public selfassess(): void {
     console.log("selfassess", this.eduobjectiveid);  
+    this.editselfassess = !this.editselfassess;
+    
+    if(!this.editselfassess) {
+      if(this.users.getUserEduOSelfassessment(this.eduobjectiveid)!=this.selfassessvalue) {
+        console.log("Save selfassess", this.selfassessvalue);
+        this.users.setUserEduOSelfassessment(this.eduobjectiveid, this.selfassessvalue)  
+      }
+    }
   }
 }
