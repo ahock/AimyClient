@@ -2,28 +2,27 @@
   <div class="container-fluid">
       <a class="navbar-brand" href="#">Aimy - Deine Kompetenzen</a>
       <form class="form-inline">
-        <div class="btn-group" dropdown>
+        <div *ngIf="auth.isAuthenticated()" class="btn-group" dropdown>
           <button id="button-basic" dropdownToggle type="button" class="btn btn-primary my-2 my-sm-0 mr-2 dropdown-toggle"
                   aria-controls="dropdown-basic">Action<span class="caret"></span>
           </button>
           <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu"
               role="menu" aria-labelledby="button-basic">
-            <li role="menuitem"><a class="dropdown-item" href="#" (click)="alertToggle()">Alert</a></li>
-            <li role="menuitem"><a routerLink="/comp1" routerLinkActive="active" class="dropdown-item">Kompetenz-Liste</a></li>
-            <li role="menuitem"><a routerLink="/comp2" class="dropdown-item">Kompetenz-Katalog</a></li>
-            <li role="menuitem"><a routerLink="/competence" class="dropdown-item">Kompetenz-Details</a></li>
+<!--            <li role="menuitem"><a class="dropdown-item" href="#" (click)="alertToggle()">Alert</a></li>  -->
+            <li role="menuitem"><a routerLink="/comp1" routerLinkActive="active" class="dropdown-item">Kompetenzfelder</a></li>
             <li class="divider dropdown-divider"></li>
             <li role="menuitem"><a routerLink="/registration" class="dropdown-item">Registrierung</a>
             <li role="menuitem"><a routerLink="/dialog" class="dropdown-item">Dialoge</a>
+            <li role="menuitem"><a *ngIf="auth.isAuthenticated()" class="dropdown-item" (click)="auth.logout()">Log Out</a>
             
-        <button class="btn btn-primary my-2 my-sm-0 mr-2" routerLink="/" type="button">Home</button>
+<!--        <button class="btn btn-primary my-2 my-sm-0 mr-2" routerLink="/" type="button">Home</button>
         <button class="btn btn-primary my-2 my-sm-0 mr-2" (click)="this.status.setStatusText('User Status: '+this.user.user_status)" type="button">Status</button>
         <button id="qsLogoutBtn"
           class="btn btn-primary my-2 my-sm-0"
           *ngIf="auth.isAuthenticated()"
           (click)="auth.logout()" type="button">
             Log Out
-        </button>
+        </button> -->
         
             </li>
           </ul>
@@ -128,6 +127,8 @@
 
 <alert type="success" *ngIf="alertBoxShow" id="alertbox">hello</alert>
 
+<!--
 <nav class="navbar fixed-bottom navbar-light bg-light">
   <app-status></app-status>
 </nav>
+-->

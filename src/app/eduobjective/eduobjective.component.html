@@ -9,43 +9,13 @@
                     <div class="card-header"><h5>Lernziel</h5></div>
                     <div class="card-text">{{ this.eduobjective.eduobjective.name }}</div>
                 </div>
-            </div>
-            <div class="col">
+                &nbsp;
                 <div class="card">
-                    <div class="card-header"><h5>Lernmittel zur Zielerreichung</h5></div>
-                    <div class="card-text">
-                        <table class="table table-hover">
-                            <tbody>
-                                <tr *ngFor="let eduo of this.eduobjective.eduobjective.contentref" routerLink="/content/{{ eduo._id }}">
-                                    <td><a href="{{ eduo.url }}" target="_blank">{{ eduo.name }}</a>
-                                    [{{ eduo.description }}]
-                                    
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
+                    <div class="card-header">
+                        <h5>Selbsteinschätzung
+                        <span class="col text-right"><i class="fas fa-pencil-alt" (click)="this.selfassess()"></i></span>
+                        </h5>
                     </div>
-                </div>
-            </div>            
-        </div>
-        <div class="row">
-            <div class="col">
-                <div class="card">
-                    <div class="card-header"><h5>Zielerreichung</h5></div>
-                    <div class="card-text">
-                    </div>
-                </div>
-            </div>
-            <div class="col">
-                <div class="card">
-                    <div class="card-header"><h5>Selbsteinschätzung
-                    
-                                  <span class="col text-right">
-                <i class="fas fa-pencil-alt" (click)="this.selfassess()"></i>
-              </span>
-
-                    
-                    </h5></div>
                     <div class="card-text">
                         <i style="color:red" class="fas fa-thumbs-down" *ngIf="this.users.getUserEduOSelfassessment(this.eduobjective.eduobjective._id)=='Noch garnicht'"></i>
                         <i style="color:red" class="fas fa-frown" *ngIf="this.users.getUserEduOSelfassessment(this.eduobjective.eduobjective._id)=='Zu wenig'"></i>
@@ -83,11 +53,12 @@
                           </fieldset>
                         </form>
                    </div>
+                </div>                
+                <div class="card">
+                    <div class="card-header"><h5>Zielerreichung</h5></div>
+                    <div class="card-text">
+                    </div>
                 </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col">
                 <div class="card">
                     <div class="card-header"><h5>Unterstützt Kompetenzen</h5></div>
                     <div class="card-text">
@@ -101,8 +72,6 @@
                         </table>
                     </div>
                 </div>
-            </div>
-            <div class="col">
                 <div class="card">
                     <div class="card-header"><h5>Verifiziert durch Aufträgen</h5></div>
                     <div class="card-text">
@@ -115,9 +84,28 @@
                         </table>
                     </div>
                 </div>
+            </div>
+            <div class="col">
+                <div class="card">
+                    <div class="card-header"><h5>Lernmittel zur Zielerreichung</h5></div>
+                    <div class="card-text">
+                        <table class="table table-hover">
+                            <tbody>
+                                <tr *ngFor="let eduo of this.eduobjective.eduobjective.contentref" routerLink="/content/{{ eduo._id }}">
+                                    <td>
+                                    <span *ngIf="eduo.priority" class="badge badge-primary badge-pill">{{ eduo.priority }}</span>&nbsp;
+                                    <a href="{{ eduo.url }}" target="_blank">{{ eduo.name }}</a>
+                                    <p>{{ eduo.description }}</p>
+                                    <p>Verortung: {{ eduo.locator }}</p>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>            
         </div>
-
+<!--
         <div class="row">
             <div class="col">
                 <div class="card">
@@ -126,7 +114,7 @@
                           <tbody>
                             <tr>
                               <th scope="row">Aufgaben #</th>
-<!--                              <td>{{ this.eduobjective.eduobjective.challengeRef.length  }}</td>  -->
+                              <td *ngIf="this.eduobjective.eduobjective.challengeRef" >{{ this.eduobjective.eduobjective.challengeRef.length  }}</td>
                             </tr>
                             <tr>
                               <th scope="row">Erstellt</th>
@@ -152,6 +140,7 @@
                 </div>
             </div>
         </div>
+-->
     </div>
 </div>
 

@@ -41,7 +41,6 @@ export class SkillService {
         .get(APP_CONFIG.storageURL+"/api/0.1.0/skill/get", {params:{id: id}})
         .subscribe((data) => {
           if( data['success'] ) {
-            console.log("skill loaded", data);
             this.skill = <Skill>data['skill'];
             console.log("Skill loaded", this.skill);
           }
