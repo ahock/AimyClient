@@ -8,6 +8,8 @@ import { DialogComponent } from './dialog/dialog.component';
 import { AssignmentComponent } from './assignment/assignment.component';
 import { EduobjectiveComponent } from './eduobjective/eduobjective.component';
 import { SkillComponent } from './skill/skill.component';
+import { PlaylistComponent } from './playlist/playlist.component';
+import { ContentComponent } from './content/content.component';
 
 const routes: Routes = [
   {path: 'comp1', component: Component1Component},
@@ -18,7 +20,9 @@ const routes: Routes = [
   {path: 'assignment/:id', component: AssignmentComponent},
   {path: 'eduobjective/:id', component: EduobjectiveComponent},
   {path: 'skill/:id', component: SkillComponent},
-  {path: 'skillboard/:id', component: Component1Component}
+  {path: 'skillboard/:id', component: Component1Component},
+  {path: 'playlist', component: PlaylistComponent},
+  {path: 'content/:id', component: ContentComponent},
   ];
 
 @NgModule({

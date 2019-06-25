@@ -91,7 +91,7 @@
                     <div class="card-text">
                         <table class="table table-hover">
                             <tbody>
-                                <tr *ngFor="let eduo of this.eduobjective.eduobjective.contentref" routerLink="/content/{{ eduo._id }}">
+                                <tr *ngFor="let eduo of this.eduobjective.eduobjective.contentref" routerLink="/content/{{ eduo.id }}">
                                     <td>
                                     <span *ngIf="eduo.priority" class="badge badge-primary badge-pill">{{ eduo.priority }}</span>&nbsp;
                                     <a href="{{ eduo.url }}" target="_blank">{{ eduo.name }}</a>
