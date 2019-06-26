@@ -1,10 +1,11 @@
-<div>
+<div *ngIf="this.contents.content">
     <div class="row">
         <div class="col">&nbsp;</div>
     </div>
     <div class="container">
         <div class="row">
             <div class="col">
+<!--
                 <div class="card">
                     <div class="card-header bg-primary text-white">
                         <h5>
@@ -12,14 +13,33 @@
                             <span class="col text-right"><i class="fas fa-pencil-alt" (click)="this.selfassess()"></i></span>
                         </h5>
                     </div>
-                    <div class="card-text">
-                        
-Lernmittelinformationen hier!                      
-
-
-
+                    <div *ngIf="this.contents.content" class="card-text">
+                        <p>{{ this.contents.content.create_date }}</p>
+                        <p>{{ this.contents.content.description }}</p>
+                        <p>{{ this.contents.content.lang }}</p>
+                        <p>{{ this.contents.content.name }}</p>
+                        <p>{{ this.contents.content.type }}</p>
+                        <p>{{ this.contents.content.type_text }}</p>
+                        <p>{{ this.contents.content.url }}</p>
+                        <p>{{ this.contents.content.__v }}</p>
+                        <p>{{ this.contents.content._id }}</p>
+                        <a href="{{ this.contents.content.url }}" target="_blank" (click)="this.contents.visitContent()">{{ this.contents.content.name }}</a>
                     </div>
                 </div>
+-->                
+<div class="card">
+  <img class="card-img-top" [src]="this.getLogoUrl(this.contents.content.type)" alt="YouTube"  style="width: 18rem;">
+  <div class="card-body">
+    <h5 class="card-title">{{ this.contents.content.name }}</h5>
+    <p class="card-text">{{ this.contents.content.description }}</p>
+    <a href="{{ this.contents.content.url }}" target="_blank" class="btn btn-primary" (click)="this.contents.visitContent()">Lernmittel nutzen</a>
+    
+    <p>{{ this.contents.content.type }}</p>
+    
+  </div>
+</div>                
+                
+                
             </div>
         </div>
     </div>
