@@ -63,9 +63,11 @@
     <div class="col">
       <div *ngIf="this.skillsets" class="list-group">
         <div class="list-group-item list-group-item-primary">
-          Kompetenzfelder
+          
+          <span><input type="text" [(ngModel)]="skillsetfilter" (keyup)="filter()" class="form-control"></span>
         </div>
         <button *ngFor="let skillset of this.skillsets.skillsetlist; index as i" type="button" class="list-group-item list-group-item-action" [ngClass]="{'active':i===this.skillsetindex}" (click)="this.setactiveskillset(i)">
+          <div *ngIf="doFilter(i)">
           <div class="row">
             <div class="col-sm-2">
               <span *ngIf="skillset.field=='Sales'"><i style="color:gray" class="fas fa-dice-d20 fa-3x"></i></span>
@@ -84,6 +86,7 @@
           </div>
           <div class="row">
             <p class="card-text">{{ skillset.field }}</p>
+          </div>
           </div>
         </button>
       </div>

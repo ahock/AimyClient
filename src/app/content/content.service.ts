@@ -39,4 +39,17 @@ export class ContentService {
     
     this.log.createLog(<Log>{token: this.user.getUserToken(), message: "Lernmittel", type: 2, area: "content", content: "Lernmittel "+this.content.name+"wird verwendet ("+this.content._id+")"}); 
   }
+  
+  public addContent(contype: string, url: string, name: string, description: string, lang: string, callback: Function ): void {
+    console.log("Content add", contype,url,name);
+
+    this.http
+      .get(APP_CONFIG.storageURL+"/api/0.1.0/content/upsert", {params:{name: name, ctype:contype, description:description, url:url, lang:lang}})
+      .subscribe((data) => {
+        if( data['success'] ) {
+          console.log("Content added", data);
+          callback(data['content']['_id']);
+        }
+      });
+  }
 }

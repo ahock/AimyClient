@@ -6,6 +6,66 @@
         <div class="row">
             <div class="col">
                 <div class="card">
+                    <div class="card-header">
+<!--                        ()Video ()Buch ()Artikel ()Tutorial ()Hörbuch ()Event ()Veranstalltung ()Kurs ()Online-Kurs  -->
+                        <div class="btn-group btn-group-sm" role="group" aria-label="...">
+                            <button type="button" class="btn btn-secondary" (click)="setContentType(1)" [ngClass]="{'active':this.contenttype==1}"><i class="fas fa-video"></i>&nbsp;Video</button>
+                            <button type="button" class="btn btn-secondary" (click)="setContentType(2)" [ngClass]="{'active':this.contenttype==2}"><i class="far fa-newspaper"></i>&nbsp;Artikel</button>
+                            <button type="button" class="btn btn-secondary" (click)="setContentType(3)" [ngClass]="{'active':this.contenttype==3}"><i class="fas fa-book-open"></i>&nbsp;Buch</button>
+                            <button type="button" class="btn btn-secondary" (click)="setContentType(4)" [ngClass]="{'active':this.contenttype==4}"><i class="far fa-map"></i>&nbsp;Tutorial</button>
+                            <button type="button" class="btn btn-secondary" (click)="setContentType(5)" [ngClass]="{'active':this.contenttype==5}"><i class="fas fa-file-audio"></i>&nbsp;Hörbuch</button>
+                            <button type="button" class="btn btn-secondary" (click)="setContentType(6)" [ngClass]="{'active':this.contenttype==6}"><i class="fas fa-calendar-alt"></i>&nbsp;Event</button>
+                            <button type="button" class="btn btn-secondary" (click)="setContentType(7)" [ngClass]="{'active':this.contenttype==7}"><i class="fas fa-graduation-cap"></i>&nbsp;Kurs</button>
+                        </div>
+                    </div>
+                    <div class="card-text">
+                        <input type="text" class="form-control" [(ngModel)]="url" name="" placeholder="Hier bitte den Link zum Video eintragen" (keyup.enter)="this.details();"/>
+                    </div>
+                    <div *ngIf="showdetails" class="container">
+                        <div class="row">
+                            <div class="col">&nbsp;</div>
+                        </div>                        
+                        <div class="card-text">
+                            <p><input type="text" class="form-control" [(ngModel)]="contentname" name="" placeholder="Hier bitte einen Namen eintragen"/></p>
+                            <p><input type="text" class="form-control" [(ngModel)]="contentdescription" name="" placeholder="Hier bitte eine kurze Beschreibung eintragen"/></p>
+                            <div class="form-group">
+                                <label for="langsel">Sprache</label>
+                                <select [(ngModel)]="this.contentlang" name="langsel" class="form-control">
+                                    <option value="de">Deutsch</option>
+                                    <option value="en">Englisch</option>
+                                </select>                            
+                            </div>                        
+                            
+                            
+                            
+                            
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleFormControlSelect1">Zu welcher Kompetenz?</label>
+                            <select [(ngModel)]="this.selectedskill" (ngModelChange)="setSkill($event)" name="skillsel" class="form-control">
+                                <option [value]="skill.id" *ngFor="let skill of this.users.getUser().skillref">{{ skill.name }}</option>
+                            </select>                            
+                        </div>                        
+                        <div *ngIf="this.skills.skill">
+                            <label>Lernziele abgedeckt?</label>
+                            <div class="form-group" *ngIf="this.skills.skill.eduobjectiveref">                            
+                              <div class="form-check" *ngFor="let eduo of this.selectededuo">
+                                <input type="checkbox" [(ngModel)]="eduo.selected" class="form-check-input" id="{{ eduo.id }}">
+                                <label class="form-check-label" for="{{ eduo._id }}">{{ eduo.name }}</label>
+                              </div>
+                            </div>
+                        </div>                        
+                        <p><button type="button" class="btn btn-primary" (click)="saveContent()"><i class="fas fa-check-square"></i>&nbsp;Ablegen</button></p>
+                    </div>
+                </div>
+            </div>    
+        </div>
+        <div class="row">
+            <div class="col">&nbsp;</div>
+        </div>        
+        <div class="row">
+            <div class="col">
+                <div class="card">
                     <div class="card-header bg-primary text-white">
                         <h5>
                             Playlist

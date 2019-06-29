@@ -33,7 +33,6 @@ export class SkillsetService {
       .get(APP_CONFIG.storageURL+"/api/0.1.0/skillset/getall")
       .subscribe((data) => {
         if( data['success'] ) {
-//          console.log("skill loaded", data);
           this.skillsetlist = <[SkillSet]>data['skillsets'];
           console.log("SkillSets loaded", this.skillsetlist);
         }

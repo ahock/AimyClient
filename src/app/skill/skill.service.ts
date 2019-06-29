@@ -14,7 +14,7 @@ export interface Skill {
   lang: string;
   create_date: Date;
   skillsetref: {_id: string, name: string};
-  eduobjectiveref: {_id: string, name: string};
+  eduobjectiveref: [{_id: string, name: string}];
 }
 
 @Injectable({
@@ -42,6 +42,20 @@ export class SkillService {
         .subscribe((data) => {
           if( data['success'] ) {
             this.skill = <Skill>data['skill'];
+            console.log("Skill loaded", this.skill);
+          }
+        });
+    } 
+  }
+  public getSkillC(id: string, callback: Function) {
+    console.log("Skill to load", id, this.skill);
+    if(id) {
+      this.http
+        .get(APP_CONFIG.storageURL+"/api/0.1.0/skill/get", {params:{id: id}})
+        .subscribe((data) => {
+          if( data['success'] ) {
+            this.skill = <Skill>data['skill'];
+            callback();
             console.log("Skill loaded", this.skill);
           }
         });
