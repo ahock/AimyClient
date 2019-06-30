@@ -1,5 +1,6 @@
 <nav class="navbar navbar-dark bg-dark">
   <div class="container-fluid">
+    <img width="40" alt="Angular Logo" src="assets/aimy-logo-black.jpg" alt="LOGO" routerLink="/">
       <a class="navbar-brand" href="#">Aimy - Deine Kompetenzen</a>
       <form class="form-inline">
         <div *ngIf="auth.isAuthenticated()" class="btn-group" dropdown>
@@ -29,42 +30,33 @@
             </li>
           </ul>
         </div>
-        <button id="qsLoginBtn"
-          class="btn btn-primary my-2 my-sm-0"
-          *ngIf="!auth.isAuthenticated()"
-          (click)="auth.login()" type="button">
+        <a *ngIf="!auth.isAuthenticated()" class="navbar-brand" href="mailto:andreashock@bluewin.ch?subject=Mehr%20zu%20Aimy%20und%20Kompetenzmanagement&body=Ich%20möchte%20mehr%20über%20Aimy%20erfahren.%0ABitte%20kontaktiert%20mich.%0A%0AGrüsse%20">Ich möchte mehr erfahren</a>
+        
+        &nbsp;
+        <button id="qsLoginBtn" class="btn btn-primary my-2 my-sm-0" *ngIf="!auth.isAuthenticated()" (click)="auth.login()" type="button">
             Log In
         </button>
-
       </form>
   </div>
 </nav>
 
-<!--The content below is only a placeholder and can be replaced.-->
-
 <div *ngIf="!auth.isAuthenticated()">
   <!--  You are not logged in! / guest -->
-  <carousel>
+  <carousel data-interval="10000">
     <slide>
-      <img src="assets/lucas-sankey-1339354-unsplash.jpg" alt="first slide" style="display: block; width: 100%;">
+      <img src="assets/Aimy_Why.jpg" alt="Aimy Why" class="rounded mx-auto d-block" style="display: block;">
       <div class="carousel-caption d-none d-md-block">
-        <h3>Aimy hilft</h3>
-        <p>Aimy hilft den Weg zu neuen Kompetenzen zu finden. [Photo by Lucas Sankey on <a href="https://unsplash.com">Unsplash</a>]</p>
+<!--        <h3>Aimy hilft</h3>
+        <p>Aimy hilft den Weg zu neuen Kompetenzen zu finden.</p> -->
       </div>
     </slide>
     <slide>
-      <img src="assets/markus-spiske-1375298-unsplash.jpg" alt="second slide" style="display: block; width: 100%;">
+      <img src="assets/Aimy_How.jpg" alt="Aimy How" class="rounded mx-auto d-block" style="display: block;">
       <div class="carousel-caption d-none d-md-block">
-        <h3>Aimy nutzt</h3>
-        <p>Aimy nutz die kollektiven Lernerfahrungen, um auch dich weiter zu bringen. [Photo by Markus Spiske on <a href="https://unsplash.com">Unsplash</a>]</p>
       </div>
     </slide>
     <slide>
-      <img src="assets/simon-matzinger-317150-unsplash.jpg" alt="third slide" style="display: block; width: 100%;">
-      <div class="carousel-caption d-none d-md-block">
-        <h3>Du erreichst </h3>
-        <p>Du erwirbst neue Kompetenzen, die dir neue Möglichkeiten eröffnen. [Photo by Simon Matzinger on <a href="https://unsplash.com">Unsplash</a>]</p>
-      </div>
+      <img src="assets/Aimy_What.jpg" alt="Aimy What" class="rounded mx-auto d-block" style="display: block;">
     </slide>
   </carousel>
 </div>

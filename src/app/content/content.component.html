@@ -28,15 +28,36 @@
                 </div>
 -->                
 <div class="card">
-  <img class="card-img-top" [src]="this.getLogoUrl(this.contents.content.type)" alt="YouTube"  style="width: 18rem;">
+    <div class="btn-group btn-group-sm" role="group" aria-label="...">
+        <button type="button" class="btn btn-secondary" [ngClass]="{'active':this.contents.content.type==1}"><i class="fas fa-video"></i>&nbsp;Video</button>
+        <button type="button" class="btn btn-secondary" [ngClass]="{'active':this.contents.content.type==2}"><i class="far fa-newspaper"></i>&nbsp;Artikel</button>
+        <button type="button" class="btn btn-secondary" [ngClass]="{'active':this.contents.content.type==3}"><i class="fas fa-book-open"></i>&nbsp;Buch</button>
+        <button type="button" class="btn btn-secondary" [ngClass]="{'active':this.contents.content.type==4}"><i class="far fa-map"></i>&nbsp;Tutorial</button>
+        <button type="button" class="btn btn-secondary" [ngClass]="{'active':this.contents.content.type==5}"><i class="fas fa-file-audio"></i>&nbsp;Hörbuch</button>
+        <button type="button" class="btn btn-secondary" [ngClass]="{'active':this.contents.content.type==6}"><i class="fas fa-calendar-alt"></i>&nbsp;Event</button>
+        <button type="button" class="btn btn-secondary" [ngClass]="{'active':this.contents.content.type==7}"><i class="fas fa-graduation-cap"></i>&nbsp;Kurs</button>
+    </div>
+    
+    
+    
+  <img class="card-img-top" [src]="this.getLogoUrl(this.contents.content.type)" alt="YouTube" style="width: 10%;">
   <div class="card-body">
     <h5 class="card-title">{{ this.contents.content.name }}</h5>
     <p class="card-text">{{ this.contents.content.description }}</p>
-    <a href="{{ this.contents.content.url }}" target="_blank" class="btn btn-primary" (click)="this.contents.visitContent()">Lernmittel nutzen</a>
-    
+
+
+    <a href="{{ this.contents.content.url }}" target="_blank" class="btn btn-primary" (click)="this.contents.visitContent()">Lernmittel nutzen</a>&nbsp;
+
+
+
+<!--
     <p>{{ this.contents.content.type }}</p>
-    
+-->    
   </div>
+    <div class="btn-group btn-group-sm" role="group" aria-label="...">
+        <button type="button" class="btn btn-primary" (click)="this.contents.visitContent()"><i class="fas fa-play-circle"></i>&nbsp;Lermittel nutzen</button>
+        <button type="button" class="btn btn-secondary"><i class="fas fa-list-alt"></i>&nbsp;Auf meine Playlist</button>
+    </div>
 </div>                
                 
                 

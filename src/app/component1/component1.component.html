@@ -68,25 +68,22 @@
         </div>
         <button *ngFor="let skillset of this.skillsets.skillsetlist; index as i" type="button" class="list-group-item list-group-item-action" [ngClass]="{'active':i===this.skillsetindex}" (click)="this.setactiveskillset(i)">
           <div *ngIf="doFilter(i)">
-          <div class="row">
-            <div class="col-sm-2">
-              <span *ngIf="skillset.field=='Sales'"><i style="color:gray" class="fas fa-dice-d20 fa-3x"></i></span>
-              <span *ngIf="skillset.field=='OCM'"><i style="color:gray" class="fas fa-coins fa-3x"></i></span>
-              <span *ngIf="skillset.field=='Communications'"><i style="color:gray" class="fas fa-american-sign-language-interpreting fa-3x"></i></span>
-              <span *ngIf="skillset.field=='Digital Transformation'"><i style="color:gray" class="fas fa-certificate fa-3x"></i></span>
-              <span *ngIf="skillset.field=='Service Management'"><i style="color:gray" class="fas fa-exchange-alt fa-3x"></i></span>
-              <span *ngIf="skillset.field=='Innovation'"><i style="color:gray" class="fas fa-asterisk fa-3x"></i></span>
+            <div class="row">
+              <div class="col-sm-2">
+                <span *ngIf="skillset.field=='Sales'"><i style="color:gray" class="fas fa-dice-d20 fa-3x"></i></span>
+                <span *ngIf="skillset.field=='OCM'"><i style="color:gray" class="fas fa-coins fa-3x"></i></span>
+                <span *ngIf="skillset.field=='Communications'"><i style="color:gray" class="fas fa-american-sign-language-interpreting fa-3x"></i></span>
+                <span *ngIf="skillset.field=='Digital Transformation'"><i style="color:gray" class="fas fa-certificate fa-3x"></i></span>
+                <span *ngIf="skillset.field=='Service Management'"><i style="color:gray" class="fas fa-exchange-alt fa-3x"></i></span>
+                <span *ngIf="skillset.field=='Innovation'"><i style="color:gray" class="fas fa-asterisk fa-3x"></i></span>
+              </div>
+              <div class="col-sm-10 text-center">
+                <strong class="">{{ skillset.name }}</strong>
+              </div>
+            </div>    
+            <div class="row">
+              <p class="card-text">{{ skillset.description }}</p>
             </div>
-            <div class="col-sm-10 text-center">
-              <strong class="">{{ skillset.name }}</strong>
-            </div>
-          </div>    
-          <div class="row">
-            <p class="card-text">{{ skillset.description }}</p>
-          </div>
-          <div class="row">
-            <p class="card-text">{{ skillset.field }}</p>
-          </div>
           </div>
         </button>
       </div>

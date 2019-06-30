@@ -37,6 +37,7 @@ export class ContentComponent implements OnInit {
         url = "/assets/YouTube_logo_2017.png";
         break;
       case '4':
+        console.log("4");
         url = "/assets/YouTube_logo_2017.png";
         break;
       case '5':

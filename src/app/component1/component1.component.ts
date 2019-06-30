@@ -85,7 +85,7 @@ export class Component1Component implements OnInit {
       result = true;
     }
 
-    console.log("doFilter", i, this.skillsetfilter, index1, index2, result);
+//    console.log("doFilter", i, this.skillsetfilter, index1, index2, result);
 
     return result;
   }
