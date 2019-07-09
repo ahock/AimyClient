@@ -10,6 +10,7 @@ import { EduobjectiveComponent } from './eduobjective/eduobjective.component';
 import { SkillComponent } from './skill/skill.component';
 import { PlaylistComponent } from './playlist/playlist.component';
 import { ContentComponent } from './content/content.component';
+import { PromoteComponent } from './promote/promote.component';
 
 const routes: Routes = [
   {path: 'comp1', component: Component1Component},
@@ -23,6 +24,8 @@ const routes: Routes = [
   {path: 'skillboard/:id', component: Component1Component},
   {path: 'playlist', component: PlaylistComponent},
   {path: 'content/:id', component: ContentComponent},
+  {path: 'promote', component: PromoteComponent},
+  {path: 'promote/:id', component: PromoteComponent}
   ];
 
 @NgModule({

@@ -6,7 +6,7 @@
         <div class="row">
             <div class="col">
                 <div class="card">
-                    <div class="card-header">
+                    
 <!--                        ()Video ()Buch ()Artikel ()Tutorial ()Hörbuch ()Event ()Veranstalltung ()Kurs ()Online-Kurs  -->
                         <div class="btn-group btn-group-sm" role="group" aria-label="...">
                             <button type="button" class="btn btn-secondary" (click)="setContentType(1)" [ngClass]="{'active':this.contenttype==1}"><i class="fas fa-video"></i>&nbsp;Video</button>
@@ -17,7 +17,7 @@
                             <button type="button" class="btn btn-secondary" (click)="setContentType(6)" [ngClass]="{'active':this.contenttype==6}"><i class="fas fa-calendar-alt"></i>&nbsp;Event</button>
                             <button type="button" class="btn btn-secondary" (click)="setContentType(7)" [ngClass]="{'active':this.contenttype==7}"><i class="fas fa-graduation-cap"></i>&nbsp;Kurs</button>
                         </div>
-                    </div>
+                    
                     <div class="card-text">
                         <input type="text" class="form-control" [(ngModel)]="url" name="" placeholder="Hier bitte den Link zum Video eintragen" (keyup.enter)="this.details();"/>
                     </div>

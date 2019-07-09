@@ -21,6 +21,7 @@ import { AssignmentComponent } from './assignment/assignment.component';
 import { EduobjectiveComponent } from './eduobjective/eduobjective.component';
 import { PlaylistComponent } from './playlist/playlist.component';
 import { ContentComponent } from './content/content.component';
+import { PromoteComponent } from './promote/promote.component';
 
 @NgModule({
   declarations: [
@@ -35,7 +36,8 @@ import { ContentComponent } from './content/content.component';
     AssignmentComponent,
     EduobjectiveComponent,
     PlaylistComponent,
-    ContentComponent
+    ContentComponent,
+    PromoteComponent
   ],
   imports: [
     AlertModule.forRoot(),

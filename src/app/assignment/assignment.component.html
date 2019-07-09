@@ -7,61 +7,66 @@
         <div class="col">
           <div class="card">
             <h5 class="card-header bg-primary text-white">
-              <span class="col text-right">
-                <!-- fontawesome.com -->
-                <i class="fas fa-times-circle" routerLink="/"></i>
-              </span>
-              {{ this.aservice.assignment.name }}
-
-              <span class="col text-right">
-                <i class="fas fa-play-circle" (click)="this.runAssignment()"></i>
-              </span>
-
-
-            </h5>
+              <div class="d-flex justify-content-between">
+                <div>
+                   {{ this.aservice.assignment.name }}
+                </div>
+                <div>
+                   <span class="col text-right" (click)="this.runAssignment()"><i class="fas fa-play-circle"></i>&nbsp;Durchführen</span>
+                </div>
+             </div>
+            </h5>           
+            
             <div class="card-body">
-              <div>&nbsp;</div>
               <h5 class="card-title">{{ this.aservice.assignment.modul }} / {{ this.aservice.assignment.field }}</h5>
               <p class="card-text">{{ this.aservice.assignment.description }}</p>
-              <div class="container">
-                <div class="row">
-                  <div class="col">
-                    <p class="card-text">Offen: von <strong>{{ this.aservice.assignment.earlieststart | date : 'dd.MM.yyyy - H:mm' : '+0200' }}</strong> bis <strong>{{ this.aservice.assignment.latestend | date : 'dd.MM.yyyy - H:mm' : '+0200' }}</strong></p>
-                    <p class="card-text">Anzahl Aufgaben: {{ this.aservice.assignment.challenges.length }}</p>
-                    <p class="card-text">Zeit: {{ this.aservice.assignment.duration }} {{ this.aservice.assignment.durationunit }}</p>
-                    <p class="card-text">Minimalziel: {{ this.aservice.assignment.unitpass }} / {{ this.aservice.assignment.unitmax }} {{ this.aservice.assignment.unit }}</p>
-                    <p class="card-text">Bewertung: {{ this.aservice.assignment.rubic }}</p>
-                  </div>
-                  <div class="col">
-                    <p class="card-text">Autoren: {{ this.aservice.assignment.autor }} / {{ this.aservice.assignment.coautor }}</p>
-                    <p class="card-text">Coach: {{ this.aservice.assignment.coach }}</p>
-                    <p class="card-text">Startmode: {{ this.aservice.assignment.startmode }}</p>
-                    <p class="card-text">Gruppe: {{ this.aservice.assignment.group }}</p>
-                    <p class="card-text">Id: {{ this.aservice.assignment._id }}</p>
-                  </div>
-                </div>
-              </div>
+            </div>
+            <div class="card-body">
+              <h5 class="card-title">Offen: von <strong>{{ this.aservice.assignment.earlieststart | date : 'dd.MM.yyyy - H:mm' : '+0200' }}</strong> bis <strong>{{ this.aservice.assignment.latestend | date : 'dd.MM.yyyy - H:mm' : '+0200' }}</strong></h5>
+              <table class="table">
+                <tbody>
+                  <tr>
+                    <td>Anzahl Aufgaben</td>
+                    <td>{{ this.aservice.assignment.challenges.length }}</td>
+                    <td>&nbsp;</td>
+                    <td>Coach</td>
+                    <td>{{ this.aservice.assignment.coach }}</td>
+                  </tr>
+                  <tr>
+                    <td>Zeit</td>
+                    <td>{{ this.aservice.assignment.duration }} {{ this.aservice.assignment.durationunit }}</td>
+                    <td>&nbsp;</td>
+                    <td>Auftragstyp</td>
+                    <td>{{ this.aservice.assignment.type }}</td>
+                  </tr>
+                  <tr>
+                    <td>Minimalziel</td>
+                    <td>{{ this.aservice.assignment.unitpass }} / {{ this.aservice.assignment.unitmax }} {{ this.aservice.assignment.unit }}</td>
+                    <td>&nbsp;</td>
+                    <td>Bewertungsraster</td>
+                    <td>{{ this.aservice.assignment.rubic }}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="card-body">
+<!--              <h5 class="card-title">Details</h5>  -->
               <table class="table table-hover">
                 <thead class="thead-light">
                   <tr>
-                    
                     <th scope="col">Lernziel</th>
                     <th scope="col">Selbsteinschätzung</th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr *ngFor="let eduobj of this.aservice.assignment.eduobjref; index as i" (click)="selectEduObjective(eduobj.id)">
-                    
               <!--     [ngClass]="{'table-primary' : i===this.users.selected_user_index}" (click)="selectUser(i)"> -->
-                    
-                    
                     <td>{{ eduobj.name }}</td>
                     <td>{{ eduobj.selfassessment }}</td>
-                    
                   </tr>
                 </tbody>
               </table>
-            </div>
+            </div><!-- -->
           </div>
         </div>
       </div>
@@ -69,34 +74,12 @@
 </div><!-- Show assignment details -->
 
 <div *ngIf="this.mode==1" class="container">
-  <div class="btn-group" role="group" aria-label="Basic example">
-    <button type="button" class="btn btn-primary" (click)="this.cancleAssignment()">Abbrechen</button>
-        <button type="button" class="btn btn-secondary"><<</button>
-        <button type="button" class="btn btn-secondary" data-toggle="collapse" data-target="#collapseExample" (click)="this.showWarning=true">Infos</button>
-        <button type="button" class="btn btn-secondary">Gemerkt</button>
-        <button type="button" class="btn btn-secondary">Mehr Zeit</button>
-        <div class="btn-group" role="group">
-          <button id="btnGroupDrop1" type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            Mehr Zeit
-          </button>
-          <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
-            <a class="dropdown-item" href="#">+ 1 Minute</a>
-            <a class="dropdown-item" href="#">+ 5 Minuten</a>
-            <a class="dropdown-item" href="#">+ 10 Minuten</a>
-          </div>
-        </div>        
-        <button type="button" class="btn btn-primary" (click)="this.finishAssignment()">Fertig</button>
-        <button type="button" class="btn btn-secondary">>></button>
-    </div>
-  
   <div *ngIf="this.showWarning">
     <div class="card">
       <h5 class="card-header">Vor dem Start dieser Challenge</h5>
       <div class="card-body">
         <div class="card-text">{{ this.aservice.assignment.description }}</div>
-
         <p>Bitte nimm Dir kurz Zeit und lasse mich wissen, wie Du Dich heute fühlst.</p>
-        
         <h3>Körperlich</h3>
           <div class="form-check">
             <input class="form-check-input" type="radio" name="physical" id="exampleRadios0" value="option0" checked>
@@ -172,7 +155,6 @@
               Eigentlich habe ich mich gar nicht vorbereitet.
             </label>
           </div>
-        
         <p>&nbsp;</p>
         <button type="button" class="btn btn-primary" (click)="this.showWarning=false">Ok</button>
       </div>
@@ -180,29 +162,51 @@
   </div>
 
   <div class="challangelist">
-        <div *ngFor="let ch of this.challenges.challenges; index as i" class="challange">
+    <div class="row">
+      <div class="col">&nbsp;</div>
+    </div>
+    <div class="card">
+            <div class="btn-group btn-group-sm" role="group" aria-label="...">
+              <button type="button" class="btn btn-primary" (click)="this.cancleAssignment()" [ngClass]="{'active':this.contenttype==1}"><i class="far fa-window-close"></i>&nbsp;Abbrechen</button>
+              <button type="button" class="btn btn-secondary" [ngClass]="{'active':this.contenttype==2}"><i class="fas fa-chevron-left"></i>&nbsp;</button>
+              <button type="button" class="btn btn-secondary" (click)="this.showWarning=true" [ngClass]="{'active':this.contenttype==3}"><i class="fas fa-info-circle"></i>&nbsp;Info</button>
+              <button type="button" class="btn btn-secondary" [ngClass]="{'active':this.contenttype==4}"><i class="fas fa-bookmark"></i>&nbsp;Gemerkt</button>
+              <button type="button" class="btn btn-secondary" [ngClass]="{'active':this.contenttype==5}"><i class="far fa-clock"></i>&nbsp;Mehr Zeit
+              </button>
+              <button type="button" class="btn btn-primary" (click)="this.finishAssignment()" [ngClass]="{'active':this.contenttype==6}"><i class="fas fa-check-square"></i>&nbsp;Fertig</button>
+              <button type="button" class="btn btn-secondary" [ngClass]="{'active':this.contenttype==7}"><i class="fas fa-chevron-right"></i>&nbsp;</button>
+            </div>            
+    </div>
+    
+    
+    <div *ngFor="let ch of this.challenges.challenges; index as i" class="challange">
           <div class="card">
-            <h5 class="card-header">
-              <span class="col text-right">
-                {{ i }}&nbsp;
-                <!-- fontawesome.com -->
-                <!-- <i class="fas fa-times-circle" routerLink="/"></i> -->
-              </span>
-              {{ ch.name }}
-            </h5>
+            <div class="card-header bg-light">
+              <div class="d-flex justify-content-between">
+                <div>
+                  <span class="col text-right">{{ i+1 }}</span>
+                  <strong>{{ ch.name }}</strong>
+                </div>
+                <div>
+                  <span class="col text-right" (click)="this.markChallenge(i)"><i *ngIf="!this.markerlist[i]" class="far fa-bookmark"></i><i *ngIf="this.markerlist[i]" class="fas fa-bookmark"></i>&nbsp;Merken</span>
+                  <span class="col text-right" (click)="this.toggleHint($event, i)"><i class="fas fa-smile-wink"></i>&nbsp;Hinweis</span>
+                </div>
+             </div>
+            </div>           
             <div class="card-body">
               <div class="card-text">
                 <div [innerHTML]="ch.text"></div><!-- innerHTML to make HTML formating possible -->
               </div>
-
-          
+              <div class="row">
+                <div class="col">&nbsp;</div>
+              </div>
           <table width="100%">
             <tr>
               <td>
                 <div [ngSwitch]="ch.type">
                   <div *ngSwitchCase="'multi'">
                     <div class="form-check" *ngFor="let an of ch.answers; index as j">
-                      <input class="form-check-input" type="checkbox" name="gridRadios" id="gridRadios{{ i }}{{ j }}" value="{{ j }}">
+                      <input class="form-check-input" (click)="this.answerChallenge(i,j)" type="checkbox" name="gridRadios" id="gridRadios{{ i }}{{ j }}" value="{{ j }}">
                       <label class="form-check-label" for="gridRadios{{ i }}{{ j }}">  
                         {{ an }}
                       </label>
@@ -210,7 +214,7 @@
                   </div>
                   <div *ngSwitchCase="'single'">
                     <div class="form-check" *ngFor="let an of ch.answers; index as j">
-                      <input class="form-check-input" type="radio" name="challenge{{ i }}" id="gridRadios{{ i }}{{ j }}" value="{{ j }}">
+                      <input class="form-check-input" (click)="this.answerChallenge(i,j)" type="radio" name="challenge{{ i }}" id="gridRadios{{ i }}{{ j }}" value="{{ j }}">
                       <label class="form-check-label" for="gridRadios{{ i }}{{ j }}">
                         {{ an }}
                       </label>
@@ -219,33 +223,73 @@
                 </div>
                 
                 <div *ngIf="this.showHint==i" class="hint">
+                  <div class="row">
+                    <div class="col">&nbsp;</div>
+                  </div>
                   <div [innerHTML]="ch.hint"></div>
+                  <div class="row">
+                    <div class="col">&nbsp;</div>
+                  </div>
                   <div *ngIf="ch.eduobjectives!=undefined&&ch.eduobjectives.length<2" class="ch_name">Lernziel</div>
                   <div *ngIf="ch.eduobjectives!=undefined&&ch.eduobjectives.length>=2" class="ch_name">Lernziele</div>
                   <div *ngFor="let eo of ch.eduobjectives" class="eolist">
-                  <a class="nav-link" routerLink="/eduobjective/{{ eo._id }}" routerLinkActive="active-link">{{ eo.name }}</a>
+                    <a class="nav-link" routerLink="/eduobjective/{{ eo.id }}" routerLinkActive="active-link">{{ eo.name }}</a>
                   </div>
+
+                  <div *ngIf="ch.learningaid!=undefined&&ch.learningaid.length>0" class="ch_name">Lernmittel</div>
+                  <div *ngFor="let la of ch.learningaid" class="eolist">
+                    <a class="nav-link" routerLink="/content/{{ la.id }}" routerLinkActive="active-link">{{ la.name }}</a>
+                  </div>
+                  
+                  
                 </div>
               </td>
-              <td class="ch_menue">
+<!--              <td class="ch_menue">
                 <button id="{{ i }}" type="button" class="btn btn-outline-primary btn-sm btn-block" (click)="this.markChallenge(i)">Merken</button><br />
                 <button id="{{ i }}" type="button" class="btn btn-outline-secondary btn-sm btn-block" (click)="this.toggleHint($event, i)">Hinweis</button>
-              </td>
+              </td> -->
             </tr>
           </table>
           
             </div>
           </div>          
           
-        </div>
-      </div>
+    </div>
+  </div>
 </div>
 
 <div *ngIf="this.mode==5"><!-- Evaluate result -->
+      <div class="row">
+        <div class="col">&nbsp;</div>
+      </div>
+
   <div class="card">
     <h5 class="card-header">Abschluss dieser Challenge</h5>
     <div class="card-body">
       <div class="card-text">{{ this.aservice.assignment.description }}</div>
+      <div>&nbsp;</div>
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">Aufgabe</th>
+            <th scope="col">Name</th>
+            <th scope="col">Ergebnis</th>
+            <th scope="col">Antwort</th>
+            <th scope="col">Richtig</th>
+            <th scope="col">Gemerkt</th>
+          </tr>          
+        </thead>
+        <tbody>
+          <tr *ngFor="let ch of this.challenges.challenges; index as i">
+            <td class="text-center">{{ i }}</td>
+            <td>{{ ch.name }}</td>
+            <td class="text-center"><i *ngIf="answerlist[i]==ch.correct" class="fas fa-check-circle" style="color: green;"></i></td>
+            <td class="text-center">{{ answerlist[i] }}</td>
+            <td class="text-center">{{ ch.correct }}</td>
+            <td class="text-center"><i *ngIf="markerlist[i]" class="fas fa-bookmark"></i></td>
+          </tr>
+        </tbody>
+      </table>
       <button type="button" class="btn btn-primary" (click)="this.closeAssignment()">Abschliessen</button>
     </div>
   </div>  

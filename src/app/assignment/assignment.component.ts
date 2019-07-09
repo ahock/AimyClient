@@ -13,7 +13,9 @@ export class AssignmentComponent implements OnInit {
   private assignmentid: string;
   private mode: number = 0;//0: show details, 1: run assignment
   public showHint: number = -1;
-  public showWarning: boolean = true;
+  public showWarning: boolean = false;
+  private markerlist: boolean[];
+  private answerlist: string[] = [];
 
   constructor(private route:ActivatedRoute, private aservice: AssignmentService, private challenges: ChallengeService, private router:Router) {
     this.route.params.subscribe( params => {
@@ -28,8 +30,13 @@ export class AssignmentComponent implements OnInit {
   }
   public runAssignment(): void {
     console.log("Run Assignment", this.assignmentid, this.aservice.assignment);
+    if( this.aservice.assignment.type == "Mastery") {
+      this.showWarning = true;
+    }
     this.challenges.loadChallenges(this.aservice.assignment.challenges);
     this.mode = 1;
+    this.markerlist = [];
+    
   }
   public cancleAssignment(): void {
     this.mode = 0;
@@ -43,6 +50,45 @@ export class AssignmentComponent implements OnInit {
       this.showHint = id;
     }
   }
+  public markChallenge(id: number):void {
+    console.log("markChallenge:", id);
+    
+    if(!this.markerlist||this.markerlist.length==0) {
+      console.log("markerlist init");
+      for(var i=0;i<this.challenges.challenges.length;i++) {
+        this.markerlist.push(false);
+      }
+    }
+    this.markerlist[id] = !this.markerlist[id];
+      
+    console.log("markerlist", this.markerlist);
+  }
+  public answerChallenge(id: number, ans: number):void {
+    console.log("answerChallenge:", id);
+    
+    if(!this.answerlist||this.answerlist.length==0) {
+      for(var i=0;i<this.challenges.challenges.length;i++) {
+        this.answerlist.push("");
+      }
+    }
+    console.log("type", this.challenges.challenges[id].type[0] );
+    switch(this.challenges.challenges[id].type[0]) {
+      case 'multi':
+        if(this.answerlist[id]==""){
+          this.answerlist[id] = ans.toString();
+        } else {
+          this.answerlist[id] = this.answerlist[id]+","+ans.toString(); 
+        }
+        this.answerlist[id] = this.answerlist[id].split(",").sort().join(",");
+        break;
+      case 'single':
+        this.answerlist[id] = ans.toString();
+        break;
+    }
+    console.log("answerlist", this.answerlist);
+    
+  }
+  
   public finishAssignment(): void {
     this.mode = 5;
   }

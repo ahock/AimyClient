@@ -82,7 +82,7 @@
             <button type="button" routerLink="assignment/{{ aref.id }}" class="list-group-item list-group-item-action" *ngFor="let aref of this.user.getUser().assignmentrefs; index as i">
               <div class="d-flex w-100 justify-content-between">
                 <h5 class="mb-1">{{ aref.name }}</h5>
-                <small>noch 1 Tag</small>
+                <small>{{ aref.daystogo }}</small>
               </div>
               <p class="mb-1">Typ: {{ aref.type }}</p>
               <small>Rating: </small>
