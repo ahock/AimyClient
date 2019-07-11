@@ -62,7 +62,17 @@
                   <tr *ngFor="let eduobj of this.aservice.assignment.eduobjref; index as i" (click)="selectEduObjective(eduobj.id)">
               <!--     [ngClass]="{'table-primary' : i===this.users.selected_user_index}" (click)="selectUser(i)"> -->
                     <td>{{ eduobj.name }}</td>
-                    <td>{{ eduobj.selfassessment }}</td>
+<!--                    <td>{{ eduobj.id }}</td> -->
+                    <td>
+                        <i style="color:red" class="fas fa-thumbs-down" *ngIf="this.users.getUserEduOSelfassessment(eduobj.id)=='Noch garnicht'"></i>
+                        <i style="color:red" class="fas fa-frown" *ngIf="this.users.getUserEduOSelfassessment(eduobj.id)=='Zu wenig'"></i>
+                        <i style="color:black" class="fas fa-meh" *ngIf="this.users.getUserEduOSelfassessment(eduobj.id)=='Neutral'"></i>
+                        <i style="color:orange" class="fas fa-smile" *ngIf="this.users.getUserEduOSelfassessment(eduobj.id)=='Gut'"></i>
+                        <i style="color:green" class="fas fa-thumbs-up" *ngIf="this.users.getUserEduOSelfassessment(eduobj.id)=='Sehr gut'"></i>
+                        &nbsp;
+                      
+                      {{ this.users.getUserEduOSelfassessment(eduobj.id) }}
+                    </td>
                   </tr>
                 </tbody>
               </table>
@@ -290,7 +300,60 @@
           </tr>
         </tbody>
       </table>
-      <button type="button" class="btn btn-primary" (click)="this.closeAssignment()">Abschliessen</button>
     </div>
-  </div>  
+  
+  
+            <div class="card-body">
+              <h5 class="card-title"><strong>Gesamtergebnis</strong></h5>
+              <table class="table">
+                <tbody>
+                  <tr>
+                    <td>Erreicht</td>
+                    <td>3/5</td>
+                    <td>&nbsp;</td>
+                    <td>Minimalziel</td>
+                    <td><i class="fas fa-check-circle" style="color: green;"></i>&nbsp;erreicht</td>
+                  </tr>
+                  <tr>
+                    <td>Zeit</td>
+                    <td>{{ this.aservice.assignment.duration }} {{ this.aservice.assignment.durationunit }}</td>
+                    <td>&nbsp;</td>
+                    <td></td>
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <td>Bewertungsraster</td>
+                    <td>{{ this.aservice.assignment.rubic }}</td>
+                    <td>&nbsp;</td>
+                    <td></td>
+                    <td></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="card-body">
+<!--              <h5 class="card-title">Details</h5>  -->
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th scope="col">Lernziel</th>
+                    <th scope="col">Teilergebnis</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let eduobj of this.aservice.assignment.eduobjref; index as i" (click)="selectEduObjective(eduobj.id)">
+              <!--     [ngClass]="{'table-primary' : i===this.users.selected_user_index}" (click)="selectUser(i)"> -->
+                    <td>{{ eduobj.name }}</td>
+                    <td><i class="fas fa-circle" style="color: green;"></i><i class="fas fa-circle" style="color: green;"></i><i class="far fa-circle" style="color: red;"></i></td>
+                  </tr>
+                </tbody>
+              </table>
+      <button type="button" class="btn btn-primary" (click)="this.closeAssignment()">Abschliessen</button>
+            </div><!-- -->
+
+            
+  </div> 
+  
+  
+  
 </div><!-- Evaluate result -->

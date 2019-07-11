@@ -28,15 +28,25 @@
                 </div>
 -->                
 <div class="card">
-    <div class="btn-group btn-group-sm" role="group" aria-label="...">
-        <button type="button" class="btn btn-secondary" [ngClass]="{'active':this.contents.content.type==1}"><i class="fas fa-video"></i>&nbsp;Video</button>
-        <button type="button" class="btn btn-secondary" [ngClass]="{'active':this.contents.content.type==2}"><i class="far fa-newspaper"></i>&nbsp;Artikel</button>
-        <button type="button" class="btn btn-secondary" [ngClass]="{'active':this.contents.content.type==3}"><i class="fas fa-book-open"></i>&nbsp;Buch</button>
-        <button type="button" class="btn btn-secondary" [ngClass]="{'active':this.contents.content.type==4}"><i class="far fa-map"></i>&nbsp;Tutorial</button>
-        <button type="button" class="btn btn-secondary" [ngClass]="{'active':this.contents.content.type==5}"><i class="fas fa-file-audio"></i>&nbsp;Hörbuch</button>
-        <button type="button" class="btn btn-secondary" [ngClass]="{'active':this.contents.content.type==6}"><i class="fas fa-calendar-alt"></i>&nbsp;Event</button>
-        <button type="button" class="btn btn-secondary" [ngClass]="{'active':this.contents.content.type==7}"><i class="fas fa-graduation-cap"></i>&nbsp;Kurs</button>
+    <div class="card-header bg-light">
+              <div class="d-flex justify-content-between">
+                <div>
+                  <strong>{{ this.contents.content.name }}</strong>
+                </div>
+                <div>
+                    <span *ngIf="this.contents.content.type==1"><i class="fas fa-video"></i>&nbsp;Video</span>
+                    <span *ngIf="this.contents.content.type==2"><i class="far fa-newspaper"></i>&nbsp;Artikel</span>
+                    <span *ngIf="this.contents.content.type==3"><i class="fas fa-book-open"></i>&nbsp;Buch</span>
+                    <span *ngIf="this.contents.content.type==4"><i class="far fa-map"></i>&nbsp;Tutorial</span>
+                    <span *ngIf="this.contents.content.type==5"><i class="fas fa-file-audio"></i>&nbsp;Hörbuch</span>
+                    <span *ngIf="this.contents.content.type==6"><i class="fas fa-calendar-alt"></i>&nbsp;Event</span>
+                    <span *ngIf="this.contents.content.type==7"><i class="fas fa-graduation-cap"></i>&nbsp;Kurs</span>
+                </div>
+             </div>
     </div>
+
+    
+    
     
     
     
@@ -44,9 +54,19 @@
   <div class="card-body">
     <h5 class="card-title">{{ this.contents.content.name }}</h5>
     <p class="card-text">{{ this.contents.content.description }}</p>
-
-
-    <a href="{{ this.contents.content.url }}" target="_blank" class="btn btn-primary" (click)="this.contents.visitContent()">Lernmittel nutzen</a>&nbsp;
+    <p>&nbsp;</p>
+    
+    <div class="card-text">
+        <table class="table table-hover">
+            <thead><tr><th scope="col">Lernziele</th></tr></thead>
+            <tbody>
+                <tr *ngFor="let eduo of this.contents.content.eduobjectiveref" routerLink="/eduobjective/{{ eduo._id }}">
+                    <td>{{ eduo.name }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    
 
 
 
@@ -55,7 +75,9 @@
 -->    
   </div>
     <div class="btn-group btn-group-sm" role="group" aria-label="...">
-        <button type="button" class="btn btn-primary" (click)="this.contents.visitContent()"><i class="fas fa-play-circle"></i>&nbsp;Lermittel nutzen</button>
+        <a href="{{ this.contents.content.url }}" target="_blank" class="btn btn-primary" (click)="this.contents.visitContent()"><i class="fas fa-play-circle"></i>&nbsp;Lernmittel nutzen</a>
+        <button type="button" class="btn btn-secondary"><i class="fas fa-share-alt-square"></i>&nbsp;Teilen</button>
+        <button type="button" class="btn btn-secondary"><i class="fas fa-comment"></i>&nbsp;Bewerten</button>
         <button type="button" class="btn btn-secondary"><i class="fas fa-list-alt"></i>&nbsp;Auf meine Playlist</button>
     </div>
 </div>                

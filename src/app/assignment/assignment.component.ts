@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AssignmentService, Assignment } from '../assignment/assignment.service';
 import { ChallengeService } from '../challenge/challenge.service';
-
+import { UserService } from '../user/user.service';
 
 @Component({
   selector: 'app-assignment',
@@ -17,7 +17,7 @@ export class AssignmentComponent implements OnInit {
   private markerlist: boolean[];
   private answerlist: string[] = [];
 
-  constructor(private route:ActivatedRoute, private aservice: AssignmentService, private challenges: ChallengeService, private router:Router) {
+  constructor(private route:ActivatedRoute, private aservice: AssignmentService, private challenges: ChallengeService, private router:Router, private users:UserService) {
     this.route.params.subscribe( params => {
       console.log("Param: ", params, this.assignmentid)
       this.assignmentid = params.id
@@ -74,12 +74,24 @@ export class AssignmentComponent implements OnInit {
     console.log("type", this.challenges.challenges[id].type[0] );
     switch(this.challenges.challenges[id].type[0]) {
       case 'multi':
-        if(this.answerlist[id]==""){
-          this.answerlist[id] = ans.toString();
+        var pos: number;
+        pos = this.answerlist[id].split(",").indexOf(ans.toString());
+        if( pos>=0 ){
+          // reset answer
+          var temp: string[];
+          temp = this.answerlist[id].split(",");
+          temp.splice(pos, 1);
+          this.answerlist[id] = temp.join(",");
+//          console.log("reset", ans, pos, this.answerlist[id], temp);
         } else {
-          this.answerlist[id] = this.answerlist[id]+","+ans.toString(); 
-        }
-        this.answerlist[id] = this.answerlist[id].split(",").sort().join(",");
+          // set answer
+          if(this.answerlist[id]==""){
+            this.answerlist[id] = ans.toString();
+          } else {
+            this.answerlist[id] = this.answerlist[id]+","+ans.toString(); 
+          }
+          this.answerlist[id] = this.answerlist[id].split(",").sort().join(",");
+        } // end set answer
         break;
       case 'single':
         this.answerlist[id] = ans.toString();
