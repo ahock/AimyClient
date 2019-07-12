@@ -18,11 +18,14 @@ import { StatusService } from '../status/status.service';
 import { LogService, Log } from '../log/log.service';
 
 export interface EduObjective {
-  id: string;
+  _id: string;
   name: string;
-  field: string;
   selfassess: string;
-  notes: string;
+  preknowledge: string;
+  resume: string;
+  selfatest: string;
+  extatest: string;
+  mastery: string;
 }
 export interface AssignmentRefs {
   id: string;
@@ -162,7 +165,7 @@ export class UserService {
 //    console.log("LoadDate: ", this.data_loadTime);
     if(this.auth.getToken()!="") {
       this.http
-        .get(APP_CONFIG.storageURL+"/api/0.0.1/user/get", {params:{UserToken: this.auth.getToken(), ClientId: APP_CONFIG.clientID}})
+        .get(APP_CONFIG.storageURL+"/api/0.1.0/user/get", {params:{UserToken: this.auth.getToken(), ClientId: APP_CONFIG.clientID}})
         .subscribe((data) => {
           console.log("loadUserData", data);
           // Copy user data to service object
@@ -335,7 +338,7 @@ export class UserService {
       var i: number;
       for(i = 0; i<this.activeuser.eduobjectives.length; i++) {
 //        console.log(i);
-        if(this.activeuser.eduobjectives[i].id==eduoid) {
+        if(this.activeuser.eduobjectives[i]._id==eduoid) {
           break;
         }
       }
@@ -349,13 +352,67 @@ export class UserService {
       return "n/a";
     }
   }
+  public getUserEduO(achievement: number, eduoid: string): string {
+    /*
+    achievement:
+    0: Resume
+    1: PreKnowledge
+    2: SelfAtest
+    3: ExtAtest
+    4: Mastery
+    */
+    if(this.activeuser.eduobjectives) {
+      for(var i = 0; i<this.activeuser.eduobjectives.length; i++) {
+        if(this.activeuser.eduobjectives[i]._id==eduoid) {
+          break;
+        }
+      }
+//      console.log(i);
+      if(i<this.activeuser.eduobjectives.length) {
+        // matching eduo found
+        var result: string;
+        switch(achievement) {
+          case 0:
+            result = this.activeuser.eduobjectives[i].resume;
+            break;
+          case 1:
+            result = this.activeuser.eduobjectives[i].preknowledge;
+            break;
+          case 2:
+            result = this.activeuser.eduobjectives[i].selfatest;
+            break;
+          case 3:
+            result = this.activeuser.eduobjectives[i].extatest;
+            break;
+          case 4:
+            result = this.activeuser.eduobjectives[i].mastery;
+            break;
+          default:
+            result = "n/a";
+        }
+        return result;  
+      } else {
+        return "n/a";
+      }
+    } else {
+      return "n/a";
+    }
+  }
   public setUserEduOSelfassessment(eduoid: string, value: string): void {
     console.log("UserService: Save selfassess", eduoid, value);
-    this.http
-      .get(APP_CONFIG.storageURL+"/api/0.0.1/user/seteduoselfassess", {params:{token: this.auth.getToken(), eduoid: eduoid, value: value}})
-      .subscribe((data) => {
-        console.log("saveUserData", data);
-    });   
+    if(eduoid!=""&&value!=undefined) {
+      this.http
+        .get(APP_CONFIG.storageURL+"/api/0.1.0/user/seteduoselfassess", {params:{token: this.auth.getToken(), eduoid: eduoid, value: value}})
+        .subscribe((data) => {
+          console.log("saveUserData", data);
+      });
+      for(var i=0; i<this.activeuser.eduobjectives.length;i++) {
+        if(eduoid==this.activeuser.eduobjectives[i]._id) {
+          console.log("EduO "+i+" of user:", this.activeuser.eduobjectives[i] );
+          this.activeuser.eduobjectives[i].selfassess = value;
+        }
+      }
+    }
   } 
   
 }

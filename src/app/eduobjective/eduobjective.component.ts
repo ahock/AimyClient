@@ -37,8 +37,9 @@ export class EduobjectiveComponent implements OnInit {
     
     if(!this.editselfassess) {
       if(this.users.getUserEduOSelfassessment(this.eduobjectiveid)!=this.selfassessvalue) {
+        // Only save if value has changed
         console.log("Save selfassess", this.selfassessvalue);
-        this.users.setUserEduOSelfassessment(this.eduobjectiveid, this.selfassessvalue)  
+        this.users.setUserEduOSelfassessment(this.eduobjectiveid, this.selfassessvalue);  
       }
     }
   }
