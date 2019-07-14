@@ -214,6 +214,7 @@
             <tr>
               <td>
                 <div [ngSwitch]="ch.type">
+                  <!-- Multiple choice question, multiple answers possible -->
                   <div *ngSwitchCase="'multi'">
                     <div class="form-check" *ngFor="let an of ch.answers; index as j">
                       <input class="form-check-input" (click)="this.answerChallenge(i,j)" type="checkbox" name="gridRadios" id="gridRadios{{ i }}{{ j }}" value="{{ j }}">
@@ -222,6 +223,7 @@
                       </label>
                     </div>                    
                   </div>
+                  <!-- Multiple choice question, only one answers possible -->
                   <div *ngSwitchCase="'single'">
                     <div class="form-check" *ngFor="let an of ch.answers; index as j">
                       <input class="form-check-input" (click)="this.answerChallenge(i,j)" type="radio" name="challenge{{ i }}" id="gridRadios{{ i }}{{ j }}" value="{{ j }}">
@@ -230,6 +232,31 @@
                       </label>
                     </div>
                   </div>
+                  <!-- Survey feedback from other people -->
+                  <div *ngSwitchCase="'survey'">
+                    <div>Anzahl Befragter: {{ ch.survey.numberparticipants }}</div>
+                    <div>Auswahl der Befragten: {{ ch.survey.scope }}</div>
+                    <div>Art der Befragung: {{ ch.survey.provider }}</div>
+                    <div>&nbsp;</div>
+                    <div class="form-group">
+                        <label for="exampleInputEmail1">Hier die Email-Adressen der Befragten eintragen:</label>
+                        <input *ngFor="let par of ch.participants" type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="{{ par }}">
+                    </div>
+                    <div>Befragung kann eingesehen werden: {{ ch.survey.show }}</div>
+                    <div>&nbsp;</div>
+                    <div *ngIf="ch.survey.show"><a href="{{ ch.survey.url }}" target="_new" class="btn btn-primary"role="button">Befragung einsehen</a></div>        
+                  </div>
+                  <!-- Freetext question -->
+                  <div *ngSwitchCase="'freetext'">
+                    
+                    <div class="form-group">
+                      <label for="exampleFormControlTextarea2">Antwort</label>
+                      <textarea class="form-control rounded-0" id="exampleFormControlTextarea2" rows="3"></textarea>
+                    </div>                    
+                  </div>
+                  
+                  
+                  
                 </div>
                 
                 <div *ngIf="this.showHint==i" class="hint">
@@ -269,41 +296,40 @@
 </div>
 
 <div *ngIf="this.mode==5"><!-- Evaluate result -->
-      <div class="row">
-        <div class="col">&nbsp;</div>
-      </div>
-
+  <div class="row">
+    <div class="col">&nbsp;</div>
+  </div>
   <div class="card">
     <h5 class="card-header">Abschluss dieser Challenge</h5>
     <div class="card-body">
-      <div class="card-text">{{ this.aservice.assignment.description }}</div>
-      <div>&nbsp;</div>
-      <table class="table">
-        <thead>
-          <tr>
-            <th scope="col">Aufgabe</th>
-            <th scope="col">Name</th>
-            <th scope="col">Ergebnis</th>
-            <th scope="col">Antwort</th>
-            <th scope="col">Richtig</th>
-            <th scope="col">Gemerkt</th>
-          </tr>          
-        </thead>
-        <tbody>
-          <tr *ngFor="let ch of this.challenges.challenges; index as i">
-            <td class="text-center">{{ i }}</td>
-            <td>{{ ch.name }}</td>
-            <td class="text-center"><i *ngIf="answerlist[i]==ch.correct" class="fas fa-check-circle" style="color: green;"></i></td>
-            <td class="text-center">{{ answerlist[i] }}</td>
-            <td class="text-center">{{ ch.correct }}</td>
-            <td class="text-center"><i *ngIf="markerlist[i]" class="fas fa-bookmark"></i></td>
-          </tr>
-        </tbody>
-      </table>
+          <div class="card-text">{{ this.aservice.assignment.description }}</div>
+          <div>&nbsp;</div>
+          <table class="table">
+            <thead>
+              <tr>
+                <th scope="col">Aufgabe</th>
+                <th scope="col">Name</th>
+                <th scope="col">Status</th>
+                <th scope="col">Ergebnis</th>
+                <th scope="col">Antwort</th>
+                <th scope="col">Richtig</th>
+                <th scope="col">Gemerkt</th>
+              </tr>          
+            </thead>
+            <tbody>
+              <tr *ngFor="let ch of this.challenges.challenges; index as i">
+                <td class="text-center">{{ i }}</td>
+                <td>{{ ch.name }}</td>
+                <td>{{ ch.status }}</td>
+                <td class="text-center"><i *ngIf="answerlist[i]==ch.correct" class="fas fa-check-circle" style="color: green;"></i></td>
+                <td class="text-center">{{ answerlist[i] }}</td>
+                <td class="text-center">{{ ch.correct }}</td>
+                <td class="text-center"><i *ngIf="markerlist[i]" class="fas fa-bookmark"></i></td>
+              </tr>
+            </tbody>
+          </table>
     </div>
-  
-  
-            <div class="card-body">
+    <div class="card-body">
               <h5 class="card-title"><strong>Gesamtergebnis</strong></h5>
               <table class="table">
                 <tbody>
@@ -330,8 +356,8 @@
                   </tr>
                 </tbody>
               </table>
-            </div>
-            <div class="card-body">
+    </div>
+    <div class="card-body">
 <!--              <h5 class="card-title">Details</h5>  -->
               <table class="table">
                 <thead>
@@ -348,12 +374,7 @@
                   </tr>
                 </tbody>
               </table>
-      <button type="button" class="btn btn-primary" (click)="this.closeAssignment()">Abschliessen</button>
-            </div><!-- -->
-
-            
+          <button type="button" class="btn btn-primary" (click)="this.closeAssignment()">Abschliessen</button>
+    </div><!-- -->
   </div> 
-  
-  
-  
 </div><!-- Evaluate result -->
