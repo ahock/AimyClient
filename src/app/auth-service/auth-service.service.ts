@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { AUTH_CONFIG } from './auth0-variables';
+import { AUTH_CONFIG } from '../app-variables';
 import { Router } from '@angular/router';
 import * as auth0 from 'auth0-js';
 import { StatusService } from '../status/status.service';
@@ -47,6 +47,7 @@ export class AuthServiceService {
   }
 
   public setLoginCallback(callback: Function): void {
+    console.log("localLogin", callback);
     this.loginCallback = callback;
 //    this.loginCallback().call();
   }
@@ -55,12 +56,14 @@ export class AuthServiceService {
     this.auth0.authorize();
   }
 
-  public handleAuthentication(): void {
+  public handleAuthentication(callback: Function): void {
+    console.log("Auth-Service: handleAuthentication");
     this.auth0.parseHash((err, authResult) => {
       if (authResult && authResult.accessToken && authResult.idToken) {
         this.localLogin(authResult, () => {
-//          this.users.loadUserData(() => this.router.navigate(['/dialog']));
-          this.router.navigate(['/#']);
+          console.log("Auth-Service: handleAuthentication - callback", this._userToken, localStorage.getItem('user_token'));
+          callback(this._userToken);
+//          this.loginCallback(this._userToken);
         });
       } else if (err) {
         this.router.navigate(['/']);
@@ -71,6 +74,8 @@ export class AuthServiceService {
   }
 
   private localLogin(authResult, callback): void {
+    console.log("Auth-Service: localLogin");
+
     // Set the time that the access token will expire at
     const expiresAt = (authResult.expiresIn * 1000) + Date.now();
     this._accessToken = authResult.accessToken;
@@ -79,10 +84,12 @@ export class AuthServiceService {
     this._userToken = authResult.idTokenPayload.sub;
     
 //    console.log("AuthService: localLogin", authResult.idTokenPayload);
-//    console.log("Token:   ", this._userToken);
+
+    console.log("localLogin:Token:", this._userToken);
+    localStorage.setItem('user_token', this._userToken);
+    
 //    console.log("Expires: ", new Date(this._expiresAt));
 //    console.log("Now:     ", new Date());
-    
 
     this.auth_detail.email = authResult.idTokenPayload['email'];
     this.auth_detail.name = authResult.idTokenPayload['name'];
@@ -92,17 +99,16 @@ export class AuthServiceService {
     this.auth_detail.family_name = authResult.idTokenPayload['family_name'];
     this.auth_detail.locale = authResult.idTokenPayload['locale'];
     
-    console.log("Details: ", this.auth_detail);
+    console.log("Details: ", this.auth_detail, authResult.idTokenPayload.sub);
     
-    localStorage.setItem('user_token', authResult.idTokenPayload.sub);
+//    localStorage.setItem('user_token', authResult.idTokenPayload.sub);
     localStorage.setItem('expires_at', String(expiresAt));
     localStorage.setItem('access_token', authResult.accessToken);
     
     this.status.setStatusText(authResult.idTokenPayload.sub);
     
-    this.loginCallback();
-    
-    callback.call();
+//    this.loginCallback(authResult.idTokenPayload.sub);
+    callback.call(this._userToken);
   }
 
   public renewTokens(): void {
@@ -147,8 +153,13 @@ export class AuthServiceService {
   }
 
   public getToken(): string {
-    return localStorage.getItem('user_token');
+        return this._userToken;
+//    return localStorage.getItem('user_token');
   }
+  public setToken( token: string ): void {
+        this._userToken = token;
+  }
+
   
   public getExpiration(): string {
     return localStorage.getItem('expires_at');

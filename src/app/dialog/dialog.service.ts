@@ -45,6 +45,21 @@ export class DialogService {
   public getDialogs(): Dialog[] {
     return this.dialoglist;
   }
+
+  public getActiveDialogCount(token: string, callback): void {
+    var ActiveDialogCount: number = 0;
+
+    this.http
+      .get(APP_CONFIG.storageURL+"/api/0.1.0/dialogs/getactive", {params:{token: token}})
+      .subscribe((data) => {
+        if( data['success'] ) {
+          ActiveDialogCount = data['dialogcount'];
+          console.log("DialogCount", ActiveDialogCount);
+          callback(ActiveDialogCount);
+        }
+    });    
+  }
+  
   public createNewDialog(token: string): void {
     this.newdialog.token = token;
     

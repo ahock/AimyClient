@@ -21,11 +21,11 @@ export interface EduObjective {
   _id: string;
   name: string;
   selfassess: string;
-  preknowledge: string;
-  resume: string;
-  selfatest: string;
-  extatest: string;
-  mastery: string;
+  preknowledge?: string;
+  resume?: string;
+  selfatest?: string;
+  extatest?: string;
+  mastery?: string;
 }
 export interface AssignmentRefs {
   id: string;
@@ -80,6 +80,7 @@ export class UserService {
   public user_status = UserService.NO_USER;
   
   private user_token: string = "";
+  
   private user_valid: boolean = false;
   private user_loaded: boolean = false;
   private data_loadTime: Date;
@@ -105,7 +106,7 @@ export class UserService {
       this.user_token = this.auth.getToken();
       this.user_status = UserService.USER_VALID;
       this.status.setStatusText("Angemeldet");
-      console.log("UserService - constructor: isAuthenticated", this.user_status, this.user_token);
+      console.log("UserService - constructor: isAuthenticated", this.user_status, this.auth.getToken(), this.user_token);
       
       this.log.createLog(<Log>{token:this.user_token,area:"user",message:"login",content:"AimyClient"});
       
@@ -120,10 +121,13 @@ export class UserService {
     }
   }
 
-  public loginDone():void {
-    console.log("loginDone", this.user_status);
+  public loginDone(token: string):void {
     this.user_status = UserService.USER_VALID;
-    console.log("loginDone", this.user_status);
+    console.log("loginDone", this.user_status, token);
+    this.user_token = token;
+    this.loadUserData( () => {
+      console.log("loginDone: User Data loaded");
+    });
   }
   
   public doRegistration():boolean {
@@ -159,10 +163,12 @@ export class UserService {
     console.log("UserService: loadUserData");
     this.data_loadTime = new Date();
     this.email2 = this.auth.auth_detail.email;
-    
 //    console.log("Config: ", APP_CONFIG.clientID, APP_CONFIG.storageURL, APP_CONFIG.apiVersion);
-//    console.log("Token:",this.auth.getToken());
-//    console.log("LoadDate: ", this.data_loadTime);
+    if(localStorage.getItem('user_token') != "") {
+      this.auth.setToken(localStorage.getItem('user_token'));
+    }
+    console.log("UserService: loadUserData - Token:", this.auth.getToken());
+    
     if(this.auth.getToken()!="") {
       this.http
         .get(APP_CONFIG.storageURL+"/api/0.1.0/user/get", {params:{UserToken: this.auth.getToken(), ClientId: APP_CONFIG.clientID}})
@@ -286,6 +292,9 @@ export class UserService {
     }
     return true;
   }
+  public setUserToken(token: string): void {
+    this.user_token = token;
+  }
   public getUserToken(): string {
     return this.user_token;
   }
@@ -407,10 +416,16 @@ export class UserService {
           console.log("saveUserData", data);
       });
       for(var i=0; i<this.activeuser.eduobjectives.length;i++) {
+        console.log("EduO "+i+" of user:", this.activeuser.eduobjectives[i] );
         if(eduoid==this.activeuser.eduobjectives[i]._id) {
           console.log("EduO "+i+" of user:", this.activeuser.eduobjectives[i] );
           this.activeuser.eduobjectives[i].selfassess = value;
+          break;
         }
+      }
+      if(i>=this.activeuser.eduobjectives.length) {
+        // new self assessment
+        this.activeuser.eduobjectives.push({_id: eduoid, selfassess: value, name: "New"});
       }
     }
   } 

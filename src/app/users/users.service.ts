@@ -25,6 +25,7 @@ export interface User {
     goals: [];
     masteries: [];
     eduobjectives: Array<EduObjective>;
+    plan?: string;
 }
 
 
