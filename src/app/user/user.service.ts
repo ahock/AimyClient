@@ -58,6 +58,12 @@ export interface User {
     email: string;
     firstname: string;
     lastname: string;
+    
+    language?: string;
+    gender?: string;
+    plan?: string;
+    learningstyle?: string;
+    
     login_history?: [];
     reviews?: [];
     groups?: string[];
@@ -85,7 +91,7 @@ export class UserService {
   private user_loaded: boolean = false;
   private data_loadTime: Date;
   
-  private activeuser: User;
+  public activeuser: User;
 
   public firstname: string = "";
   public lastname: string = "";
@@ -131,31 +137,17 @@ export class UserService {
   }
   
   public doRegistration():boolean {
-
     console.log("doRegistration");
-    console.log("firstname", this.firstname);
-    console.log("lastname", this.lastname);
-    console.log("full_name", this.full_name);
-    console.log("email", this.email1);
-    console.log("email2", this.email2);
-    console.log("gender", this.gender);
-    console.log("language", this.language);
-    
-    var payload = {
-      token: this.auth.getToken(),
-      firstname:this.firstname,
-      lastname:this.lastname,
-      email1:this.email1,
-      email2:this.email2,
-      gender:this.gender,
-      language:this.language,
-    };
-    
+
+    console.log("Active user", this.activeuser);
+
+    // Store user data in system
     this.http
-      .get(APP_CONFIG.storageURL+"/api/0.0.1/user/add", {params:{UserToken: this.auth.getToken(), UserData: JSON.stringify(payload)}})
+      .get(APP_CONFIG.storageURL+"/api/0.0.1/user/add", {params:{UserToken: this.auth.getToken(), UserData: JSON.stringify(this.activeuser)}})
       .subscribe((data) => {
         console.log("saveUserData", data);
-      });    
+      });
+
     return true;
   }
   
