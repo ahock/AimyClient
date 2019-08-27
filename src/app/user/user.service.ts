@@ -143,11 +143,10 @@ export class UserService {
 
     // Store user data in system
     this.http
-      .get(APP_CONFIG.storageURL+"/api/0.0.1/user/add", {params:{UserToken: this.auth.getToken(), UserData: JSON.stringify(this.activeuser)}})
+      .get(APP_CONFIG.storageURL+"/api/0.1.0/user/add", {params:{UserToken: this.auth.getToken(), UserData: JSON.stringify(this.activeuser)}})
       .subscribe((data) => {
         console.log("saveUserData", data);
       });
-
     return true;
   }
   

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormsModule }   from '@angular/forms';
-
+import { Router } from '@angular/router';
 import { AuthServiceService } from '../auth-service/auth-service.service';
 import { UserService, User, SkillRef } from '../user/user.service';
 
@@ -30,7 +30,7 @@ export class RegistrationComponent implements OnInit {
     }
   ];
 
-  constructor(public auth: AuthServiceService, public user: UserService) { }
+  constructor(public router: Router, public auth: AuthServiceService, public user: UserService) { }
 
   ngOnInit() {
     console.log("RegistrationComponent - ngOnInit");
@@ -50,5 +50,15 @@ export class RegistrationComponent implements OnInit {
     this.user.activeuser.skillref.push(this.defaultskills[1]);
   }
 
+  public doRegistration(): void {
+    this.setDefaultSkills();
+    this.user.doRegistration();
+    setTimeout(() => {
+      this.user.loadUserData(() => {
+        console.log("loginDone: User Data loaded");
+        this.router.navigate(['/dialog']);
+      });
+    }, 1000);
+  }
 }
 
