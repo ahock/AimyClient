@@ -178,120 +178,227 @@
     <div class="card">
             <div class="btn-group btn-group-sm" role="group" aria-label="...">
               <button type="button" class="btn btn-primary" (click)="this.cancleAssignment()" [ngClass]="{'active':this.contenttype==1}"><i class="far fa-window-close"></i>&nbsp;Abbrechen</button>
-              <button type="button" class="btn btn-secondary" [ngClass]="{'active':this.contenttype==2}"><i class="fas fa-chevron-left"></i>&nbsp;</button>
+              <button type="button" class="btn btn-secondary" (click)="this.prevChallenge()" [ngClass]="{'active':this.contenttype==2}"><i class="fas fa-chevron-left"></i>&nbsp;</button>
               <button type="button" class="btn btn-secondary" (click)="this.showWarning=true" [ngClass]="{'active':this.contenttype==3}"><i class="fas fa-info-circle"></i>&nbsp;Info</button>
               <button type="button" class="btn btn-secondary" [ngClass]="{'active':this.contenttype==4}"><i class="fas fa-bookmark"></i>&nbsp;Gemerkt</button>
               <button type="button" class="btn btn-secondary" [ngClass]="{'active':this.contenttype==5}"><i class="far fa-clock"></i>&nbsp;Mehr Zeit
               </button>
               <button type="button" class="btn btn-primary" (click)="this.finishAssignment()" [ngClass]="{'active':this.contenttype==6}"><i class="fas fa-check-square"></i>&nbsp;Fertig</button>
-              <button type="button" class="btn btn-secondary" [ngClass]="{'active':this.contenttype==7}"><i class="fas fa-chevron-right"></i>&nbsp;</button>
+              <button type="button" class="btn btn-secondary" (click)="this.nextChallenge()" [ngClass]="{'active':this.contenttype==7}"><i class="fas fa-chevron-right"></i>&nbsp;</button>
             </div>            
     </div>
     
-    
-    <div *ngFor="let ch of this.challenges.challenges; index as i" class="challange">
-          <div class="card">
-            <div class="card-header bg-light">
-              <div class="d-flex justify-content-between">
-                <div>
-                  <span class="col text-right">{{ i+1 }}</span>
-                  <strong>{{ ch.name }}</strong>
-                </div>
-                <div>
-                  <span class="col text-right" (click)="this.markChallenge(i)"><i *ngIf="!this.markerlist[i]" class="far fa-bookmark"></i><i *ngIf="this.markerlist[i]" class="fas fa-bookmark"></i>&nbsp;Merken</span>
-                  <span class="col text-right" (click)="this.toggleHint($event, i)"><i class="fas fa-smile-wink"></i>&nbsp;Hinweis</span>
-                </div>
-             </div>
-            </div>           
-            <div class="card-body">
-              <div class="card-text">
-                <div [innerHTML]="ch.text"></div><!-- innerHTML to make HTML formating possible -->
-              </div>
-              <div class="row">
-                <div class="col">&nbsp;</div>
-              </div>
-          <table width="100%">
-            <tr>
-              <td>
-                <div [ngSwitch]="ch.type">
-                  <!-- Multiple choice question, multiple answers possible -->
-                  <div *ngSwitchCase="'multi'">
-                    <div class="form-check" *ngFor="let an of ch.answers; index as j">
-                      <input class="form-check-input" (click)="this.answerChallenge(i,j)" type="checkbox" name="gridRadios" id="gridRadios{{ i }}{{ j }}" value="{{ j }}">
-                      <label class="form-check-label" for="gridRadios{{ i }}{{ j }}">  
-                        {{ an }}
-                      </label>
-                    </div>                    
-                  </div>
-                  <!-- Multiple choice question, only one answers possible -->
-                  <div *ngSwitchCase="'single'">
-                    <div class="form-check" *ngFor="let an of ch.answers; index as j">
-                      <input class="form-check-input" (click)="this.answerChallenge(i,j)" type="radio" name="challenge{{ i }}" id="gridRadios{{ i }}{{ j }}" value="{{ j }}">
-                      <label class="form-check-label" for="gridRadios{{ i }}{{ j }}">
-                        {{ an }}
-                      </label>
+    <div [ngSwitch]="this.aservice.assignment.challengemode">
+      <div *NgSwitchDefault>
+        <p>Default</p>
+      </div>
+      <div *ngSwitchCase="'single'">
+              <div class="card">
+                <div class="card-header bg-light">
+                  <div class="d-flex justify-content-between">
+                    <div>
+                      <span class="col text-right">{{ this.challengeid }}</span>
+                      <strong>{{ this.challenges.challenges[this.challengeid].name }}</strong>
                     </div>
-                  </div>
-                  <!-- Survey feedback from other people -->
-                  <div *ngSwitchCase="'survey'">
-                    <div>Anzahl Befragter: {{ ch.survey.numberparticipants }}</div>
-                    <div>Auswahl der Befragten: {{ ch.survey.scope }}</div>
-                    <div>Art der Befragung: {{ ch.survey.provider }}</div>
-                    <div>&nbsp;</div>
-                    <div class="form-group">
-                        <label for="exampleInputEmail1">Hier die Email-Adressen der Befragten eintragen:</label>
-                        <input *ngFor="let par of ch.participants" type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="{{ par }}">
+                    <div>
+                      <span class="col text-right" (click)="this.markChallenge(i)"><i *ngIf="!this.markerlist[i]" class="far fa-bookmark"></i><i *ngIf="this.markerlist[i]" class="fas fa-bookmark"></i>&nbsp;Merken</span>
+                      <span class="col text-right" (click)="this.toggleHint($event, i)"><i class="fas fa-smile-wink"></i>&nbsp;Hinweis</span>
                     </div>
-                    <div>Befragung kann eingesehen werden: {{ ch.survey.show }}</div>
-                    <div>&nbsp;</div>
-                    <div *ngIf="ch.survey.show"><a href="{{ ch.survey.url }}" target="_new" class="btn btn-primary"role="button">Befragung einsehen</a></div>        
+                 </div>
+                </div>           
+                <div class="card-body">
+                  <div class="card-text">
+                    <div [innerHTML]="this.challenges.challenges[this.challengeid].text"></div><!-- innerHTML to make HTML formating possible -->
                   </div>
-                  <!-- Freetext question -->
-                  <div *ngSwitchCase="'freetext'">
+                  <div class="row">
+                    <div class="col">&nbsp;</div>
+                  </div>
+              <table width="100%">
+                <tr>
+                  <td>
+                    <div [ngSwitch]="this.challenges.challenges[this.challengeid].type">
+                      <!-- Multiple choice question, multiple answers possible -->
+                      <div *ngSwitchCase="'multi'">
+                        <div class="form-check" *ngFor="let an of this.challenges.challenges[this.challengeid].answers; index as j">
+                          <input class="form-check-input" (click)="this.answerChallenge(i,j)" type="checkbox" name="gridRadios" id="gridRadios{{ i }}{{ j }}" value="{{ j }}">
+                          <label class="form-check-label" for="gridRadios{{ i }}{{ j }}">  
+                            {{ an }}
+                          </label>
+                        </div>                    
+                      </div>
+                      <!-- Multiple choice question, only one answers possible -->
+                      <div *ngSwitchCase="'single'">
+                        <div class="form-check" *ngFor="let an of this.challenges.challenges[this.challengeid].answers; index as j">
+                          <input class="form-check-input" (click)="this.answerChallenge(i,j)" type="radio" name="challenge{{ i }}" id="gridRadios{{ i }}{{ j }}" value="{{ j }}">
+                          <label class="form-check-label" for="gridRadios{{ i }}{{ j }}">
+                            {{ an }}
+                          </label>
+                        </div>
+                      </div>
+                      <!-- Survey feedback from other people -->
+                      <div *ngSwitchCase="'survey'">
+                        <div>Anzahl Befragter: {{ this.challenges.challenges[this.challengeid].survey.numberparticipants }}</div>
+                        <div>Auswahl der Befragten: {{ this.challenges.challenges[this.challengeid].survey.scope }}</div>
+                        <div>Art der Befragung: {{ this.challenges.challenges[this.challengeid].survey.provider }}</div>
+                        <div>&nbsp;</div>
+                        <div class="form-group">
+                            <label for="exampleInputEmail1">Hier die Email-Adressen der Befragten eintragen:</label>
+                            <input *ngFor="let par of ch.participants" type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="{{ par }}">
+                        </div>
+                        <div>Befragung kann eingesehen werden: {{ this.challenges.challenges[this.challengeid].survey.show }}</div>
+                        <div>&nbsp;</div>
+                        <div *ngIf="this.challenges.challenges[this.challengeid].survey.show"><a href="{{ this.challenges.challenges[this.challengeid].survey.url }}" target="_new" class="btn btn-primary"role="button">Befragung einsehen</a></div>        
+                      </div>
+                      <!-- Freetext question -->
+                      <div *ngSwitchCase="'freetext'">
+                        
+                        <div class="form-group">
+                          <label for="exampleFormControlTextarea2">Antwort</label>
+                          <textarea class="form-control rounded-0" id="exampleFormControlTextarea2" rows="3"></textarea>
+                        </div>                    
+                      </div>
+                      
+                      
+                      
+                    </div>
                     
-                    <div class="form-group">
-                      <label for="exampleFormControlTextarea2">Antwort</label>
-                      <textarea class="form-control rounded-0" id="exampleFormControlTextarea2" rows="3"></textarea>
-                    </div>                    
-                  </div>
-                  
-                  
-                  
-                </div>
-                
-                <div *ngIf="this.showHint==i" class="hint">
-                  <div class="row">
-                    <div class="col">&nbsp;</div>
-                  </div>
-                  <div [innerHTML]="ch.hint"></div>
-                  <div class="row">
-                    <div class="col">&nbsp;</div>
-                  </div>
-                  <div *ngIf="ch.eduobjectives!=undefined&&ch.eduobjectives.length<2" class="ch_name">Lernziel</div>
-                  <div *ngIf="ch.eduobjectives!=undefined&&ch.eduobjectives.length>=2" class="ch_name">Lernziele</div>
-                  <div *ngFor="let eo of ch.eduobjectives" class="eolist">
-                    <a class="nav-link" routerLink="/eduobjective/{{ eo.id }}" routerLinkActive="active-link">{{ eo.name }}</a>
-                  </div>
+                    <div *ngIf="this.showHint==i" class="hint">
+                      <div class="row">
+                        <div class="col">&nbsp;</div>
+                      </div>
+                      <div [innerHTML]="ch.hint"></div>
+                      <div class="row">
+                        <div class="col">&nbsp;</div>
+                      </div>
+                      <div *ngIf="this.challenges.challenges[this.challengeid].eduobjectives!=undefined&&ch.eduobjectives.length<2" class="ch_name">Lernziel</div>
+                      <div *ngIf="this.challenges.challenges[this.challengeid].eduobjectives!=undefined&&ch.eduobjectives.length>=2" class="ch_name">Lernziele</div>
+                      <div *ngFor="let eo of this.challenges.challenges[this.challengeid].eduobjectives" class="eolist">
+                        <a class="nav-link" routerLink="/eduobjective/{{ eo.id }}" routerLinkActive="active-link">{{ eo.name }}</a>
+                      </div>
+    
+                      <div *ngIf="this.challenges.challenges[this.challengeid].learningaid!=undefined&&ch.learningaid.length>0" class="ch_name">Lernmittel</div>
+                      <div *ngFor="let la of this.challenges.challenges[this.challengeid].learningaid" class="eolist">
+                        <a class="nav-link" routerLink="/content/{{ la.id }}" routerLinkActive="active-link">{{ la.name }}</a>
+                      </div>
+                      
+                      
+                    </div>
+                  </td>
 
-                  <div *ngIf="ch.learningaid!=undefined&&ch.learningaid.length>0" class="ch_name">Lernmittel</div>
-                  <div *ngFor="let la of ch.learningaid" class="eolist">
-                    <a class="nav-link" routerLink="/content/{{ la.id }}" routerLinkActive="active-link">{{ la.name }}</a>
-                  </div>
-                  
-                  
+                </tr>
+              </table>
+              
                 </div>
-              </td>
-<!--              <td class="ch_menue">
-                <button id="{{ i }}" type="button" class="btn btn-outline-primary btn-sm btn-block" (click)="this.markChallenge(i)">Merken</button><br />
-                <button id="{{ i }}" type="button" class="btn btn-outline-secondary btn-sm btn-block" (click)="this.toggleHint($event, i)">Hinweis</button>
-              </td> -->
-            </tr>
-          </table>
-          
-            </div>
-          </div>          
-          
+              </div>
+
+      </div>
+      <div *ngSwitchCase="'multi'">
+        <div *ngFor="let ch of this.challenges.challenges; index as i" class="challange">
+              <div class="card">
+                <div class="card-header bg-light">
+                  <div class="d-flex justify-content-between">
+                    <div>
+                      <span class="col text-right">{{ i+1 }}</span>
+                      <strong>{{ ch.name }}</strong>
+                    </div>
+                    <div>
+                      <span class="col text-right" (click)="this.markChallenge(i)"><i *ngIf="!this.markerlist[i]" class="far fa-bookmark"></i><i *ngIf="this.markerlist[i]" class="fas fa-bookmark"></i>&nbsp;Merken</span>
+                      <span class="col text-right" (click)="this.toggleHint($event, i)"><i class="fas fa-smile-wink"></i>&nbsp;Hinweis</span>
+                    </div>
+                 </div>
+                </div>           
+                <div class="card-body">
+                  <div class="card-text">
+                    <div [innerHTML]="ch.text"></div><!-- innerHTML to make HTML formating possible -->
+                  </div>
+                  <div class="row">
+                    <div class="col">&nbsp;</div>
+                  </div>
+              <table width="100%">
+                <tr>
+                  <td>
+                    <div [ngSwitch]="ch.type">
+                      <!-- Multiple choice question, multiple answers possible -->
+                      <div *ngSwitchCase="'multi'">
+                        <div class="form-check" *ngFor="let an of ch.answers; index as j">
+                          <input class="form-check-input" (click)="this.answerChallenge(i,j)" type="checkbox" name="gridRadios" id="gridRadios{{ i }}{{ j }}" value="{{ j }}">
+                          <label class="form-check-label" for="gridRadios{{ i }}{{ j }}">  
+                            {{ an }}
+                          </label>
+                        </div>                    
+                      </div>
+                      <!-- Multiple choice question, only one answers possible -->
+                      <div *ngSwitchCase="'single'">
+                        <div class="form-check" *ngFor="let an of ch.answers; index as j">
+                          <input class="form-check-input" (click)="this.answerChallenge(i,j)" type="radio" name="challenge{{ i }}" id="gridRadios{{ i }}{{ j }}" value="{{ j }}">
+                          <label class="form-check-label" for="gridRadios{{ i }}{{ j }}">
+                            {{ an }}
+                          </label>
+                        </div>
+                      </div>
+                      <!-- Survey feedback from other people -->
+                      <div *ngSwitchCase="'survey'">
+                        <div>Anzahl Befragter: {{ ch.survey.numberparticipants }}</div>
+                        <div>Auswahl der Befragten: {{ ch.survey.scope }}</div>
+                        <div>Art der Befragung: {{ ch.survey.provider }}</div>
+                        <div>&nbsp;</div>
+                        <div class="form-group">
+                            <label for="exampleInputEmail1">Hier die Email-Adressen der Befragten eintragen:</label>
+                            <input *ngFor="let par of ch.participants" type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="{{ par }}">
+                        </div>
+                        <div>Befragung kann eingesehen werden: {{ ch.survey.show }}</div>
+                        <div>&nbsp;</div>
+                        <div *ngIf="ch.survey.show"><a href="{{ ch.survey.url }}" target="_new" class="btn btn-primary"role="button">Befragung einsehen</a></div>        
+                      </div>
+                      <!-- Freetext question -->
+                      <div *ngSwitchCase="'freetext'">
+                        
+                        <div class="form-group">
+                          <label for="exampleFormControlTextarea2">Antwort</label>
+                          <textarea class="form-control rounded-0" id="exampleFormControlTextarea2" rows="3"></textarea>
+                        </div>                    
+                      </div>
+                      
+                      
+                      
+                    </div>
+                    
+                    <div *ngIf="this.showHint==i" class="hint">
+                      <div class="row">
+                        <div class="col">&nbsp;</div>
+                      </div>
+                      <div [innerHTML]="ch.hint"></div>
+                      <div class="row">
+                        <div class="col">&nbsp;</div>
+                      </div>
+                      <div *ngIf="ch.eduobjectives!=undefined&&ch.eduobjectives.length<2" class="ch_name">Lernziel</div>
+                      <div *ngIf="ch.eduobjectives!=undefined&&ch.eduobjectives.length>=2" class="ch_name">Lernziele</div>
+                      <div *ngFor="let eo of ch.eduobjectives" class="eolist">
+                        <a class="nav-link" routerLink="/eduobjective/{{ eo.id }}" routerLinkActive="active-link">{{ eo.name }}</a>
+                      </div>
+    
+                      <div *ngIf="ch.learningaid!=undefined&&ch.learningaid.length>0" class="ch_name">Lernmittel</div>
+                      <div *ngFor="let la of ch.learningaid" class="eolist">
+                        <a class="nav-link" routerLink="/content/{{ la.id }}" routerLinkActive="active-link">{{ la.name }}</a>
+                      </div>
+                      
+                      
+                    </div>
+                  </td>
+
+                </tr>
+              </table>
+              
+                </div>
+              </div>          
+              
+        </div>
+    
+      </div>
     </div>
+    
+    
+    
   </div>
 </div>
 

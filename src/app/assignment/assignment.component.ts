@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+// import { Time } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AssignmentService, Assignment } from '../assignment/assignment.service';
 import { ChallengeService } from '../challenge/challenge.service';
@@ -10,12 +11,18 @@ import { UserService } from '../user/user.service';
   styles: []
 })
 export class AssignmentComponent implements OnInit {
+  
   private assignmentid: string;
   private mode: number = 0;//0: show details, 1: run assignment
   public showHint: number = -1;
   public showWarning: boolean = false;
   private markerlist: boolean[];
   private answerlist: string[] = [];
+  private challengeid;
+  private elem;
+  private starttime: Date;
+  private elapsedtime: Date;
+  private intervalID;
 
   constructor(private route:ActivatedRoute, private aservice: AssignmentService, private challenges: ChallengeService, private router:Router, private users:UserService) {
     this.route.params.subscribe( params => {
@@ -26,20 +33,69 @@ export class AssignmentComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.elem = this;
+    window.addEventListener("blur", (event) => {
+//       event.preventDefault();
+//       event.returnValue = "Unsaved modifications";
+      alert("Du darfst den Browser nicht verlassen");
+       return event;
+    });
+    
+    
     this.aservice.getAssignmentById(this.assignmentid);
   }
+  
+  openFullscreen() {
+    if (this.elem.requestFullscreen) {
+      this.elem.requestFullscreen();
+    } else if (this.elem.mozRequestFullScreen) {
+      /* Firefox */
+      this.elem.mozRequestFullScreen();
+    } else if (this.elem.webkitRequestFullscreen) {
+      /* Chrome, Safari and Opera */
+      this.elem.webkitRequestFullscreen();
+    } else if (this.elem.msRequestFullscreen) {
+      /* IE/Edge */
+      this.elem.msRequestFullscreen();
+    }
+  }
+
+  /* Close fullscreen */
+  closeFullscreen() {
+// https://stackoverflow.com/questions/51998594/how-to-make-google-chrome-go-full-screen-in-angular-4-application
+  }  
+  
   public runAssignment(): void {
     console.log("Run Assignment", this.assignmentid, this.aservice.assignment);
     if( this.aservice.assignment.type == "Mastery") {
       this.showWarning = true;
     }
     this.challenges.loadChallenges(this.aservice.assignment.challenges);
+    this.challengeid = 0;
     this.mode = 1;
     this.markerlist = [];
+    this.starttime = new Date;
+    
+    this.intervalID = setInterval( () => {
+      this.elapsedtime = new Date;
+      console.log("Zeit", this.starttime, this.elapsedtime);
+    } , 10000);
     
   }
+  public nextChallenge() {
+    if(this.challengeid < this.challenges.challenges.length-1) {
+      this.challengeid += 1; 
+    }
+  }
+  public prevChallenge() {
+    if(this.challengeid > 0) {
+      this.challengeid -= 1;
+    }
+  }
+  
   public cancleAssignment(): void {
     this.mode = 0;
+    clearInterval(this.intervalID);
   }
   public toggleHint(event: MouseEvent, id: number) {
     console.log("Toggle Hint:", event.currentTarget, id);
@@ -102,9 +158,11 @@ export class AssignmentComponent implements OnInit {
   }
   
   public finishAssignment(): void {
+    clearInterval(this.intervalID);
     this.mode = 5;
   }
   public closeAssignment(): void {
+    clearInterval(this.intervalID);
     this.mode = 0;
     this.router.navigate(["/"]);
   }

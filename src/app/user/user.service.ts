@@ -33,8 +33,8 @@ export interface AssignmentRefs {
   status: string;
   type: string; 
   active: Date;
-  submitted: Date;
-  due: Date;
+  submitted?: Date;
+  due?: Date;
   attempts: string; 
   daystogo: string;
   rating: string;

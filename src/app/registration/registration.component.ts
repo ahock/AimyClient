@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormsModule }   from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthServiceService } from '../auth-service/auth-service.service';
-import { UserService, User, SkillRef } from '../user/user.service';
+import { UserService, User, SkillRef, AssignmentRefs } from '../user/user.service';
 
 @Component({
   selector: 'app-registration',
@@ -29,6 +29,21 @@ export class RegistrationComponent implements OnInit {
       rating: "0%"
     }
   ];
+  private defaultassignments = [ 
+    {
+      id: "5d5004227c213e60b8ee1ef4",
+      name: "Aimy-Bedienung - Was weiss ich schon?",
+      status: "active",
+      type: "PreKnowledge",
+      active: new Date(),
+//      submitted: Date;
+//      due: Date;
+      attempts: "",
+      daystogo: "",
+      rating: "",
+      comments: ""
+    }
+   ];
 
   constructor(public router: Router, public auth: AuthServiceService, public user: UserService) { }
 
@@ -48,6 +63,10 @@ export class RegistrationComponent implements OnInit {
     this.user.activeuser.skillref = new Array();
     this.user.activeuser.skillref.push(this.defaultskills[0]);
     this.user.activeuser.skillref.push(this.defaultskills[1]);
+
+    this.user.activeuser.assignmentrefs = new Array();    
+    this.user.activeuser.assignmentrefs.push(this.defaultassignments[0]);
+    
   }
 
   public doRegistration(): void {
