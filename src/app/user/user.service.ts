@@ -419,6 +419,15 @@ export class UserService {
         this.activeuser.eduobjectives.push({_id: eduoid, selfassess: value, name: "New"});
       }
     }
-  } 
-  
+  }
+  public setAssignmentPreparatoryAnswers(assignmentid: string, answers: any) {
+    console.log("function setAssignmentPreparatoryAnswers", answers);
+
+    this.http
+        .get(APP_CONFIG.storageURL+"/api/0.1.0/user/setpreparatory", {params:{token: this.auth.getToken(), assignment: assignmentid, answers: JSON.stringify(answers)}})
+        .subscribe((data) => {
+          console.log("updatePreparatory", data);
+    });    
+    
+  }
 }

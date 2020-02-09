@@ -3,6 +3,9 @@ import { NgModule } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule }   from '@angular/forms';
 
+
+import { ReactiveFormsModule } from '@angular/forms';
+
 import { AlertModule, ButtonsModule, BsDatepickerModule, BsDropdownModule, CarouselModule } from 'ngx-bootstrap';
 
 import { AppRoutingModule, routingComponents } from './app-routing.module';
@@ -48,7 +51,9 @@ import { PromoteComponent } from './promote/promote.component';
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
-    FormsModule
+    FormsModule,
+    
+    ReactiveFormsModule
   ],
   providers: [
     AuthServiceService,

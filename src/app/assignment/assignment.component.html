@@ -90,88 +90,99 @@
       <div class="card-body">
         <div class="card-text">{{ this.aservice.assignment.description }}</div>
         <p>Bitte nimm Dir kurz Zeit und lasse mich wissen, wie Du Dich heute fühlst.</p>
+
+
+<form [formGroup]="preparatoryForm" (ngSubmit)="onTest()">
+  
+
+
         <h3>Körperlich</h3>
           <div class="form-check">
-            <input class="form-check-input" type="radio" name="physical" id="exampleRadios0" value="option0" checked>
+            <input class="form-check-input" type="radio" name="physically" id="exampleRadios0" value="noinfo" formControlName="physically">
             <label class="form-check-label" for="exampleRadios1">
               Ich möchte hierzu heute keine Angabe machen.
             </label>
           </div>
           <div class="form-check">
-            <input class="form-check-input" type="radio" name="physical" id="exampleRadios1" value="option1">
+            <input class="form-check-input" type="radio" name="physically" id="exampleRadios1" value="topfit" formControlName="physically">
             <label class="form-check-label" for="exampleRadios1">
               Ich fühle mich körperlich top-fit heuet.
             </label>
           </div>
           <div class="form-check">
-            <input class="form-check-input" type="radio" name="physical" id="exampleRadios2" value="option2">
+            <input class="form-check-input" type="radio" name="physically" id="exampleRadios2" value="normal" formControlName="physically">
             <label class="form-check-label" for="exampleRadios2">
               Ich fühle mich körperlich etwas ermüdet, aber im normalen Bereich.
             </label>
           </div>
           <div class="form-check disabled">
-            <input class="form-check-input" type="radio" name="physical" id="exampleRadios3" value="option3">
+            <input class="form-check-input" type="radio" name="physically" id="exampleRadios3" value="broken" formControlName="physically">
             <label class="form-check-label" for="exampleRadios3">
               Heute bin ich körperlich total kaput.
             </label>
           </div>
         <h3>Mental</h3>
           <div class="form-check">
-            <input class="form-check-input" type="radio" name="mental" id="exampleRadios1" value="option0" checked>
+            <input class="form-check-input" type="radio" name="mental" id="exampleRadios4" value="noinfo" formControlName="mental">
             <label class="form-check-label" for="exampleRadios1">
               Ich möchte hierzu heute keine Angabe machen.
             </label>
           </div>
           <div class="form-check">
-            <input class="form-check-input" type="radio" name="mental" id="exampleRadios1" value="option1">
+            <input class="form-check-input" type="radio" name="mental" id="exampleRadios5" value="normal" formControlName="mental">
             <label class="form-check-label" for="exampleRadios1">
               Ich fühle mich dem gewachsen, ggf. sogar überlegen.
             </label>
           </div>
           <div class="form-check">
-            <input class="form-check-input" type="radio" name="mental" id="exampleRadios2" value="option2">
+            <input class="form-check-input" type="radio" name="mental" id="exampleRadios6" value="respect" formControlName="mental">
             <label class="form-check-label" for="exampleRadios2">
               Ich habe Respekt vor dem was kommt, sehe ihm aber gelassen entgegen.
             </label>
           </div>
           <div class="form-check disabled">
-            <input class="form-check-input" type="radio" name="mental" id="exampleRadios3" value="option3">
+            <input class="form-check-input" type="radio" name="mental" id="exampleRadios7" value="fear" formControlName="mental">
             <label class="form-check-label" for="exampleRadios3">
               Ich habe Angst vor dem was kommt.
             </label>
           </div>
         <h3>Vorbereitet</h3>
           <div class="form-check">
-            <input class="form-check-input" type="radio" name="prep" id="exampleRadios1" value="option0" checked>
+            <input class="form-check-input" type="radio" name="preparation" id="exampleRadios8" value="noinfo" formControlName="preparation">
             <label class="form-check-label" for="exampleRadios1">
               Ich möchte hierzu heute keine Angabe machen.
             </label>
           </div>
           <div class="form-check">
-            <input class="form-check-input" type="radio" name="prep" id="exampleRadios1" value="option1">
+            <input class="form-check-input" type="radio" name="preparation" id="exampleRadios9" value="prepverygood" formControlName="preparation">
             <label class="form-check-label" for="exampleRadios1">
               Ich bin sehr gut vorbereitet.
             </label>
           </div>
           <div class="form-check">
-            <input class="form-check-input" type="radio" name="prep" id="exampleRadios2" value="option2">
+            <input class="form-check-input" type="radio" name="preparation" id="exampleRadios10" value="little" formControlName="preparation">
             <label class="form-check-label" for="exampleRadios2">
               Ich habe wenig oder das Nötigste vorbereitet.
             </label>
           </div>
           <div class="form-check disabled">
-            <input class="form-check-input" type="radio" name="prep" id="exampleRadios3" value="option3">
+            <input class="form-check-input" type="radio" name="preparation" id="exampleRadios11" value="noprep" formControlName="preparation">
             <label class="form-check-label" for="exampleRadios3">
               Eigentlich habe ich mich gar nicht vorbereitet.
             </label>
           </div>
         <p>&nbsp;</p>
-        <button type="button" class="btn btn-primary" (click)="this.showWarning=false">Ok</button>
+        <button type="button" class="btn btn-primary" (click)="this.startAfterPreparatoryQuestions()">Ok</button>
+        &nbsp;
+        <button type="button" class="btn btn-secondary" (click)="this.cancleAssignment()">Abbrechen</button>
+        
+        </form>
+        
       </div>
     </div>
   </div>
 
-  <div class="challangelist">
+  <div *ngIf="!this.showWarning" class="challangelist">
     <div class="row">
       <div class="col">&nbsp;</div>
     </div>
@@ -181,13 +192,13 @@
               <button type="button" class="btn btn-secondary" (click)="this.prevChallenge()" [ngClass]="{'active':this.contenttype==2}"><i class="fas fa-chevron-left"></i>&nbsp;</button>
               <button type="button" class="btn btn-secondary" (click)="this.showWarning=true" [ngClass]="{'active':this.contenttype==3}"><i class="fas fa-info-circle"></i>&nbsp;Info</button>
               <button type="button" class="btn btn-secondary" [ngClass]="{'active':this.contenttype==4}"><i class="fas fa-bookmark"></i>&nbsp;Gemerkt</button>
-              <button type="button" class="btn btn-secondary" [ngClass]="{'active':this.contenttype==5}"><i class="far fa-clock"></i>&nbsp;Mehr Zeit
+              <button type="button" class="btn btn-secondary" [ngClass]="{'active':this.contenttype==5}"><i class="far fa-clock"></i>&nbsp;Mehr Zeit [{{this.getElapsedTimeString()}}]
               </button>
               <button type="button" class="btn btn-primary" (click)="this.finishAssignment()" [ngClass]="{'active':this.contenttype==6}"><i class="fas fa-check-square"></i>&nbsp;Fertig</button>
               <button type="button" class="btn btn-secondary" (click)="this.nextChallenge()" [ngClass]="{'active':this.contenttype==7}"><i class="fas fa-chevron-right"></i>&nbsp;</button>
             </div>            
     </div>
-    
+    <!-- Different types of challenges -->
     <div [ngSwitch]="this.aservice.assignment.challengemode">
       <div *NgSwitchDefault>
         <p>Default</p>
@@ -197,12 +208,12 @@
                 <div class="card-header bg-light">
                   <div class="d-flex justify-content-between">
                     <div>
-                      <span class="col text-right">{{ this.challengeid }}</span>
+                      <span class="col text-right">{{ this.challengeid + 1 }}</span>
                       <strong>{{ this.challenges.challenges[this.challengeid].name }}</strong>
                     </div>
                     <div>
-                      <span class="col text-right" (click)="this.markChallenge(i)"><i *ngIf="!this.markerlist[i]" class="far fa-bookmark"></i><i *ngIf="this.markerlist[i]" class="fas fa-bookmark"></i>&nbsp;Merken</span>
-                      <span class="col text-right" (click)="this.toggleHint($event, i)"><i class="fas fa-smile-wink"></i>&nbsp;Hinweis</span>
+<!--                      <span class="col text-right" (click)="this.markChallenge(i)"><i *ngIf="!this.markerlist[i]" class="far fa-bookmark"></i><i *ngIf="this.markerlist[i]" class="fas fa-bookmark"></i>&nbsp;Merken</span>
+                      <span class="col text-right" (click)="this.toggleHint($event, i)"><i class="fas fa-smile-wink"></i>&nbsp;Hinweis</span> -->
                     </div>
                  </div>
                 </div>           
@@ -226,14 +237,19 @@
                           </label>
                         </div>                    
                       </div>
-                      <!-- Multiple choice question, only one answers possible -->
+                      <!-- Single choice question, only one answers possible -->
                       <div *ngSwitchCase="'single'">
-                        <div class="form-check" *ngFor="let an of this.challenges.challenges[this.challengeid].answers; index as j">
-                          <input class="form-check-input" (click)="this.answerChallenge(i,j)" type="radio" name="challenge{{ i }}" id="gridRadios{{ i }}{{ j }}" value="{{ j }}">
-                          <label class="form-check-label" for="gridRadios{{ i }}{{ j }}">
+                        
+                        <div class="form-check" [formGroup]="answers" *ngFor="let an of this.challenges.challenges[this.challengeid].answers; index as j">
+                          
+                          <input class="form-check-input" formControlName="answer" name="answer" type="radio" id="gridRadios{{ this.challengeid }}{{ j }}" value="{{ j }}">
+                          <!-- (click)="this.answerChallenge(this.challengeid,j)" -->
+                          <label class="form-check-label" for="gridRadios{{ this.challengeid }}{{ j }}">
                             {{ an }}
                           </label>
+                          
                         </div>
+                        
                       </div>
                       <!-- Survey feedback from other people -->
                       <div *ngSwitchCase="'survey'">
@@ -257,10 +273,8 @@
                           <textarea class="form-control rounded-0" id="exampleFormControlTextarea2" rows="3"></textarea>
                         </div>                    
                       </div>
-                      
-                      
-                      
                     </div>
+
                     
                     <div *ngIf="this.showHint==i" class="hint">
                       <div class="row">
@@ -396,7 +410,6 @@
     
       </div>
     </div>
-    
     
     
   </div>

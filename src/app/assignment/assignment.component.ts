@@ -1,9 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 // import { Time } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
+import { FormsModule }   from '@angular/forms';
+
+import { FormGroup, FormControl } from '@angular/forms';
+
 import { AssignmentService, Assignment } from '../assignment/assignment.service';
 import { ChallengeService } from '../challenge/challenge.service';
 import { UserService } from '../user/user.service';
+import { LogService, Log } from '../log/log.service';
 
 @Component({
   selector: 'app-assignment',
@@ -14,6 +19,11 @@ export class AssignmentComponent implements OnInit {
   
   private assignmentid: string;
   private mode: number = 0;//0: show details, 1: run assignment
+
+  private physically: string;
+  private mental: string;
+  private preparation: string;
+  
   public showHint: number = -1;
   public showWarning: boolean = false;
   private markerlist: boolean[];
@@ -24,7 +34,20 @@ export class AssignmentComponent implements OnInit {
   private elapsedtime: Date;
   private intervalID;
 
-  constructor(private route:ActivatedRoute, private aservice: AssignmentService, private challenges: ChallengeService, private router:Router, private users:UserService) {
+  preparatoryForm = new FormGroup({
+      physically: new FormControl('noinfo'),
+      mental: new FormControl('noinfo'),
+      preparation: new FormControl('noinfo')
+    });
+  
+  answers = new FormGroup({
+    answer: new FormControl('')
+  });
+
+  //Array of answers to control the assignment forms
+  private formAnswers;
+
+  constructor(private route:ActivatedRoute, private aservice: AssignmentService, private challenges: ChallengeService, private router:Router, private users:UserService, private log:LogService) {
     this.route.params.subscribe( params => {
       console.log("Param: ", params, this.assignmentid)
       this.assignmentid = params.id
@@ -34,15 +57,19 @@ export class AssignmentComponent implements OnInit {
 
   ngOnInit() {
     this.elem = this;
-    window.addEventListener("blur", (event) => {
+    
+//    (event) => {
 //       event.preventDefault();
 //       event.returnValue = "Unsaved modifications";
-      alert("Du darfst den Browser nicht verlassen");
-       return event;
-    });
-    
-    
+//      alert("Du darfst den Browser nicht verlassen");
+//       return event;
+//    });
+
     this.aservice.getAssignmentById(this.assignmentid);
+  }
+
+  public leaveAssignment(): void {
+    alert("Du darfst den Browser nicht verlassen");
   }
   
   openFullscreen() {
@@ -66,7 +93,11 @@ export class AssignmentComponent implements OnInit {
   }  
   
   public runAssignment(): void {
-    console.log("Run Assignment", this.assignmentid, this.aservice.assignment);
+    console.log("Run Assignment", this.users.getUserToken(), this.assignmentid, this.aservice.assignment);
+//    window.addEventListener("blur", this.leaveAssignment);
+    // Log the start of the assignment
+    this.log.createLog(<Log>{token: this.users.getUserToken(), message: "Assignment startet", type: 2, area: "assignment", content: "Assignment "+this.assignmentid+" startet"});
+    // For Masteries the self assessment questions always will be shown.
     if( this.aservice.assignment.type == "Mastery") {
       this.showWarning = true;
     }
@@ -76,26 +107,89 @@ export class AssignmentComponent implements OnInit {
     this.markerlist = [];
     this.starttime = new Date;
     
+    //Initiate the form control and answer list for all challenges in the assignment
+    console.log("# Challenges: ", this.aservice.assignment.challenges.length);
+//    console.log("FormGroup", this.answers);
+    if(!this.answerlist||this.answerlist.length==0) {
+      for(var i=0;i<this.aservice.assignment.challenges.length;i++) {
+        this.answerlist.push("");
+      }
+    }
+    console.log("answerlist:", this.answerlist);
+
+/*    
+    this.formAnswers[0] = new FormControl('2');
+    for(var fc=1;fc<this.aservice.assignment.challenges.length;fc++){
+        this.formAnswers.push(new FormControl(fc.toString));
+    }
+    console.log("FormControlArray", this.formAnswers);
+*/
+    
+//    answers = new FormGroup({
+//    answer: new FormControl('')
+
+    // Start the time for this assignment
     this.intervalID = setInterval( () => {
-      this.elapsedtime = new Date;
-      console.log("Zeit", this.starttime, this.elapsedtime);
+      this.elapsedtime =  new Date((new Date).getTime() - this.starttime.getTime());
+
+      console.log("Zeit abgelaufen:", this.elapsedtime.getHours()-1, this.elapsedtime.getMinutes(), this.elapsedtime.getSeconds());
     } , 10000);
+  }
+  
+  public startAfterPreparatoryQuestions() {
+    console.log("function startAfterPreparatoryQuestions");
+    //Hide Preparatory Questions
+    this.showWarning = false;
+    // Save answers to preparatory questions
+//    console.log(this.users.activeuser.assignmentrefs.length, this.assignmentid, JSON.stringify(this.preparatoryForm.value));
+    
+//    console.log(JSON.stringify(this.preparatoryForm.value));
+    
+    this.users.setAssignmentPreparatoryAnswers(this.assignmentid,this.preparatoryForm.value);
     
   }
+  
+  public getElapsedTimeString() {
+    var elapsedTimeString: string;
+    if(this.elapsedtime) {
+      elapsedTimeString = "0" + (this.elapsedtime.getHours()-1) +":"+ "0" + this.elapsedtime.getMinutes() +":"+ "0" + this.elapsedtime.getSeconds();  
+    }
+    else {
+      elapsedTimeString = "00:00:00";
+    }
+    return elapsedTimeString;
+  }
+    
   public nextChallenge() {
+    // Go to next, if not at the last challenge
     if(this.challengeid < this.challenges.challenges.length-1) {
+      //Bevor leaving the current challenge
+      console.log("value", this.answers.value);
+      this.answerlist[this.challengeid] = this.answers.value.answer;
+      console.log("answerlist", this.answerlist);
       this.challengeid += 1; 
+      //Bevor rendering the next challenge
+      this.answers.setValue({'answer': this.answerlist[this.challengeid]});
+      
     }
   }
   public prevChallenge() {
     if(this.challengeid > 0) {
+      //Bevor leaving the current challenge
+      console.log("value", this.answers.value);
+      this.answerlist[this.challengeid] = this.answers.value.answer;
+      console.log("answerlist", this.answerlist);
       this.challengeid -= 1;
+      //Bevor rendering the next challenge
+      this.answers.setValue({'answer': this.answerlist[this.challengeid]});
     }
   }
   
   public cancleAssignment(): void {
     this.mode = 0;
+    window.removeEventListener("blur", this.leaveAssignment);
     clearInterval(this.intervalID);
+    this.log.createLog(<Log>{token: this.users.getUserToken(), message: "Assignment cancled", type: 2, area: "assignment", content: "Assignment "+this.assignmentid+" cancled"});
   }
   public toggleHint(event: MouseEvent, id: number) {
     console.log("Toggle Hint:", event.currentTarget, id);
@@ -120,14 +214,15 @@ export class AssignmentComponent implements OnInit {
     console.log("markerlist", this.markerlist);
   }
   public answerChallenge(id: number, ans: number):void {
-    console.log("answerChallenge:", id);
+    console.log("answerChallenge, type:", id, this.challenges.challenges[id].type[0]);
     
+    // Create answerlist with appropriate number of fields
     if(!this.answerlist||this.answerlist.length==0) {
       for(var i=0;i<this.challenges.challenges.length;i++) {
         this.answerlist.push("");
       }
     }
-    console.log("type", this.challenges.challenges[id].type[0] );
+
     switch(this.challenges.challenges[id].type[0]) {
       case 'multi':
         var pos: number;
@@ -170,4 +265,9 @@ export class AssignmentComponent implements OnInit {
     console.log("selectEduObjective", id);
     this.router.navigate(['/eduobjective/'+id]);
   }
+  
+  public onTest() {
+    console.log(JSON.stringify(this.preparatoryForm.value));
+  }
+  
 }
