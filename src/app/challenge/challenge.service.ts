@@ -13,7 +13,7 @@ export interface Challenge {
     aspect: string,
     field: string,
     module: string,
-    eduobjectives: [string],
+    eduobjectives: [any],
     correct: [string],
     answers: [string],
     participants: [string]

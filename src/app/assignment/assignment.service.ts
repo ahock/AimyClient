@@ -32,7 +32,7 @@ export interface Assignment {
   coautor?: string;
   coach?: string;
   challenges: [string],
-  eduobjref: {id: string, name: string}
+  eduobjref: [any]
 }
 
 @Injectable({

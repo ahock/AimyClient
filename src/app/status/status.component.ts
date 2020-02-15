@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { StatusService } from './status.service';
+import { APP_CONFIG } from '../app-variables';
 
 @Component({
   selector: 'app-status',
@@ -7,6 +8,7 @@ import { StatusService } from './status.service';
   styleUrls: ['./status.component.css']
 })
 export class StatusComponent implements OnInit {
+  private version: string = APP_CONFIG.version;
   
   constructor(public status: StatusService) { }
 

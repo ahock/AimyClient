@@ -490,7 +490,15 @@
                   <tr *ngFor="let eduobj of this.aservice.assignment.eduobjref; index as i" (click)="selectEduObjective(eduobj.id)">
               <!--     [ngClass]="{'table-primary' : i===this.users.selected_user_index}" (click)="selectUser(i)"> -->
                     <td>{{ eduobj.name }}</td>
-                    <td><i class="fas fa-circle" style="color: green;"></i><i class="fas fa-circle" style="color: green;"></i><i class="far fa-circle" style="color: red;"></i></td>
+                    <td>
+                      {{ this.eduoresult[i].count }}
+                      {{ this.eduoresult[i].countok }}
+                      
+                      <h1 ng-repeat="x in [].constructor(10) track by $index">x</h1>
+                      <i class="fas fa-circle" style="color: green;"></i>
+                      <i class="fas fa-circle" style="color: green;"></i>
+                      <i class="far fa-circle" style="color: red;"></i>
+                    </td>
                   </tr>
                 </tbody>
               </table>

@@ -28,6 +28,7 @@ export class AssignmentComponent implements OnInit {
   public showWarning: boolean = false;
   private markerlist: boolean[];
   private answerlist: string[] = [];
+  private eduoresult = [];
   private challengeid;
   private elem;
   private starttime: Date;
@@ -252,10 +253,50 @@ export class AssignmentComponent implements OnInit {
     
   }
   
+  /////////////////////////////////
+  //
+  //  finishAssignment() 
+  //
+  /////////////////////////////////
   public finishAssignment(): void {
+    this.eduoresult = [];
+    
     clearInterval(this.intervalID);
+    console.log("answerlist", this.answerlist);
+//    console.log("assignment eduobjectives", this.aservice.assignment.eduobjref);
+    
+    for(var i=0; i<this.aservice.assignment.eduobjref.length ;i++) {
+      // For all edu objectives of the assignment
+      this.eduoresult.push({
+        id: "" + (i + 1),
+        name: "",
+        count: 0,
+        countok: 0
+      });
+      
+      console.log("asses eduobjective", this.aservice.assignment.eduobjref[i].name, this.eduoresult[i]);
+
+      this.eduoresult[i].name = this.aservice.assignment.eduobjref[i].name;
+      this.eduoresult[i].id = this.aservice.assignment.eduobjref[i].id;
+
+      for(var j=0; j<this.challenges.challenges.length;j++) {
+//        console.log("challenge", j, this.challenges.challenges[j].name);
+
+        for(var k=0; k<this.challenges.challenges[j].eduobjectives.length;k++) {
+          if(this.aservice.assignment.eduobjref[i].id==this.challenges.challenges[j].eduobjectives[k].id)
+            this.eduoresult[i].count++;
+            console.log("+", j, this.challenges.challenges[j].eduobjectives[k].name, this.challenges.challenges[j].correct[0]==this.answerlist[j]?"1":"0");
+            if(this.challenges.challenges[j].correct[0]==this.answerlist[j]) {
+              this.eduoresult[i].countok++;
+            }
+        }        
+      }
+    }
+    console.log("eduoresult", this.eduoresult);
+    
     this.mode = 5;
   }
+  
   public closeAssignment(): void {
     clearInterval(this.intervalID);
     this.mode = 0;
