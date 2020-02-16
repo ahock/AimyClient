@@ -55,7 +55,8 @@
                 <thead class="thead-light">
                   <tr>
                     <th scope="col">Lernziel</th>
-                    <th scope="col">Selbsteinschätzung</th>
+                    <th scope="col">Selbst-Einschätzung</th>
+                    <th scope="col">Fragen richtig</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -64,15 +65,15 @@
                     <td>{{ eduobj.name }}</td>
 <!--                    <td>{{ eduobj.id }}</td> -->
                     <td>
-                        <i style="color:red" class="fas fa-thumbs-down" *ngIf="this.users.getUserEduOSelfassessment(eduobj.id)=='Noch garnicht'"></i>
-                        <i style="color:red" class="fas fa-frown" *ngIf="this.users.getUserEduOSelfassessment(eduobj.id)=='Zu wenig'"></i>
-                        <i style="color:black" class="fas fa-meh" *ngIf="this.users.getUserEduOSelfassessment(eduobj.id)=='Neutral'"></i>
-                        <i style="color:orange" class="fas fa-smile" *ngIf="this.users.getUserEduOSelfassessment(eduobj.id)=='Gut'"></i>
-                        <i style="color:green" class="fas fa-thumbs-up" *ngIf="this.users.getUserEduOSelfassessment(eduobj.id)=='Sehr gut'"></i>
-                        &nbsp;
-                      
+                      <i style="color:red" class="fas fa-thumbs-down" *ngIf="this.users.getUserEduOSelfassessment(eduobj.id)=='Noch garnicht'"></i>
+                      <i style="color:red" class="fas fa-frown" *ngIf="this.users.getUserEduOSelfassessment(eduobj.id)=='Zu wenig'"></i>
+                      <i style="color:black" class="fas fa-meh" *ngIf="this.users.getUserEduOSelfassessment(eduobj.id)=='Neutral'"></i>
+                      <i style="color:orange" class="fas fa-smile" *ngIf="this.users.getUserEduOSelfassessment(eduobj.id)=='Gut'"></i>
+                      <i style="color:green" class="fas fa-thumbs-up" *ngIf="this.users.getUserEduOSelfassessment(eduobj.id)=='Sehr gut'"></i>
+                      &nbsp;
                       {{ this.users.getUserEduOSelfassessment(eduobj.id) }}
                     </td>
+                    <td>{{ this.users.getUserEduORating(eduobj.id).countok }} von {{ this.users.getUserEduORating(eduobj.id).count }}</td>
                   </tr>
                 </tbody>
               </table>
@@ -422,9 +423,11 @@
   <div class="card">
     <h5 class="card-header">Abschluss dieser Challenge</h5>
     <div class="card-body">
-          <div class="card-text">{{ this.aservice.assignment.description }}</div>
-          <div>&nbsp;</div>
-          <table class="table">
+      <button type="button" class="btn btn-primary" (click)="this.closeAssignment()">Abschliessen</button>
+      
+      <div class="card-text">{{ this.aservice.assignment.description }}</div>
+      <div>&nbsp;</div>
+      <table class="table">
             <thead>
               <tr>
                 <th scope="col">Aufgabe</th>
@@ -447,25 +450,25 @@
                 <td class="text-center"><i *ngIf="markerlist[i]" class="fas fa-bookmark"></i></td>
               </tr>
             </tbody>
-          </table>
+      </table>
     </div>
     <div class="card-body">
               <h5 class="card-title"><strong>Gesamtergebnis</strong></h5>
               <table class="table">
                 <tbody>
                   <tr>
-                    <td>Erreicht</td>
-                    <td>3/5</td>
+                    <td>Fragen richtig</td>
+                    <td>{{ this.overallresult }} / {{ this.challenges.challenges.length }}</td>
                     <td>&nbsp;</td>
                     <td>Minimalziel</td>
                     <td><i class="fas fa-check-circle" style="color: green;"></i>&nbsp;erreicht</td>
                   </tr>
                   <tr>
-                    <td>Zeit</td>
-                    <td>{{ this.aservice.assignment.duration }} {{ this.aservice.assignment.durationunit }}</td>
+                    <td>Zeit benötigt</td>
+                    <td>{{ this.elapsedtime | date : 'HH:mm:ss' : '+0000' }}</td>
                     <td>&nbsp;</td>
-                    <td></td>
-                    <td></td>
+                    <td>Erlaubt</td>
+                    <td>{{ this.aservice.assignment.duration }} {{ this.aservice.assignment.durationunit }}</td>
                   </tr>
                   <tr>
                     <td>Bewertungsraster</td>
@@ -482,7 +485,7 @@
               <table class="table">
                 <thead>
                   <tr>
-                    <th scope="col">Lernziel</th>
+                    <th scope="col">Lernziel (<i class="fas fa-circle" style="color: green;"></i> Frage zu diesem Ziel richtig, <i class="far fa-circle" style="color: red;"></i> Frage zu diesem Ziel nicht richtig)</th>
                     <th scope="col">Teilergebnis</th>
                   </tr>
                 </thead>
@@ -491,17 +494,24 @@
               <!--     [ngClass]="{'table-primary' : i===this.users.selected_user_index}" (click)="selectUser(i)"> -->
                     <td>{{ eduobj.name }}</td>
                     <td>
+<!--                      
                       {{ this.eduoresult[i].count }}
                       {{ this.eduoresult[i].countok }}
-                      
-                      <h1 ng-repeat="x in [].constructor(10) track by $index">x</h1>
-                      <i class="fas fa-circle" style="color: green;"></i>
-                      <i class="fas fa-circle" style="color: green;"></i>
-                      <i class="far fa-circle" style="color: red;"></i>
+                      <br>
+-->                      
+                      <ng-container *ngFor="let i of [].constructor(this.eduoresult[i].countok)"><i class="fas fa-circle" style="color: green;"></i></ng-container>
+                      <ng-container *ngFor="let i of [].constructor(this.eduoresult[i].count-this.eduoresult[i].countok)"><i class="far fa-circle" style="color: red;"></i></ng-container>
+<!--
+                      <br><ng-container *ngFor="let i of [].constructor(3)">🐱</ng-container>
+-->
                     </td>
                   </tr>
                 </tbody>
               </table>
+            <br>
+            &nbsp;
+            <br>
+            &nbsp;
           <button type="button" class="btn btn-primary" (click)="this.closeAssignment()">Abschliessen</button>
     </div><!-- -->
   </div> 

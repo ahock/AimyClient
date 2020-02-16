@@ -7,7 +7,7 @@ import { FormGroup, FormControl } from '@angular/forms';
 
 import { AssignmentService, Assignment } from '../assignment/assignment.service';
 import { ChallengeService } from '../challenge/challenge.service';
-import { UserService } from '../user/user.service';
+import { UserService, AssignmentResult } from '../user/user.service';
 import { LogService, Log } from '../log/log.service';
 
 @Component({
@@ -29,6 +29,7 @@ export class AssignmentComponent implements OnInit {
   private markerlist: boolean[];
   private answerlist: string[] = [];
   private eduoresult = [];
+  private overallresult: number = 0;
   private challengeid;
   private elem;
   private starttime: Date;
@@ -261,44 +262,75 @@ export class AssignmentComponent implements OnInit {
   public finishAssignment(): void {
     this.eduoresult = [];
     
+    // Stop timer
     clearInterval(this.intervalID);
-    console.log("answerlist", this.answerlist);
+//    console.log("answerlist", this.answerlist);
 //    console.log("assignment eduobjectives", this.aservice.assignment.eduobjref);
-    
+  
+    // Calculate right and wrong answers by educational objective  
     for(var i=0; i<this.aservice.assignment.eduobjref.length ;i++) {
       // For all edu objectives of the assignment
       this.eduoresult.push({
         id: "" + (i + 1),
-        name: "",
+//        name: "",
         count: 0,
         countok: 0
       });
-      
-      console.log("asses eduobjective", this.aservice.assignment.eduobjref[i].name, this.eduoresult[i]);
-
-      this.eduoresult[i].name = this.aservice.assignment.eduobjref[i].name;
+//      console.log("asses eduobjective", this.aservice.assignment.eduobjref[i].name, this.eduoresult[i]);
+//      this.eduoresult[i].name = this.aservice.assignment.eduobjref[i].name;
       this.eduoresult[i].id = this.aservice.assignment.eduobjref[i].id;
-
       for(var j=0; j<this.challenges.challenges.length;j++) {
 //        console.log("challenge", j, this.challenges.challenges[j].name);
 
         for(var k=0; k<this.challenges.challenges[j].eduobjectives.length;k++) {
-          if(this.aservice.assignment.eduobjref[i].id==this.challenges.challenges[j].eduobjectives[k].id)
+//          console.log("eduoids:",this.aservice.assignment.eduobjref[i].id, this.challenges.challenges[j].eduobjectives[k].id)
+          if(this.aservice.assignment.eduobjref[i].id == this.challenges.challenges[j].eduobjectives[k].id) {
             this.eduoresult[i].count++;
-            console.log("+", j, this.challenges.challenges[j].eduobjectives[k].name, this.challenges.challenges[j].correct[0]==this.answerlist[j]?"1":"0");
-            if(this.challenges.challenges[j].correct[0]==this.answerlist[j]) {
+//            console.log("+", j, this.challenges.challenges[j].eduobjectives[k].name, this.challenges.challenges[j].correct[0], this.answerlist[j]);
+            if(this.challenges.challenges[j].correct[0] == this.answerlist[j]) {
               this.eduoresult[i].countok++;
             }
+          }
         }        
       }
     }
     console.log("eduoresult", this.eduoresult);
     
+    // Calculate overall result
+    this.overallresult = 0;
+    for(var j=0; j<this.challenges.challenges.length;j++) {
+      if(this.challenges.challenges[j].correct[0] == this.answerlist[j]) {
+        this.overallresult++;
+      }
+    }
+    console.log("overallresult", this.overallresult, this.challenges.challenges.length);
+    
+    console.log("Zeit benötigt", this.elapsedtime);
+    
+    
+    // Display the results page
     this.mode = 5;
   }
-  
+
+  /////////////////////////////////
+  //
+  //  closeAssignment() 
+  //
+  /////////////////////////////////
   public closeAssignment(): void {
     clearInterval(this.intervalID);
+    
+    // Save results to user
+    var assresult: AssignmentResult = { create_date: new Date() };
+    assresult.pass = true;
+    assresult.elapsedtime = this.elapsedtime;
+    assresult.rightanswers = this.overallresult;
+    assresult.questioncount = this.challenges.challenges.length;
+    assresult.eduobj = this.eduoresult;
+    
+//    console.log("Save results to user", this.users.getUserToken(), this.assignmentid, assresult);
+    this.users.setAssmentResult(this.users.getUserToken(), this.assignmentid, assresult);
+    
     this.mode = 0;
     this.router.navigate(["/"]);
   }

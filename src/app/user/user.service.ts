@@ -21,12 +21,25 @@ export interface EduObjective {
   _id: string;
   name: string;
   selfassess: string;
+  count?: number;
+  okcount?: number;
+  
   preknowledge?: string;
   resume?: string;
   selfatest?: string;
   extatest?: string;
   mastery?: string;
 }
+
+export interface AssignmentResult {
+  pass?: boolean;
+  create_date: Date;
+  elapsedtime?: Date;
+  rightanswers?: number;
+  questioncount?: number;
+  eduobj?: any[];
+}
+
 export interface AssignmentRefs {
   id: string;
   name: string;
@@ -39,6 +52,7 @@ export interface AssignmentRefs {
   daystogo: string;
   rating: string;
   comments: string;
+  assresults?: Array<AssignmentResult>;
 }
 export interface SkillSetRef {
   
@@ -352,6 +366,23 @@ export class UserService {
       return "n/a";
     }
   }
+  public getUserEduORating(eduoid: string): any {
+    var result = {count: 0, countok: 0};
+    var i;
+    
+    if(this.activeuser.eduobjectives) {
+      for(i = 0; i<this.activeuser.eduobjectives.length; i++) {
+        if(this.activeuser.eduobjectives[i]._id==eduoid) {
+          break;
+        }
+      }
+//      console.log("getUserEduORating", i, this.activeuser.eduobjectives[i]);
+      if(i < this.activeuser.eduobjectives.length) {
+        result = {count: this.activeuser.eduobjectives[i].count, countok: this.activeuser.eduobjectives[i].okcount};
+      }
+    }
+    return result;
+  }
   public getUserEduO(achievement: number, eduoid: string): string {
     /*
     achievement:
@@ -429,5 +460,13 @@ export class UserService {
           console.log("updatePreparatory", data);
     });    
     
+  }
+  public setAssmentResult(token: string, assessmentid: string, assessmentresult: AssignmentResult) {
+    console.log("Parameter:", token, assessmentid, assessmentresult);
+    this.http
+        .get(APP_CONFIG.storageURL+"/api/0.1.0/user/setassessmentresult", {params:{token: this.auth.getToken(), assignment: assessmentid, result: JSON.stringify(assessmentresult)}})
+        .subscribe((data) => {
+          console.log("saveAssessmentResult", data);
+    });
   }
 }
