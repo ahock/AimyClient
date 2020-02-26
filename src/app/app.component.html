@@ -10,11 +10,12 @@
           <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu"
               role="menu" aria-labelledby="button-basic">
 <!--            <li role="menuitem"><a class="dropdown-item" href="#" (click)="alertToggle()">Alert</a></li>  -->
-            <li role="menuitem"><a routerLink="/playlist"  class="dropdown-item">Playlist</a></li>
+            <li role="menuitem"><a routerLink="/playlist"  class="dropdown-item" [ngClass]="!togPlaylist?'disabled':''">Playlist</a></li>
             <li role="menuitem"><a routerLink="/" class="dropdown-item">Aktuell</a></li>
-            <li role="menuitem"><a routerLink="/comp1" routerLinkActive="active" class="dropdown-item">Kompetenzen</a></li>
+            <li role="menuitem"><a routerLink="/comp1" routerLinkActive="active" class="dropdown-item" [ngClass]="!togSkillCat?'disabled':''">Kompetenzen</a></li>
             <li class="divider dropdown-divider"></li>
 <!--            <li role="menuitem"><a routerLink="/registration" class="dropdown-item">Registrierung</a> -->
+            <li role="menuitem"><a class="dropdown-item" (click)="statusBarShow=!statusBarShow">Statuszeile</a>
             <li role="menuitem"><a routerLink="/dialog" class="dropdown-item">Dialoge</a>
             <li role="menuitem"><a *ngIf="auth.isAuthenticated()" class="dropdown-item" (click)="auth.logout()">Log Out</a>
             
@@ -79,11 +80,11 @@
                 <h5 class="mb-1">{{ aref.name }}</h5>
                 <small>{{ aref.daystogo }}</small>
               </div>
-              <p class="mb-1">Typ: {{ aref.type }}</p>
-              <small>Rating: </small>
-              <span class="badge badge-primary badge-pill">0/5</span>&nbsp;
-              <small>Comments: </small>
-              <span class="badge badge-primary badge-info">1</span>&nbsp;
+              <p class="mb-1">Typ: {{ aref.asstype }}</p>
+              <small>Ergebnis: </small>
+              <span class="badge badge-primary badge-pill" *ngIf="aref.results.length">{{ aref.results[aref.results.length-1].pass }}</span>&nbsp;
+              <small>Wiederholungen: </small>
+              <span class="badge badge-primary badge-info">{{ aref.results.length }}</span>&nbsp;
               <small>Status: {{ aref.status }}</small>
             </button>
           </div>
@@ -116,6 +117,6 @@
 
 <alert type="success" *ngIf="alertBoxShow" id="alertbox">hello</alert>
 
-<nav class="navbar fixed-bottom navbar-light bg-light">
+<nav *ngIf="statusBarShow" class="navbar fixed-bottom navbar-light bg-light">
   <app-status></app-status>
 </nav>

@@ -34,7 +34,7 @@ export class RegistrationComponent implements OnInit {
       id: "5d5004227c213e60b8ee1ef4",
       name: "Aimy-Bedienung - Was weiss ich schon?",
       status: "active",
-      type: "PreKnowledge",
+      asstype: "PK",
       active: new Date(),
 //      submitted: Date;
 //      due: Date;

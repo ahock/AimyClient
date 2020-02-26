@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { Location } from '@angular/common';
+import { APP_CONFIG } from './app-variables';
 import { AuthServiceService } from './auth-service/auth-service.service';
 import { UserService } from './user/user.service';
 import { StatusService } from './status/status.service';
@@ -16,6 +17,10 @@ export class AppComponent {
   title = 'aimy-vanilla';
   singleModel = '1';
   alertBoxShow = false;
+  statusBarShow = true;
+  
+  togPlaylist = APP_CONFIG.togPlaylist;
+  togSkillCat = APP_CONFIG.togSkillCat;
 
   constructor(private router: Router, private location:Location, public user: UserService, public auth: AuthServiceService, public status: StatusService, public dialogs:DialogService) {
     console.log("AppComponent: constructor");

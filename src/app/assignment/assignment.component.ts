@@ -100,7 +100,7 @@ export class AssignmentComponent implements OnInit {
     // Log the start of the assignment
     this.log.createLog(<Log>{token: this.users.getUserToken(), message: "Assignment startet", type: 2, area: "assignment", content: "Assignment "+this.assignmentid+" startet"});
     // For Masteries the self assessment questions always will be shown.
-    if( this.aservice.assignment.type == "Mastery") {
+    if( this.aservice.assignment.type == "MA") {
       this.showWarning = true;
     }
     this.challenges.loadChallenges(this.aservice.assignment.challenges);
@@ -265,7 +265,7 @@ export class AssignmentComponent implements OnInit {
     // Stop timer
     clearInterval(this.intervalID);
 //    console.log("answerlist", this.answerlist);
-//    console.log("assignment eduobjectives", this.aservice.assignment.eduobjref);
+//    console.log("assignment type", this.aservice.assignment.type);
   
     // Calculate right and wrong answers by educational objective  
     for(var i=0; i<this.aservice.assignment.eduobjref.length ;i++) {
@@ -329,7 +329,10 @@ export class AssignmentComponent implements OnInit {
     assresult.eduobj = this.eduoresult;
     
 //    console.log("Save results to user", this.users.getUserToken(), this.assignmentid, assresult);
-    this.users.setAssmentResult(this.users.getUserToken(), this.assignmentid, assresult);
+
+//    console.log("assignment type", this.aservice.assignment.type);
+
+    this.users.setAssmentResult(this.users.getUserToken(), this.assignmentid, assresult,this.aservice.assignment.type);
     
     this.mode = 0;
     this.router.navigate(["/"]);

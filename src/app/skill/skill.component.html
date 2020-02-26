@@ -15,9 +15,16 @@
                 <div class="card-text card-attributes">Status:  {{ this.users.getUserSkillStatus(this.skillid) }}</div>
                 <div class="card-text card-attributes">Rating:</div>
                 <div class="progress  card-attributes">
-                  <div class="progress-bar" role="progressbar" style="width: 80%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">{{ this.users.getUserSkillRating(this.skillid) }}</div>
+                  <div class="progress-bar" role="progressbar" style="width: 65%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">{{ this.users.getUserSkillRating(this.skillid) }}</div>
                 </div>
                 <div class="card-text card-attributes">Auftrag: {{ this.users.getUserSkillAging(this.skillid) }}</div>
+                
+                <div class="card-text card-block"><strong>Statistik:</strong></div>
+                <div class="card-text card-block">Tests: 3</div>
+                <div class="card-text card-block">Aufgaben: 23</div>
+                <div class="card-text card-block">Wie viele haben sie: 102</div>
+                <div class="card-text card-block">Aus meiner Gruppe: 4</div>
+                <div class="card-text card-block">Arbeiten daran: 234</div>
                 
                 <div class="card-text">
                     <table class="table table-hover">
@@ -44,12 +51,11 @@
                         <tbody>
                             <tr *ngFor="let eduo of this.skills.skill.eduobjectiveref" routerLink="/eduobjective/{{ eduo._id }}">
                                 <td>
-                                    <i style="color:red" class="fas fa-thumbs-down" *ngIf="this.users.getUserEduOSelfassessment(eduo._id)=='Noch garnicht'"></i>
-                                    <i style="color:red" class="fas fa-frown" *ngIf="this.users.getUserEduOSelfassessment(eduo._id)=='Zu wenig'"></i>
-                                    <i style="color:black" class="fas fa-meh" *ngIf="this.users.getUserEduOSelfassessment(eduo._id)=='Neutral'"></i>
-                                    <i style="color:orange" class="fas fa-smile" *ngIf="this.users.getUserEduOSelfassessment(eduo._id)=='Gut'"></i>
-                                    <i style="color:green" class="fas fa-thumbs-up" *ngIf="this.users.getUserEduOSelfassessment(eduo._id)=='Sehr gut'"></i>
-                                    &nbsp;{{ eduo.name }}
+                                    {{ eduo.name }}
+                                    <p><i style="color:orange" class="fas fa-thumbs-down">&nbsp;</i>Vorkenntnisse: {{ this.users.getUserEduO(1, eduo._id) }}</p>
+                                    <p><i style="color:green" class="fas fa-check-circle"></i>&nbsp;Selbstüberprüfung: {{ this.users.getUserEduO(2, eduo._id) }}</p>
+                                    <p><i  style="color:blue" class="fas fa-dot-circle"></i>&nbsp;Fremdeinschätzung: {{ this.users.getUserEduO(3, eduo._id) }}</p>
+                                    <p><i style="color:red" class="fas fa-times-circle"></i>&nbsp;Prüfung: {{ this.users.getUserEduO(4, eduo._id) }}</p>
                                 </td>
                             </tr>
                         </tbody>

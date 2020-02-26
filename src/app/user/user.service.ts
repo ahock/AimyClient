@@ -21,8 +21,16 @@ export interface EduObjective {
   _id: string;
   name: string;
   selfassess: string;
-  count?: number;
-  okcount?: number;
+  PK_asscount?: number;
+  PK_count?: number;
+  PK_ok?: number;
+  SA_asscount?: number;
+  SA_count?: number;
+  SA_ok?: number;
+  MA_asscount?: number;
+  MA_count?: number;
+  MA_ok?: number;
+
   
   preknowledge?: string;
   resume?: string;
@@ -44,7 +52,7 @@ export interface AssignmentRefs {
   id: string;
   name: string;
   status: string;
-  type: string; 
+  asstype: string; 
   active: Date;
   submitted?: Date;
   due?: Date;
@@ -378,7 +386,7 @@ export class UserService {
       }
 //      console.log("getUserEduORating", i, this.activeuser.eduobjectives[i]);
       if(i < this.activeuser.eduobjectives.length) {
-        result = {count: this.activeuser.eduobjectives[i].count, countok: this.activeuser.eduobjectives[i].okcount};
+        result = {count: this.activeuser.eduobjectives[i].MA_count, countok: this.activeuser.eduobjectives[i].MA_ok};
       }
     }
     return result;
@@ -398,7 +406,6 @@ export class UserService {
           break;
         }
       }
-//      console.log(i);
       if(i<this.activeuser.eduobjectives.length) {
         // matching eduo found
         var result: string;
@@ -407,16 +414,28 @@ export class UserService {
             result = this.activeuser.eduobjectives[i].resume;
             break;
           case 1:
-            result = this.activeuser.eduobjectives[i].preknowledge;
+            // PreKnowledge
+            if(this.activeuser.eduobjectives[i].PK_asscount>0) {
+              result = this.activeuser.eduobjectives[i].PK_asscount + ": " + this.activeuser.eduobjectives[i].PK_ok + "/" + this.activeuser.eduobjectives[i].PK_count + " - " + Math.ceil(100*(this.activeuser.eduobjectives[i].PK_ok/this.activeuser.eduobjectives[i].PK_count)) + "%";
+            } else {
+              result = "not determined"; 
+            }
             break;
           case 2:
-            result = this.activeuser.eduobjectives[i].selfatest;
+            // SelfAtest
+            if(this.activeuser.eduobjectives[i].SA_asscount>0) {
+              result = this.activeuser.eduobjectives[i].SA_asscount + ": " + this.activeuser.eduobjectives[i].SA_ok + "/" + this.activeuser.eduobjectives[i].SA_count + " - " + Math.ceil(100*(this.activeuser.eduobjectives[i].MA_ok/this.activeuser.eduobjectives[i].MA_count)) + "%";
+            }
             break;
           case 3:
-            result = this.activeuser.eduobjectives[i].extatest;
+            // External Assessment
+            result = "nicht durchgeführt";
             break;
           case 4:
-            result = this.activeuser.eduobjectives[i].mastery;
+            // Mastery
+            if(this.activeuser.eduobjectives[i].MA_asscount>0) {
+              result = this.activeuser.eduobjectives[i].MA_asscount + ": " + this.activeuser.eduobjectives[i].MA_ok + "/" + this.activeuser.eduobjectives[i].MA_count + " - " + Math.ceil(100*(this.activeuser.eduobjectives[i].MA_ok/this.activeuser.eduobjectives[i].MA_count)) + "%";
+            }
             break;
           default:
             result = "n/a";
@@ -461,10 +480,10 @@ export class UserService {
     });    
     
   }
-  public setAssmentResult(token: string, assessmentid: string, assessmentresult: AssignmentResult) {
+  public setAssmentResult(token: string, assessmentid: string, assessmentresult: AssignmentResult, assmenttype: string) {
     console.log("Parameter:", token, assessmentid, assessmentresult);
     this.http
-        .get(APP_CONFIG.storageURL+"/api/0.1.0/user/setassessmentresult", {params:{token: this.auth.getToken(), assignment: assessmentid, result: JSON.stringify(assessmentresult)}})
+        .get(APP_CONFIG.storageURL+"/api/0.1.0/user/setassessmentresult", {params:{token: this.auth.getToken(), assignment: assessmentid, result: JSON.stringify(assessmentresult), asstype: assmenttype}})
         .subscribe((data) => {
           console.log("saveAssessmentResult", data);
     });
