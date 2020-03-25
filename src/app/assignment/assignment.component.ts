@@ -266,7 +266,14 @@ export class AssignmentComponent implements OnInit {
     clearInterval(this.intervalID);
 //    console.log("answerlist", this.answerlist);
 //    console.log("assignment type", this.aservice.assignment.type);
-  
+
+    // Save last answer to answerlist
+    this.answerlist[this.challengeid] = this.answers.value.answer;
+    this.answers.setValue({'answer': this.answerlist[this.challengeid]});
+    console.log("answerlist complete:", this.challengeid, this.answerlist);
+
+    this.log.createLog(<Log>{token: this.users.getUserToken(), message: "Assignment finished", type: 2, area: "assignment", content: "Assignment "+this.assignmentid+" finished"});
+
     // Calculate right and wrong answers by educational objective  
     for(var i=0; i<this.aservice.assignment.eduobjref.length ;i++) {
       // For all edu objectives of the assignment

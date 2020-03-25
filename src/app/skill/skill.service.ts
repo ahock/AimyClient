@@ -15,6 +15,8 @@ export interface Skill {
   create_date: Date;
   skillsetref: {_id: string, name: string};
   eduobjectiveref: [{_id: string, name: string}];
+  evaluation: [{}];
+  statistic: {};
 }
 
 @Injectable({
@@ -42,7 +44,15 @@ export class SkillService {
         .subscribe((data) => {
           if( data['success'] ) {
             this.skill = <Skill>data['skill'];
-            console.log("Skill loaded", this.skill);
+
+            this.http
+              .get(APP_CONFIG.storageURL+"/api/0.1.0/skill/statistic", {params:{id: id}})
+              .subscribe((data) => {
+                if( data['success'] ) {
+                  this.skill.statistic = data['statistic'];
+                  console.log("Skill loaded", this.skill);
+                }
+              });
           }
         });
     } 

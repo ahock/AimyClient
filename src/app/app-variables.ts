@@ -10,13 +10,13 @@ interface AppConfig {
 export const APP_CONFIG: AppConfig = {
   clientID: 'gb2306fpDknAcuITs3Mf5V73R0MsibOg',
   // Development API Gateway
-  storageURL: 'http://storage.aimyonline.com:8080',
+//  storageURL: 'http://storage.aimyonline.com:8080',
   // Showcase  API Gateway
-//  storageURL: 'http://3.121.45.234:3000',
+  storageURL: 'http://3.121.45.234:3000',
   // Production  API Gateway
   
   apiVersion: '0.0.1',
-  version: '0.0.15',
+  version: '0.0.17',
   // Feature toggler activate or deactivate a specific functionality
   togPlaylist: true,
   togSkillCat: true

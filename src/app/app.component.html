@@ -75,40 +75,63 @@
             <h5 class="card-header bg-primary text-white">Auftrag</h5>
           </div>
           <div class="list-group">
-            <button type="button" routerLink="assignment/{{ aref.id }}" class="list-group-item list-group-item-action" *ngFor="let aref of this.user.getUser().assignmentrefs; index as i">
-              <div class="d-flex w-100 justify-content-between">
-                <h5 class="mb-1">{{ aref.name }}</h5>
-                <small>{{ aref.daystogo }}</small>
+            <div *ngFor="let aref of this.user.getUser().assignmentrefs; index as i">
+              <div *ngIf="aref.status=='active'">  
+                <button type="button" routerLink="assignment/{{ aref.id }}" class="list-group-item list-group-item-action">
+                  <div class="d-flex w-100 justify-content-between">
+                    <h5 class="mb-1">{{ aref.name }}</h5>
+<!--                    <small>{{ aref.daystogo }}</small> -->
+                  </div>
+                  <p class="mb-1">Typ: {{ aref.asstype }}</p>
+                  
+                  <div *ngIf="aref.results.length>0">
+                    <small>Ergebnis: </small>
+                    <i *ngIf="aref.results[aref.results.length-1].pass" style="color:green" class="fas fa-check-circle"></i>
+                    <i *ngIf="!aref.results[aref.results.length-1].pass" style="color:red" class="fas fa-times-circle"></i>
+                    &nbsp;
+                    <small>Durchführungen: </small>
+                    <span class="badge badge-primary badge-info">{{ aref.results.length }}</span>&nbsp;
+                  </div>
+                  <div *ngIf="aref.results.length==0">
+                    <small>Noch nicht durchgeführt</small>
+                  </div>                  
+                </button>
               </div>
-              <p class="mb-1">Typ: {{ aref.asstype }}</p>
-              <small>Ergebnis: </small>
-              <span class="badge badge-primary badge-pill" *ngIf="aref.results.length">{{ aref.results[aref.results.length-1].pass }}</span>&nbsp;
-              <small>Wiederholungen: </small>
-              <span class="badge badge-primary badge-info">{{ aref.results.length }}</span>&nbsp;
-              <small>Status: {{ aref.status }}</small>
-            </button>
+            </div>
+<!--            
+            <i *ngIf="!this.showAssignmentResults" (click)="this.showAssignmentResults=true" class="fas fa-plus-circle" style="position: relative;  float: right;"></i>
+            <i *ngIf="this.showAssignmentResults" (click)="this.showAssignmentResults=fasle" class="fas fa-minus-circle" style="position: relative;  float: right;"></i>
+            <div *ngIf="this.showAssignmentResults">Hallo</div>
+-->
           </div>
         </div>
         <div class="col">
           <div class="card">
             <h5 class="card-header bg-primary text-white">Kompetenzen</h5>
           </div>
-          
-<div class="list-group">
-            <button type="button" routerLink="skill/{{ sref.id }}" class="list-group-item list-group-item-action" *ngFor="let sref of this.user.getUser().skillref; index as i">
-              <div class="d-flex w-100 justify-content-between">
-                <h5 class="mb-1">{{ sref.name }}</h5>
-                <small>{{ sref.togo }}</small>
-              </div>
-              <p class="mb-1">{{ sref.description }}</p>
-              <small>Rating: </small>
-              <span class="badge badge-primary badge-pill">{{ sref.rating }}</span>&nbsp;
-              <small>Comments: </small>
-              <span class="badge badge-primary badge-info">1</span>&nbsp;
-              <small>Status: {{ sref.status }}</small>
-            </button>
-</div>         
-          
+
+          <div class="list-group">
+            
+            <div *ngFor="let sref of this.user.getUser().skillref; index as i">
+              
+              <button *ngIf="sref.status=='active'" type="button" routerLink="skill/{{ sref.id }}" class="list-group-item list-group-item-action">
+                <div class="d-flex w-100 justify-content-between">
+                  <h5 class="mb-1">{{ sref.name }}</h5>
+<!--                  <small>{{ sref.togo }}</small>-->
+                </div>
+                <p class="mb-1">{{ sref.description }}</p>
+              
+<!--              
+                <small>Rating: </small>
+                <span class="badge badge-primary badge-pill">{{ sref.rating }}</span>&nbsp;
+                <small>Comments: </small>
+                <span class="badge badge-primary badge-info">1</span>&nbsp;
+                <small>Status: {{ sref.status }}</small>
+-->
+</button>
+            
+            </div>
+          </div>         
         </div>        
       </div>
     </div>

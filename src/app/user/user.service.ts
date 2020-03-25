@@ -139,7 +139,7 @@ export class UserService {
       this.log.createLog(<Log>{token:this.user_token,area:"user",message:"login",content:"AimyClient"});
       
       this.loadUserData(() => {
-        this.status.setStatusText("Benutzerdaten geladen: "+this.firstname);
+        this.status.setStatusText("Benutzerdaten geladen: "+this.firstname+" "+this.lastname+" ["+this.email2+"]["+this.auth.getToken()+"]");
         console.log("User_Status:",this.user_status)
         if(this.user_status == UserService.USER_REGISTRATION) {this.router.navigate(['/registration'])};
       });
@@ -284,7 +284,7 @@ export class UserService {
   public userStatus(): string {
     console.log("UserService: userStatus");
     if(!this.user_loaded) { this.loadUserData(() => {
-      this.status.setStatusText(this.auth.getToken());
+      this.status.setStatusText("Benutzerdaten geladen: "+this.firstname+" "+this.lastname+" ["+this.email1+"]["+this.auth.getToken()+"]");
     }) }
     return this.auth.getToken();
   }

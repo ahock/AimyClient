@@ -19,12 +19,17 @@
                 </div>
                 <div class="card-text card-attributes">Auftrag: {{ this.users.getUserSkillAging(this.skillid) }}</div>
                 
-                <div class="card-text card-block"><strong>Statistik:</strong></div>
-                <div class="card-text card-block">Tests: 3</div>
-                <div class="card-text card-block">Aufgaben: 23</div>
-                <div class="card-text card-block">Wie viele haben sie: 102</div>
-                <div class="card-text card-block">Aus meiner Gruppe: 4</div>
-                <div class="card-text card-block">Arbeiten daran: 234</div>
+                <div *ngIf="this.skills.skill.statistic">
+                    <div class="card-text card-block"><strong>Statistik:</strong>
+                        <table>
+                            <tr><td>Tests</td><td style="position: relative;  float: right; padding-left: 50px">{{ this.skills.skill.statistic.ass_count }}</td></tr>
+                            <tr><td>Aufgaben</td><td style="position: relative;  float: right;">{{ this.skills.skill.statistic.cha_count }}</td></tr>
+                            <tr><td>Wie viele haben sie</td><td style="position: relative;  float: right;">{{ this.skills.skill.statistic.user_success }}</td></tr>
+                            <tr><td>Aus meiner Gruppe</td><td style="position: relative;  float: right;">{{ this.skills.skill.statistic.grp_count }}</td></tr>
+                            <tr><td>Arbeiten daran</td><td style="position: relative;  float: right;">{{ this.skills.skill.statistic.user_workon }}</td></tr>
+                        </table>
+                    </div>
+                </div>
                 
                 <div class="card-text">
                     <table class="table table-hover">
@@ -40,7 +45,34 @@
                             </tr>
                         </tbody>
                     </table>
-                </div>        
+                </div>  
+                
+                
+                <div class="card-text">
+                    <table class="table table-hover">
+                        <thead class="thead-light">
+                          <tr>
+                            <th scope="col">Bewertung</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let eval of this.skills.skill.evaluation; index as i">
+            <!--     [ngClass]="{'table-primary' : i===this.users.selected_user_index}" (click)="selectUser(i)"> -->
+                                <td>
+                                    <p><span class="badge badge-primary badge-pill">{{ i+1 }}</span> {{ eval.text }}</p>
+                                    <div [ngSwitch]="eval.mode">
+                                        <p *ngSwitchCase="1">Beliebige Prüfung (MA) zu einem Lernziel</p>
+                                        <p *ngSwitchCase="2">Spezielle Prüfung (id) bestehen, bemäss Prüfungskriterien</p>
+                                        <p *ngSwitchDefault>nix</p>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>  
+                
+                
+                
             </div>
         </div>
         <div class="col">

@@ -33,13 +33,11 @@ export class DialogService {
     this.http
       .get(APP_CONFIG.storageURL+"/api/0.1.0/dialogs/get", {params:{token: token}})
       .subscribe((data) => {
-        
-//        if( data['success'] ) {
+        if( data['success'] ) {
             // Valid return data for user
             this.dialoglist = <Dialog[]>data['dialogs'];
             console.log("Dialog Get", <Dialog[]>data, this.dialoglist);
-//            this.firstname = data['user']['firstname'];
-//        };        
+        };        
     });    
   }
   public getDialogs(): Dialog[] {

@@ -18,6 +18,7 @@ export class AppComponent {
   singleModel = '1';
   alertBoxShow = false;
   statusBarShow = true;
+  showAssignmentResults = false;
   
   togPlaylist = APP_CONFIG.togPlaylist;
   togSkillCat = APP_CONFIG.togSkillCat;
