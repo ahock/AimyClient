@@ -16,10 +16,10 @@ export const APP_CONFIG: AppConfig = {
   // Production  API Gateway
   
   apiVersion: '0.0.1',
-  version: '0.0.17',
+  version: '0.0.19',
   // Feature toggler activate or deactivate a specific functionality
-  togPlaylist: true,
-  togSkillCat: true
+  togPlaylist: false,
+  togSkillCat: false
 };
 
 interface AuthConfig {

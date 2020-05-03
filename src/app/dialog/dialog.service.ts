@@ -24,12 +24,12 @@ export interface Dialog {
 })
 export class DialogService {
 
-  private dialoglist: Dialog[];
+  public dialoglist: Dialog[];
   public newdialog: Dialog = {token:"", content:"", create_date:new Date, state:1};
 
   constructor(private http: HttpClient) { }
 
-  public loadByToken(token: string) {
+  public loadByToken(token: string, callback: any) {
     this.http
       .get(APP_CONFIG.storageURL+"/api/0.1.0/dialogs/get", {params:{token: token}})
       .subscribe((data) => {
@@ -37,6 +37,7 @@ export class DialogService {
             // Valid return data for user
             this.dialoglist = <Dialog[]>data['dialogs'];
             console.log("Dialog Get", <Dialog[]>data, this.dialoglist);
+            callback();
         };        
     });    
   }
@@ -78,17 +79,30 @@ export class DialogService {
       
     }
   }
-  public addReaction(id: string, reaction: number, text: string): void {
+  public addReaction(id: string, reaction: number, text: string, callback: any): void {
     
     if(id!="" && reaction>=0) {
       console.log("addReaction", id, reaction, text);  
       
       var reactionString: string = String(reaction);
+      
       this.http
         .get(APP_CONFIG.storageURL+"/api/0.1.0/dialogs/reaction", {params:{id: id, reaction: reactionString, text: text}})
         .subscribe((data) => {
           if( data['success'] ) {
             console.log("Reaction add", data);
+            
+            // delete dialog in dialog list
+            //this.dialoglist = <Dialog[]>
+            for(var i=0; i<this.dialoglist.length;i++) {
+              if(this.dialoglist[i]._id == id) {
+                // delete iten in array
+                console.log("delete dialog", id, i);
+                this.dialoglist.splice(i, 1);
+                break;
+              } 
+            }
+            callback();
           }
         });
     }

@@ -311,9 +311,8 @@ export class AssignmentComponent implements OnInit {
       }
     }
     console.log("overallresult", this.overallresult, this.challenges.challenges.length);
-    
+    console.log("max/pass", this.aservice.assignment.unitmax, this.aservice.assignment.unitpass);
     console.log("Zeit benötigt", this.elapsedtime);
-    
     
     // Display the results page
     this.mode = 5;
@@ -329,18 +328,25 @@ export class AssignmentComponent implements OnInit {
     
     // Save results to user
     var assresult: AssignmentResult = { create_date: new Date() };
-    assresult.pass = true;
+    
+    if(this.overallresult>=this.aservice.assignment.unitpass) {
+      assresult.pass = true; 
+    } else {
+      assresult.pass = false;
+    }
+    
     assresult.elapsedtime = this.elapsedtime;
     assresult.rightanswers = this.overallresult;
     assresult.questioncount = this.challenges.challenges.length;
     assresult.eduobj = this.eduoresult;
-    
-//    console.log("Save results to user", this.users.getUserToken(), this.assignmentid, assresult);
-
-//    console.log("assignment type", this.aservice.assignment.type);
+    assresult.result = [];
+    for(var i=0; i<this.challenges.challenges.length;i++) {
+      console.log(`${this.aservice.assignment.challenges[i]}: ${this.challenges.challenges[i].correct[0]} - ${this.answerlist[i]}`);
+      assresult.result.push({id:this.challenges.challenges[i]._id,cor:this.challenges.challenges[i].correct[0],ans:this.answerlist[i]});
+    }
+    console.log("Save assignment results", assresult);
 
     this.users.setAssmentResult(this.users.getUserToken(), this.assignmentid, assresult,this.aservice.assignment.type);
-    
     this.mode = 0;
     this.router.navigate(["/"]);
   }

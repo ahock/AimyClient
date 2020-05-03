@@ -82,7 +82,15 @@
                     <h5 class="mb-1">{{ aref.name }}</h5>
 <!--                    <small>{{ aref.daystogo }}</small> -->
                   </div>
-                  <p class="mb-1">Typ: {{ aref.asstype }}</p>
+                  <span class="mb-1"></span>
+                      <span [ngSwitch]="aref.asstype" style="font-weight:bold">
+                        <span *ngSwitchCase="'SA'">Selbstüberprüfung</span>
+                        <span *ngSwitchCase="'EA'">Fremdeinschätzung</span>
+                        <span *ngSwitchCase="'MA'">Mastery</span>
+                        <span *ngSwitchCase="'PK'">Vorwissen</span>
+                        <span *ngSwitchDefault>{{ aref.asstype }}</span>
+                      </span>
+                  
                   
                   <div *ngIf="aref.results.length>0">
                     <small>Ergebnis: </small>

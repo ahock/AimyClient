@@ -12,28 +12,29 @@ export class DialogComponent implements OnInit {
   public dialog_index: number = 0;
   public reaction_text: string = "";
 
-  constructor(public user:UserService, public dialogs:DialogService, private router: Router) { }
+  constructor(public users:UserService, public dialogs:DialogService, private router: Router) { }
 
   ngOnInit() {
-    console.log("Dialog ngOnInit Token", this.user.getUserToken());
-    console.log("Dialog ngOnInit UserService", this.user);
+    console.log("Dialog ngOnInit Token", this.users.getUserToken());
+    console.log("Dialog ngOnInit UserService", this.users.auth['_userToken']);
     
-    this.user.loadUserData( () => {
-      this.dialogs.loadByToken(this.user.getUserToken());
-      console.log("Dialogs#:", this.dialog_index);
+    this.users.loadUserData( () => {
+      this.dialogs.loadByToken(this.users.getUserToken(), ()=>{
+        console.log("Dialogs:", this.dialogs.dialoglist);
+      });
     });
   }
   
   public react(id:string, reaction:number): void {
     console.log("dialog react", id, reaction, this.reaction_text);
-    this.dialogs.addReaction(id, reaction, this.reaction_text);
-
-    this.dialogs.getActiveDialogCount(this.user.getUserToken(), (count: number) => {
-      if(count == 0) {
-        this.router.navigate(['/']);
-      } else {
-        this.router.navigate(['/dialog']);
-      }
+    this.dialogs.addReaction(id, reaction, this.reaction_text, ()=>{
+      this.dialogs.getActiveDialogCount(this.users.getUserToken(), (count: number) => {
+        if(count == 0) {
+          this.router.navigate(['/']);
+        } else {
+          this.router.navigate(['/dialog']);
+        }
+      });      
     });
   }
 }

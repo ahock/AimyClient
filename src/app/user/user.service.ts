@@ -46,6 +46,7 @@ export interface AssignmentResult {
   rightanswers?: number;
   questioncount?: number;
   eduobj?: any[];
+  result?: any[];
 }
 
 export interface AssignmentRefs {
@@ -309,7 +310,14 @@ export class UserService {
     this.user_token = token;
   }
   public getUserToken(): string {
-    return this.user_token;
+//    console.log(`getUserToken -${this.user_token}-${this.auth['_userToken']}`);
+    if(this.user_token=="") {
+      if(this.auth['_userToken']!="") {
+        this.user_token = this.auth['_userToken'];
+      }
+    } else {
+      return this.user_token;  
+    }
   }
   public getUser(): User {
     return this.activeuser;
@@ -481,11 +489,22 @@ export class UserService {
     
   }
   public setAssmentResult(token: string, assessmentid: string, assessmentresult: AssignmentResult, assmenttype: string) {
-    console.log("Parameter:", token, assessmentid, assessmentresult);
+    console.log("setAssmentResult:", token, assessmentid, assessmentresult);
     this.http
         .get(APP_CONFIG.storageURL+"/api/0.1.0/user/setassessmentresult", {params:{token: this.auth.getToken(), assignment: assessmentid, result: JSON.stringify(assessmentresult), asstype: assmenttype}})
         .subscribe((data) => {
           console.log("saveAssessmentResult", data);
     });
+  }
+  public getAssignmentRuns(assid: string): any {
+    var assignment: any;
+    
+    for(var i=0;i<this.activeuser.assignmentrefs.length;i++) {
+      if(this.activeuser.assignmentrefs[i].id==assid) {
+        assignment = this.activeuser.assignmentrefs[i];
+        break;
+      }  
+    }
+    return assignment.results;
   }
 }

@@ -1,93 +1,90 @@
 <div class="container">
-
-<p>{{ this.dialogs.dialog_index }}</p>
-
-<div class="card" *ngFor="let dialog of this.dialogs.getDialogs(); index as i">
-  <div class="card-header text-right">
-    <div class="row">
-      <div class="col text-left">{{ dialog.create_date | date : 'dd.MM.yyyy - H:mm' : '+0200' }}</div>
-      <div class="col text-right">
-        <!-- fontawesome.com -->
-        <i *ngIf="dialog.type==1" class="fas fa-info-circle">&nbsp;</i>
-        <i *ngIf="dialog.type==2||dialog.type==3" class="fas fa-question-circle">&nbsp;</i>
-        <i *ngIf="dialog.type==4" class="fas fa-graduation-cap">&nbsp;</i>
-        <i *ngIf="dialog.type==5" class="fas fa-thumbs-o-up">&nbsp;</i>
-        <i *ngIf="dialog.type==6" class="fas fa-exclamation-triangle" style="color: red">&nbsp;</i>
-        <i *ngIf="dialog.type==7" class="fas fa-commenting">&nbsp;</i>
-        <i *ngIf="dialog.type==8" class="fas fa-book">&nbsp;</i>
-        <!-- {{ dialog.type }} -->
+  <div *ngIf="!this.dialogs.getDialogs()">
+    <h4>Derzeit keine Dialoge vorhanden</h4>
+  </div>
+  <br>
+  <div class="card" *ngFor="let dialog of this.dialogs.getDialogs(); index as i">
+    <div class="card-header text-right">
+      <div class="row">
+        <div class="col text-left">{{ dialog.create_date | date : 'dd.MM.yyyy - H:mm' : '+0200' }}</div>
+        <div class="col text-right">
+          <!-- fontawesome.com -->
+          <i *ngIf="dialog.type==1" class="fas fa-info-circle">&nbsp;</i>
+          <i *ngIf="dialog.type==2||dialog.type==3" class="fas fa-question-circle">&nbsp;</i>
+          <i *ngIf="dialog.type==4" class="fas fa-graduation-cap">&nbsp;</i>
+          <i *ngIf="dialog.type==5" class="fas fa-thumbs-o-up">&nbsp;</i>
+          <i *ngIf="dialog.type==6" class="fas fa-exclamation-triangle" style="color: red">&nbsp;</i>
+          <i *ngIf="dialog.type==7" class="fas fa-commenting">&nbsp;</i>
+          <i *ngIf="dialog.type==8" class="fas fa-book">&nbsp;</i>
+          <!-- {{ dialog.type }} -->
+        </div>
       </div>
     </div>
-  </div>
-  <div class="card-body">
-    <h5 class="card-title">{{ dialog.content }}</h5>
-    
-    
-    <div [ngSwitch]="dialog.type">
-      <!-- the same view can be shown in more than one case -->
-      <div *ngSwitchCase="1">
-        <!-- Hinweis mit Ok -->
-        <button type="button" class="btn btn-primary" (click)="this.react(dialog._id, 10, i)">OK - Danke</button>
-      </div>
-      <div *ngSwitchCase="2">
-        <!-- Frage mit 2 Optionen -->
-        <button type="button" class="btn btn-primary" (click)="this.react(dialog._id, 1, i)">- 1 -</button>
-        &nbsp;
-        <button type="button" class="btn btn-primary" (click)="this.react(dialog._id, 2, i)">- 2 -</button>
-      </div>
-      <div *ngSwitchCase="3">
-        <!-- Frage mit 3 Optionen -->
-        <button type="button" class="btn btn-primary" (click)="this.react(dialog._id, 1, i)">- 1 -</button>
-        &nbsp;
-        <button type="button" class="btn btn-primary" (click)="this.react(dialog._id, 2, i)">- 2 -</button>
-        &nbsp;
-        <button type="button" class="btn btn-primary" (click)="this.react(dialog._id, 3, i)">- 3 -</button>
-      </div>
-      <div *ngSwitchCase="4">
-        <!-- Skill-Empfehlung -->
-        <button type="button" class="btn btn-primary" (click)="this.react(dialog._id, 12, i)">Ja gerne, füge den Skill zu meiner Liste hinzu</button>
-        &nbsp;
-        <button type="button" class="btn btn-primary" (click)="this.react(dialog._id, 0, i)">Nein danke, benötige ich jetzt nicht</button>
-        &nbsp;
-        <button type="button" class="btn btn-primary" (click)="this.react(dialog._id, 11, i)">Weiss nicht, erinnere mich später</button>
-      </div>
-      <div *ngSwitchCase="5">
-        <!-- Ansporn-Text -->
-        <button type="button" class="btn btn-primary" (click)="this.react(dialog._id, 10, i)">Danke, verstanden</button>
-        &nbsp;
-        <button type="button" class="btn btn-primary" (click)="this.react(dialog._id, 11, i)">Danke, später</button>
-      </div>
-      <div *ngSwitchCase="6">
-        <!-- Leistungs-Warnung -->
-        <button type="button" class="btn btn-primary" (click)="this.react(dialog._id, 10, i)">Danke, ich arbeite daran</button>
-        &nbsp;
-        <button type="button" class="btn btn-primary" (click)="this.react(dialog._id, 0, i)">Ist mir nicht so wichtig</button>
-      </div>
-      <div *ngSwitchCase="7">
-        <!-- Abfrage mit Text -->
-        <div class="form-group">
-          <textarea class="form-control" [(ngModel)]="reaction_text" class="form-control" #logTextInput aria-describedby="logHelp"></textarea>
-          <small id="infoHelp" class="form-text text-muted">Bitte die Information eintragen</small>
+    <div class="card-body">
+      <h5 class="card-title">{{ dialog.content }}</h5>
+      <div [ngSwitch]="dialog.type">
+        <!-- the same view can be shown in more than one case -->
+        <div *ngSwitchCase="1">
+          <!-- Hinweis mit Ok -->
+          <button type="button" class="btn btn-primary" (click)="this.react(dialog._id, 10, i)">OK - Danke</button>
         </div>
-        <button type="button" class="btn btn-primary" (click)="this.react(dialog._id, 10, i)">Danke, erledigt</button>
-        &nbsp;
-        <button type="button" class="btn btn-primary" (click)="this.react(dialog._id, 11, i)">Frage später noch mal</button>
-      </div>
-      <div *ngSwitchCase="8">
-        <!-- Lerntagebuch -->
-        <div class="form-group">
-          <textarea [(ngModel)]="reaction_text" class="form-control" #logTextInput aria-describedby="logHelp"></textarea>
-          <small id="logHelp" class="form-text text-muted">Eintrag für dein Lerntagebuch</small>
+        <div *ngSwitchCase="2">
+          <!-- Frage mit 2 Optionen -->
+          <button type="button" class="btn btn-primary" (click)="this.react(dialog._id, 1, i)">- 1 -</button>
+          &nbsp;
+          <button type="button" class="btn btn-primary" (click)="this.react(dialog._id, 2, i)">- 2 -</button>
         </div>
-        <button type="button" class="btn btn-primary" (click)="this.react(dialog._id, 10, i)">Danke, erledigt</button>
-        &nbsp;
-        <button type="button" class="btn btn-primary" (click)="this.react(dialog._id, 11, i)">Frage später noch mal</button>
+        <div *ngSwitchCase="3">
+          <!-- Frage mit 3 Optionen -->
+          <button type="button" class="btn btn-primary" (click)="this.react(dialog._id, 1, i)">- 1 -</button>
+          &nbsp;
+          <button type="button" class="btn btn-primary" (click)="this.react(dialog._id, 2, i)">- 2 -</button>
+          &nbsp;
+          <button type="button" class="btn btn-primary" (click)="this.react(dialog._id, 3, i)">- 3 -</button>
+        </div>
+        <div *ngSwitchCase="4">
+          <!-- Skill-Empfehlung -->
+          <button type="button" class="btn btn-primary" (click)="this.react(dialog._id, 12, i)">Ja gerne, füge den Skill zu meiner Liste hinzu</button>
+          &nbsp;
+          <button type="button" class="btn btn-primary" (click)="this.react(dialog._id, 0, i)">Nein danke, benötige ich jetzt nicht</button>
+          &nbsp;
+          <button type="button" class="btn btn-primary" (click)="this.react(dialog._id, 11, i)">Weiss nicht, erinnere mich später</button>
+        </div>
+        <div *ngSwitchCase="5">
+          <!-- Ansporn-Text -->
+          <button type="button" class="btn btn-primary" (click)="this.react(dialog._id, 10, i)">Danke, verstanden</button>
+          &nbsp;
+          <button type="button" class="btn btn-primary" (click)="this.react(dialog._id, 11, i)">Danke, später</button>
+        </div>
+        <div *ngSwitchCase="6">
+          <!-- Leistungs-Warnung -->
+          <button type="button" class="btn btn-primary" (click)="this.react(dialog._id, 10, i)">Danke, ich arbeite daran</button>
+          &nbsp;
+          <button type="button" class="btn btn-primary" (click)="this.react(dialog._id, 0, i)">Ist mir nicht so wichtig</button>
+        </div>
+        <div *ngSwitchCase="7">
+          <!-- Abfrage mit Text -->
+          <div class="form-group">
+            <textarea class="form-control" [(ngModel)]="reaction_text" class="form-control" #logTextInput aria-describedby="logHelp"></textarea>
+            <small id="infoHelp" class="form-text text-muted">Bitte die Information eintragen</small>
+          </div>
+          <button type="button" class="btn btn-primary" (click)="this.react(dialog._id, 10, i)">Danke, erledigt</button>
+          &nbsp;
+          <button type="button" class="btn btn-primary" (click)="this.react(dialog._id, 11, i)">Frage später noch mal</button>
+        </div>
+        <div *ngSwitchCase="8">
+          <!-- Lerntagebuch -->
+          <div class="form-group">
+            <textarea [(ngModel)]="reaction_text" class="form-control" #logTextInput aria-describedby="logHelp"></textarea>
+            <small id="logHelp" class="form-text text-muted">Eintrag für dein Lerntagebuch</small>
+          </div>
+          <button type="button" class="btn btn-primary" (click)="this.react(dialog._id, 10, i)">Danke, erledigt</button>
+          &nbsp;
+          <button type="button" class="btn btn-primary" (click)="this.react(dialog._id, 11, i)">Frage später noch mal</button>
+        </div>
+        <!--default case when there are no matches -->
       </div>
-      <!--default case when there are no matches -->
     </div>
+    <br>
   </div>
-</div>
-
-<!--     [ngClass]="{'table-primary' : i===this.users.selected_user_index}" (click)="selectUser(i)"> -->
-
 </div>
