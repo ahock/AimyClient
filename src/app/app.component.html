@@ -117,27 +117,19 @@
           <div class="card">
             <h5 class="card-header bg-primary text-white">Kompetenzen</h5>
           </div>
-
           <div class="list-group">
-            
             <div *ngFor="let sref of this.user.getUser().skillref; index as i">
-              
               <button *ngIf="sref.status=='active'" type="button" routerLink="skill/{{ sref.id }}" class="list-group-item list-group-item-action">
                 <div class="d-flex w-100 justify-content-between">
                   <h5 class="mb-1">{{ sref.name }}</h5>
-<!--                  <small>{{ sref.togo }}</small>-->
+                  <small>{{ sref.togo }}</small>
                 </div>
                 <p class="mb-1">{{ sref.description }}</p>
-              
-<!--              
                 <small>Rating: </small>
                 <span class="badge badge-primary badge-pill">{{ sref.rating }}</span>&nbsp;
-                <small>Comments: </small>
-                <span class="badge badge-primary badge-info">1</span>&nbsp;
-                <small>Status: {{ sref.status }}</small>
--->
-</button>
-            
+                <small>To Go: </small>
+                <span class="badge badge-primary badge-info">{{ sref.togo }}</span>&nbsp;
+              </button>
             </div>
           </div>         
         </div>        

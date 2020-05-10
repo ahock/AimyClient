@@ -8,8 +8,7 @@
                 <div class="card-header bg-primary text-white"><h5>Kompetenz</h5></div>
                 <div class="card-text card-block"><h3>{{ this.skills.skill.name }}</h3></div>
                 <div class="card-text card-block">{{ this.skills.skill.description }}</div>
-                
-    <!--            <div class="card-text card-attributes">Feld: {{ this.skills.skill.field }}</div>  -->
+                <div class="card-text card-attributes">Feld: {{ this.skills.skill.field }}</div>
                 <div class="card-text card-attributes">Modul: {{ this.skills.skill.modul }}</div>
     
                 <div class="card-text card-attributes">Status:  {{ this.users.getUserSkillStatus(this.skillid) }}</div>
@@ -30,39 +29,26 @@
                         </table>
                     </div>
                 </div>
-                
+            </div>
+            <div class="card">
+                <div class="card-header"><h5>Bewertung</h5></div>
                 <div class="card-text">
                     <table class="table table-hover">
-                        <thead class="thead-light">
-                          <tr>
-                            <th scope="col">Kompetenzfelder</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                            <tr *ngFor="let ssref of this.skills.skill.skillsetref" routerLink="/skillboard/{{ ssref._id }}">
-            <!--     [ngClass]="{'table-primary' : i===this.users.selected_user_index}" (click)="selectUser(i)"> -->
-                                <td>{{ ssref.name }}</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>  
-                
-                
-                <div class="card-text">
-                    <table class="table table-hover">
-                        <thead class="thead-light">
-                          <tr>
-                            <th scope="col">Bewertung</th>
-                          </tr>
-                        </thead>
                         <tbody>
                             <tr *ngFor="let eval of this.skills.skill.evaluation; index as i">
-            <!--     [ngClass]="{'table-primary' : i===this.users.selected_user_index}" (click)="selectUser(i)"> -->
                                 <td>
-                                    <p><span class="badge badge-primary badge-pill">{{ i+1 }}</span> {{ eval.text }}</p>
+                                    <p>
+                                        <span class="badge badge-primary badge-pill">{{ i+1 }}</span>&nbsp;
+                                        <span *ngIf="eval.mode=='1'">Beliebige Prüfung (Mastery) zu einem Lernziel</span>
+                                        <span *ngIf="eval.mode=='2'">Spezielle Prüfung (id) bestehen, gemäss Prüfungskriterien</span>
+                                    </p>
                                     <div [ngSwitch]="eval.mode">
-                                        <p *ngSwitchCase="1">Beliebige Prüfung (MA) zu einem Lernziel</p>
-                                        <p *ngSwitchCase="2">Spezielle Prüfung (id) bestehen, bemäss Prüfungskriterien</p>
+                                        <div *ngSwitchCase="1">{{ eval.text }} <!-- Spezial educational objective -->
+                                            <div routerLink="/eduobjective/{{ eval.eduo_id }}" style="color:blue">{{ eval.eduo_id }}</div>
+                                        </div>
+                                        <div *ngSwitchCase="2">{{ eval.text }} <!-- Spezial assignment -->
+                                            <div routerLink="/assignment/{{ eval.ass_id }}" style="color:blue">{{ eval.ass_id }}</div>
+                                        </div>
                                         <p *ngSwitchDefault>nix</p>
                                     </div>
                                 </td>
@@ -70,9 +56,6 @@
                         </tbody>
                     </table>
                 </div>  
-                
-                
-                
             </div>
         </div>
         <div class="col">
@@ -84,16 +67,55 @@
                             <tr *ngFor="let eduo of this.skills.skill.eduobjectiveref" routerLink="/eduobjective/{{ eduo._id }}">
                                 <td>
                                     {{ eduo.name }}
-                                    <p><i style="color:orange" class="fas fa-thumbs-down">&nbsp;</i>Vorkenntnisse: {{ this.users.getUserEduO(1, eduo._id) }}</p>
-                                    <p><i style="color:green" class="fas fa-check-circle"></i>&nbsp;Selbstüberprüfung: {{ this.users.getUserEduO(2, eduo._id) }}</p>
-                                    <p><i  style="color:blue" class="fas fa-dot-circle"></i>&nbsp;Fremdeinschätzung: {{ this.users.getUserEduO(3, eduo._id) }}</p>
-                                    <p><i style="color:red" class="fas fa-times-circle"></i>&nbsp;Prüfung: {{ this.users.getUserEduO(4, eduo._id) }}</p>
+                                    <table width="100%">
+                                        <tr><th>Pass</th><th>Art</th><th>#</th><th>Fr</th><th>Ok</th><th>%</th></tr>
+                                        <tr *ngIf="this.users.getUserEduO(2, eduo._id)['valid']">
+                                            <td>
+                                                <i *ngIf="!this.users.getUserEduO(2, eduo._id)['pass']" style="color:red" class="fas fa-times-circle"></i>
+                                                <i *ngIf="this.users.getUserEduO(2, eduo._id)['pass']" style="color:green" class="fas fa-check-circle"></i>
+                                            </td>
+                                            <td with="50%">Selbstüberprüfung</td>
+                                            <td>{{ this.users.getUserEduO(2, eduo._id)['ass_count'] }}</td>
+                                            <td>{{ this.users.getUserEduO(2, eduo._id)['cha_count'] }}</td>
+                                            <td>{{ this.users.getUserEduO(2, eduo._id)['cha_ok'] }}</td>
+                                            <td>{{ this.users.getUserEduO(2, eduo._id)['percent'] }}</td>
+                                        </tr>
+                                        <tr *ngIf="this.users.getUserEduO(4, eduo._id)['valid']">
+                                            <td>
+                                                <i *ngIf="!this.users.getUserEduO(4, eduo._id)['pass']" style="color:red" class="fas fa-times-circle"></i>
+                                                <i *ngIf="this.users.getUserEduO(4, eduo._id)['pass']" style="color:green" class="fas fa-check-circle"></i>
+                                            </td>
+                                            <td with="50%">Prüfung</td>
+                                            <td>{{ this.users.getUserEduO(4, eduo._id)['ass_count'] }}</td>
+                                            <td>{{ this.users.getUserEduO(4, eduo._id)['cha_count'] }}</td>
+                                            <td>{{ this.users.getUserEduO(4, eduo._id)['cha_ok'] }}</td>
+                                            <td>{{ this.users.getUserEduO(4, eduo._id)['percent'] }}</td>
+                                        </tr>
+                                        
+                                    </table>
+                                    <!-- External assessment -->
+                                    <p *ngIf="this.users.getUserEduO(3, eduo._id)['valid']"><i  style="color:blue" class="fas fa-dot-circle"></i>&nbsp;
+                                        Fremdeinschätzung:
+                                        {{ this.users.getUserEduO(3, eduo._id)['text'] }}
+                                    </p>
+                                    <br>
                                 </td>
                             </tr>
                         </tbody>
                     </table>
                 </div>        
-
+            </div>
+            <div class="card">
+                <div class="card-header"><h5>Kompetenzfelder</h5></div>
+                <div *ngIf="togSkillCat" class="card-text">
+                    <table class="table table-hover">
+                        <tbody>
+                            <tr *ngFor="let ssref of this.skills.skill.skillsetref" routerLink="/skillboard/{{ ssref._id }}">
+                                <td>{{ ssref.name }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>  
             </div>
         </div>
     </div>

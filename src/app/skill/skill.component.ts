@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SkillService } from '../skill/skill.service';
 import { UserService } from '../user/user.service';
+import { APP_CONFIG } from '../app-variables';
 
 @Component({
   selector: 'app-skill',
@@ -23,6 +24,8 @@ import { UserService } from '../user/user.service';
 })
 export class SkillComponent implements OnInit {
   private skillid: string;
+  
+  togSkillCat = APP_CONFIG.togSkillCat;
   
   constructor(private route:ActivatedRoute, private skills: SkillService, private users:UserService) {
     this.route.params.subscribe( params => {

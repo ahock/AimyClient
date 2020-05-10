@@ -399,7 +399,7 @@ export class UserService {
     }
     return result;
   }
-  public getUserEduO(achievement: number, eduoid: string): string {
+  public getUserEduO(achievement: number, eduoid: string): any {
     /*
     achievement:
     0: Resume
@@ -416,44 +416,70 @@ export class UserService {
       }
       if(i<this.activeuser.eduobjectives.length) {
         // matching eduo found
-        var result: string;
+        var result: any = {
+          valid: true,
+          text: "",
+          pass: false,
+          ass_count: 0,
+          cha_count: 0,
+          cha_ok: 0,
+          percent: "0%"
+        };
+        
         switch(achievement) {
           case 0:
-            result = this.activeuser.eduobjectives[i].resume;
+            result.text = this.activeuser.eduobjectives[i].resume;
             break;
           case 1:
             // PreKnowledge
             if(this.activeuser.eduobjectives[i].PK_asscount>0) {
-              result = this.activeuser.eduobjectives[i].PK_asscount + ": " + this.activeuser.eduobjectives[i].PK_ok + "/" + this.activeuser.eduobjectives[i].PK_count + " - " + Math.ceil(100*(this.activeuser.eduobjectives[i].PK_ok/this.activeuser.eduobjectives[i].PK_count)) + "%";
+              result.text = this.activeuser.eduobjectives[i].PK_asscount + ": " + this.activeuser.eduobjectives[i].PK_ok + "/" + this.activeuser.eduobjectives[i].PK_count + " - " + Math.ceil(100*(this.activeuser.eduobjectives[i].PK_ok/this.activeuser.eduobjectives[i].PK_count)) + "%";
             } else {
-              result = "not determined"; 
-            }
+              result.text = "not determined";
+              result.valid = false;
+            } 
             break;
           case 2:
             // SelfAtest
             if(this.activeuser.eduobjectives[i].SA_asscount>0) {
-              result = this.activeuser.eduobjectives[i].SA_asscount + ": " + this.activeuser.eduobjectives[i].SA_ok + "/" + this.activeuser.eduobjectives[i].SA_count + " - " + Math.ceil(100*(this.activeuser.eduobjectives[i].MA_ok/this.activeuser.eduobjectives[i].MA_count)) + "%";
+              result.text = this.activeuser.eduobjectives[i].SA_asscount + ": " + this.activeuser.eduobjectives[i].SA_ok + "/" + this.activeuser.eduobjectives[i].SA_count + " - " + Math.ceil(100*(this.activeuser.eduobjectives[i].MA_ok/this.activeuser.eduobjectives[i].MA_count)) + "%";
+              result.pass = Math.ceil(100*(this.activeuser.eduobjectives[i].SA_ok/this.activeuser.eduobjectives[i].SA_count))>=70?true:false;
+              result.ass_count = this.activeuser.eduobjectives[i].SA_asscount;
+              result.cha_count = this.activeuser.eduobjectives[i].SA_count;
+              result.cha_ok = this.activeuser.eduobjectives[i].SA_ok;
+              result.percent = Math.ceil(100*(this.activeuser.eduobjectives[i].SA_ok/this.activeuser.eduobjectives[i].SA_count)) + "%";
+              
+            } else {
+              result.valid = false;
             }
             break;
           case 3:
             // External Assessment
-            result = "nicht durchgeführt";
+            result.text = "nicht durchgeführt";
+            result.valid = false;
             break;
           case 4:
             // Mastery
             if(this.activeuser.eduobjectives[i].MA_asscount>0) {
-              result = this.activeuser.eduobjectives[i].MA_asscount + ": " + this.activeuser.eduobjectives[i].MA_ok + "/" + this.activeuser.eduobjectives[i].MA_count + " - " + Math.ceil(100*(this.activeuser.eduobjectives[i].MA_ok/this.activeuser.eduobjectives[i].MA_count)) + "%";
+              result.text = this.activeuser.eduobjectives[i].MA_asscount + ": " + this.activeuser.eduobjectives[i].MA_ok + "/" + this.activeuser.eduobjectives[i].MA_count + " - " + Math.ceil(100*(this.activeuser.eduobjectives[i].MA_ok/this.activeuser.eduobjectives[i].MA_count)) + "%";
+              result.pass = Math.ceil(100*(this.activeuser.eduobjectives[i].MA_ok/this.activeuser.eduobjectives[i].MA_count))>=65?true:false;
+              result.ass_count = this.activeuser.eduobjectives[i].MA_asscount;
+              result.cha_count = this.activeuser.eduobjectives[i].MA_count;
+              result.cha_ok = this.activeuser.eduobjectives[i].MA_ok;
+              result.percent = Math.ceil(100*(this.activeuser.eduobjectives[i].MA_ok/this.activeuser.eduobjectives[i].MA_count)) + "%";
+            } else {
+              result.valid = false;
             }
             break;
           default:
-            result = "n/a";
+            result.text = "n/a";
         }
         return result;  
       } else {
-        return "n/a";
+        return {text: "n/a"};
       }
     } else {
-      return "n/a";
+      return {text: "n/a"};
     }
   }
   public setUserEduOSelfassessment(eduoid: string, value: string): void {
