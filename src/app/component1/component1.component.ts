@@ -41,9 +41,9 @@ export class Component1Component implements OnInit {
       this.skillindex = i;
       
 //      console.log(this.skillsets.skillsetlist[this.skillsetindex].skillref[this.skillindex].id);
-      this.skills.getSkill(this.skillsets.skillsetlist[this.skillsetindex].skillref[this.skillindex].id);
-      console.log(this.skills.skill);      
-      
+      this.skills.getSkill(this.skillsets.skillsetlist[this.skillsetindex].skillref[this.skillindex].id, ()=>{
+        console.log(this.skills.skill);
+      });
     }
   }
   public setactiveeduo(i: number): void {

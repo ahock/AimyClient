@@ -533,4 +533,13 @@ export class UserService {
     }
     return assignment.results;
   }
+  public getSkillEvaluation(skillid: string, mode: number, refid: string, threshold: number , callback: any): void {
+    console.log("getSkillEvaluation:", skillid, mode, refid, threshold);
+    this.http
+        .get(APP_CONFIG.storageURL+"/api/0.1.0/user/getskillevaluation", {params:{token: this.auth.getToken(), skillid: skillid, mode: mode.toString(), refid: refid, threshold: threshold.toString()}})
+        .subscribe((data) => {
+          console.log("getSkillEvaluation", data);
+          callback(data['evaluation']);
+    });
+  }
 }

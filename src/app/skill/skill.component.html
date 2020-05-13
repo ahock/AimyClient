@@ -37,17 +37,22 @@
                         <tbody>
                             <tr *ngFor="let eval of this.skills.skill.evaluation; index as i">
                                 <td>
+                                    
                                     <p>
-                                        <span class="badge badge-primary badge-pill">{{ i+1 }}</span>&nbsp;
-                                        <span *ngIf="eval.mode=='1'">Beliebige Prüfung (Mastery) zu einem Lernziel</span>
-                                        <span *ngIf="eval.mode=='2'">Spezielle Prüfung (id) bestehen, gemäss Prüfungskriterien</span>
+                                        <!-- <span class="badge badge-primary badge-pill">{{ i+1 }}</span>&nbsp; -->
+                                        <span *ngIf="eval.mode=='1'">Lernziel durch Prüfungs-Auftrag (bestimmt durch Lernziel) erreichen</span>
+                                        <span *ngIf="eval.mode=='2'">Speziellen Auftrag bestehen (gemäss Prüfungskriterien)</span>
+                                    </p>
+                                    <p>
+                                        <span *ngIf="this.skillevaluation[i]" class="badge badge-primary badge-pill" style="background-color:green">Erreicht</span>
+                                        <span *ngIf="!this.skillevaluation[i]" class="badge badge-primary badge-pill" style="background-color:red">Nicht Erreicht</span>
                                     </p>
                                     <div [ngSwitch]="eval.mode">
-                                        <div *ngSwitchCase="1">{{ eval.text }} <!-- Spezial educational objective -->
-                                            <div routerLink="/eduobjective/{{ eval.eduo_id }}" style="color:blue">{{ eval.eduo_id }}</div>
+                                        <div *ngSwitchCase="1"><!-- Spezial educational objective -->
+                                            <div routerLink="/eduobjective/{{ eval.eduo_id }}" style="color:blue">{{ eval.text }}</div>
                                         </div>
-                                        <div *ngSwitchCase="2">{{ eval.text }} <!-- Spezial assignment -->
-                                            <div routerLink="/assignment/{{ eval.ass_id }}" style="color:blue">{{ eval.ass_id }}</div>
+                                        <div *ngSwitchCase="2"><!-- Spezial assignment -->
+                                            <div routerLink="/assignment/{{ eval.ass_id }}" style="color:blue">{{ eval.text }}</div>
                                         </div>
                                         <p *ngSwitchDefault>nix</p>
                                     </div>

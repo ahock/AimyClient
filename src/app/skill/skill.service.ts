@@ -36,7 +36,7 @@ export class SkillService {
     
     return skilllist;
   }
-  public getSkill(id: string): void {
+  public getSkill(id: string, callback: any): void {
     console.log("Skill to load", id, this.skill);
     if(id) {
       this.http
@@ -51,6 +51,7 @@ export class SkillService {
                 if( data['success'] ) {
                   this.skill.statistic = data['statistic'];
                   console.log("Skill loaded", this.skill);
+                  callback();
                 }
               });
           }
