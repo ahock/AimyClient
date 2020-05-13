@@ -17,7 +17,7 @@ export class AppComponent {
   title = 'aimy-vanilla';
   singleModel = '1';
   alertBoxShow = false;
-  statusBarShow = true;
+  statusBarShow = false;
   showAssignmentResults = false;
   
   togPlaylist = APP_CONFIG.togPlaylist;

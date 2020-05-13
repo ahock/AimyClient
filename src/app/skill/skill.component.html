@@ -8,18 +8,38 @@
                 <div class="card-header bg-primary text-white"><h5>Kompetenz</h5></div>
                 <div class="card-text card-block"><h3>{{ this.skills.skill.name }}</h3></div>
                 <div class="card-text card-block">{{ this.skills.skill.description }}</div>
-                <div class="card-text card-attributes">Feld: {{ this.skills.skill.field }}</div>
-                <div class="card-text card-attributes">Modul: {{ this.skills.skill.modul }}</div>
-    
-                <div class="card-text card-attributes">Status:  {{ this.users.getUserSkillStatus(this.skillid) }}</div>
-                <div class="card-text card-attributes">Rating:</div>
-                <div class="progress  card-attributes">
+                <div class="card-text card-block">
+                <table>
+                    <tr>
+                        <td>Feld</td>
+                        <td style="position: relative;  float: right; padding-left: 50px">{{ this.skills.skill.field }}</td>
+                    </tr>
+                    <tr>
+                        <td>Modul</td>
+                        <td style="position: relative;  float: right; padding-left: 50px">{{ this.skills.skill.modul }}</td>
+                    </tr>
+                    <tr>
+                        <td>Rating</td>
+                        <td style="position: relative;  float: right; padding-left: 50px">{{ this.users.getUserSkillRating(this.skillid) }}</td>
+                    </tr>
+                    <tr>
+                        <td>ToGo</td>
+                        <td style="position: relative;  float: right; padding-left: 50px"><div class="progress-bar" role="progressbar" style="width: 65%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">{{ this.users.getUserSkillRating(this.skillid) }}</div></td>
+                    </tr>
+                    <tr>
+                        <td>Aging</td>
+                        <td style="position: relative;  float: right; padding-left: 50px">{{ this.users.getUserSkillAging(this.skillid) }}</td>
+                    </tr>
+                </table>
+                </div>
+                <!-- <div class="card-text card-block">Status:  {{ this.users.getUserSkillStatus(this.skillid) }}</div> -->
+
+<!--                <div class="progress  card-block">
                   <div class="progress-bar" role="progressbar" style="width: 65%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">{{ this.users.getUserSkillRating(this.skillid) }}</div>
                 </div>
-                <div class="card-text card-attributes">Auftrag: {{ this.users.getUserSkillAging(this.skillid) }}</div>
-                
+-->
                 <div *ngIf="this.skills.skill.statistic">
-                    <div class="card-text card-block"><strong>Statistik:</strong>
+                    <div class="card-text card-block">Statistik:
                         <table>
                             <tr><td>Tests</td><td style="position: relative;  float: right; padding-left: 50px">{{ this.skills.skill.statistic.ass_count }}</td></tr>
                             <tr><td>Aufgaben</td><td style="position: relative;  float: right;">{{ this.skills.skill.statistic.cha_count }}</td></tr>
@@ -41,7 +61,7 @@
                                     <p>
                                         <!-- <span class="badge badge-primary badge-pill">{{ i+1 }}</span>&nbsp; -->
                                         <span *ngIf="eval.mode=='1'">Lernziel durch Prüfungs-Auftrag (bestimmt durch Lernziel) erreichen</span>
-                                        <span *ngIf="eval.mode=='2'">Speziellen Auftrag bestehen (gemäss Prüfungskriterien)</span>
+                                        <span *ngIf="eval.mode=='2'">Speziellen Auftrag erledigen (gemäss Prüfungskriterien)</span>
                                     </p>
                                     <p>
                                         <span *ngIf="this.skillevaluation[i]" class="badge badge-primary badge-pill" style="background-color:green">Erreicht</span>

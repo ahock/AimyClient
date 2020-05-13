@@ -1,7 +1,7 @@
 <nav class="navbar navbar-dark bg-dark">
   <div class="container-fluid">
     <img width="40" alt="Angular Logo" src="assets/aimy-logo-black.jpg" alt="LOGO" routerLink="/">
-      <a class="navbar-brand" href="#">Aimy - Deine Kompetenzen</a>
+      <a class="navbar-brand" href="#">Aimy - Entwickele Dich</a>
       <form class="form-inline">
         <div *ngIf="auth.isAuthenticated()" class="btn-group" dropdown>
           <button id="button-basic" dropdownToggle type="button" class="btn btn-primary my-2 my-sm-0 mr-2 dropdown-toggle"
@@ -122,13 +122,14 @@
               <button *ngIf="sref.status=='active'" type="button" routerLink="skill/{{ sref.id }}" class="list-group-item list-group-item-action">
                 <div class="d-flex w-100 justify-content-between">
                   <h5 class="mb-1">{{ sref.name }}</h5>
-                  <small>{{ sref.togo }}</small>
+                  <!--<small>{{ sref.togo }}</small>-->
                 </div>
                 <p class="mb-1">{{ sref.description }}</p>
                 <small>Rating: </small>
                 <span class="badge badge-primary badge-pill">{{ sref.rating }}</span>&nbsp;
                 <small>To Go: </small>
-                <span class="badge badge-primary badge-info">{{ sref.togo }}</span>&nbsp;
+                <span *ngIf="sref.togo!='Done'" class="badge badge-primary badge-info">{{ sref.togo }}</span>
+                <span *ngIf="sref.togo=='Done'"><i style="color:green" class="fas fa-check-circle"></i></span>
               </button>
             </div>
           </div>         
