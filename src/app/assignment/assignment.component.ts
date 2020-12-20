@@ -153,8 +153,13 @@ export class AssignmentComponent implements OnInit {
   
   public getElapsedTimeString() {
     var elapsedTimeString: string;
+    var secondsString: string;
+    var minutesString: string;
+
     if(this.elapsedtime) {
-      elapsedTimeString = "0" + (this.elapsedtime.getHours()-1) +":"+ "0" + this.elapsedtime.getMinutes() +":"+ "0" + this.elapsedtime.getSeconds();  
+      secondsString = "0"+this.elapsedtime.getSeconds();
+      minutesString = "0" + this.elapsedtime.getMinutes();
+      elapsedTimeString = "0" + (this.elapsedtime.getHours()-1) +":"+ minutesString.substring(minutesString.length - 2, minutesString.length) +":"+ secondsString.substring(secondsString.length - 2, secondsString.length);
     }
     else {
       elapsedTimeString = "00:00:00";

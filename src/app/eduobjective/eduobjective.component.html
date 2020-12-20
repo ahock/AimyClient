@@ -10,7 +10,63 @@
                     <div class="card-text">{{ this.eduobjective.eduobjective.name }}</div>
                 </div>
                 &nbsp;
-                <div class="card">
+                
+                <div *ngIf="this.appConfig.togEduoShowAchievement" class="card">
+                    <div class="card-header"><h5>Zielerreichung</h5></div>
+                    <div class="card-text">
+
+                        <table class="table table-hover">
+                            <thead><tr><th>Typ</th><th>Ergebnis</th></tr></thead>
+                            <tbody>
+                                <tr>
+                                    <td><p>Vorkenntnisse</p></td>
+                                    <td><p>
+                                        <i style="color:red" class="fas fa-thumbs-down"></i>&nbsp;{{ this.users.getUserEduO(1, this.eduobjective.eduobjective._id)['text'] }}
+                                    </p></td>
+                                </tr>
+                                <tr>
+                                    <td><p>Selbstüberprüfung</p></td>
+                                    <td><p>
+                                        <i style="color:green" class="fas fa-check-circle"></i>&nbsp;<strong>{{ this.users.getUserEduO(2, this.eduobjective.eduobjective._id)['text'] }}</strong>
+                                    </p></td>
+                                </tr>
+                                <tr>
+                                    <td><p>Fremdeinschätzung
+                                    </p></td>
+                                    <td><p>
+                                        <i  style="color:red" class="fas fa-minus-circle"></i>&nbsp;{{ this.users.getUserEduO(3, this.eduobjective.eduobjective._id)['text'] }}
+                                    </p></td>
+                                </tr>
+                                <tr>
+                                    <td><p>Prüfung</p></td>
+                                    <td><div>
+                                    <i *ngIf="this.users.getUserEduO(4, this.eduobjective.eduobjective._id)['valid']" style="color:blue" class="fas fa-dot-circle"></i>
+                                    <i *ngIf="!this.users.getUserEduO(4, this.eduobjective.eduobjective._id)['pass']" style="color:red" class="fas fa-times-circle"></i>
+                                    <i *ngIf="this.users.getUserEduO(4, this.eduobjective.eduobjective._id)['pass']" style="color:green" class="fas fa-check-circle"></i>
+                                    &nbsp;
+                                    <!--<div>{{ this.users.getUserEduO(4, this.eduobjective.eduobjective._id)['text'] }}</div>-->
+                                    <div>Anzahl Aufträge:{{ this.users.getUserEduO(4, this.eduobjective.eduobjective._id)['ass_count'] }}</div>
+                                    <div>Anzahl Aufgaben:{{ this.users.getUserEduO(4, this.eduobjective.eduobjective._id)['cha_count'] }}</div>
+                                    <div>davon richtig:{{ this.users.getUserEduO(4, this.eduobjective.eduobjective._id)['cha_ok'] }}</div>
+                                    <div>in Prozent:{{ this.users.getUserEduO(4, this.eduobjective.eduobjective._id)['percent'] }}</div>
+                                    </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th><p>Total</p></th>
+                                    <td><p>
+                                        <i style="color:red" class="fas fa-times-circle"></i>
+                                        &nbsp;
+                                        nicht ausreichend
+                                        &nbsp;
+                                        {{ this.users.getUserEduO(0, this.eduobjective.eduobjective._id)['text'] }}
+                                    </p></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div *ngIf="this.appConfig.togEduoShowAchievement" class="card">
                     <div class="card-header">
                         <h5>Selbsteinschätzung
                         <span class="col text-right"><i class="fas fa-pencil-alt" (click)="this.selfassess()"></i></span>
@@ -55,52 +111,6 @@
                    </div>
                 </div>                
                 <div class="card">
-                    <div class="card-header"><h5>Zielerreichung</h5></div>
-                    <div class="card-text">
-
-                        <table class="table table-hover">
-                            <thead><tr><th>Typ</th><th>Ergebnis</th></tr></thead>
-                            <tbody>
-                                <tr>
-                                    <td><p>Vorkenntnisse</p></td>
-                                    <td><p>
-                                        <i style="color:red" class="fas fa-thumbs-down"></i>&nbsp;{{ this.users.getUserEduO(1, this.eduobjective.eduobjective._id) }}
-                                    </p></td>
-                                </tr>
-                                <tr>
-                                    <td><p>Selbstüberprüfung</p></td>
-                                    <td><p>
-                                        <i style="color:green" class="fas fa-check-circle"></i>&nbsp;<strong>{{ this.users.getUserEduO(2, this.eduobjective.eduobjective._id) }}</strong>
-                                    </p></td>
-                                </tr>
-                                <tr>
-                                    <td><p>Fremdeinschätzung
-                                    </p></td>
-                                    <td><p>
-                                        <i  style="color:red" class="fas fa-minus-circle"></i>&nbsp;{{ this.users.getUserEduO(3, this.eduobjective.eduobjective._id) }}
-                                    </p></td>
-                                </tr>
-                                <tr>
-                                    <td><p>Prüfung</p></td>
-                                    <td><p>
-                                    <i  style="color:blue" class="fas fa-dot-circle"></i>&nbsp;{{ this.users.getUserEduO(4, this.eduobjective.eduobjective._id) }}
-                                    </p></td>
-                                </tr>
-                                <tr>
-                                    <th><p>Total</p></th>
-                                    <td><p>
-                                        <i style="color:red" class="fas fa-times-circle"></i>
-                                        &nbsp;
-                                        nicht ausreichend
-                                        &nbsp;
-                                        {{ this.users.getUserEduO(0, this.eduobjective.eduobjective._id) }}
-                                    </p></td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-                <div class="card">
                     <div class="card-header"><h5>Unterstützt Kompetenzen</h5></div>
                     <div class="card-text">
                         <table class="table table-hover">
@@ -128,27 +138,29 @@
             </div>
             <div class="col">
                 <div class="card">
-                    <div class="card-header"><h5>Lernmittel zur Zielerreichung</h5></div>
+                    <div class="card-header"><h5>Lernmittel</h5></div>
                     <div class="card-text">
                         <table class="table table-hover">
                             <tbody>
                                 <tr *ngFor="let eduo of this.eduobjective.eduobjective.contentref">
                                     <!--  routerLink="/content/{{ eduo.id }}" -->
                                     <td (click)="this.getContentDetails(eduo.id)">
-                                    <h5><span *ngIf="eduo.priority" class="badge badge-primary badge-pill">{{ eduo.priority }}</span>&nbsp;{{ eduo.name }}</h5>
+                                        
+                                    <h5 *ngIf="this.showContentDetails&&(this.contentid==eduo.id)"><span *ngIf="eduo.priority" class="badge badge-primary badge-pill">{{ eduo.priority }}</span>&nbsp;{{ eduo.name }}</h5>
+                                    <p><span *ngIf="eduo.priority" class="badge badge-primary badge-pill">{{ eduo.priority }}</span>&nbsp;{{ eduo.name }}</p>
                                     
 <!--                                    <a href="{{ eduo.url }}" target="_blank">{{ eduo.name }}</a> -->
                                     <!-- Only show details if content entry is selected -->
                                     <div *ngIf="this.showContentDetails&&(this.contentid==eduo.id)">
                                         <div *ngIf="this.content.content">
                                         <table>
-                                            <tr><td style="width: 40%"><img class="card-img-top" [src]="this.content.content.picture" alt="Cover" style=""></td><td><p>{{ this.content.content.description }}</p></td></tr>
+                                            <tr><td *ngIf="this.content.content.picture" style="width: 40%"><img class="card-img-top" [src]="this.content.content.picture" alt="Content Cover" style=""></td><td><p>{{ this.content.content.description }}</p></td></tr>
                                         </table>
                                         <table>
                                             <tr>
                                                 <td>
-                                                    <img *ngIf="this.content.content.lang=='en'" src="http://img.freeflagicons.com/thumb/glossy_square_icon/united_states_of_america/united_states_of_america_64.png" alt="Language: English">
-                                                    <img *ngIf="this.content.content.lang=='de'" src="http://img.freeflagicons.com/thumb/glossy_square_icon/germany/germany_64.png" alt="Sprache: Deutsch">
+                                                    <img *ngIf="this.content.content.lang=='en'" src="https://img.freeflagicons.com/thumb/round_icon/united_states_of_america/united_states_of_america_64.png" alt="Language: English">
+                                                    <img *ngIf="this.content.content.lang=='de'" src="https://img.freeflagicons.com/thumb/round_icon/germany/germany_64.png" alt="Sprache: Deutsch">
                                                 </td>
                                                 <td>
                                                     <div>
@@ -159,25 +171,21 @@
                                                         <span *ngIf="this.content.content.type==5"><i class="fas fa-file-audio"></i>&nbsp;Hörbuch</span>
                                                         <span *ngIf="this.content.content.type==6"><i class="fas fa-calendar-alt"></i>&nbsp;Event</span>
                                                         <span *ngIf="this.content.content.type==7"><i class="fas fa-graduation-cap"></i>&nbsp;Kurs</span>
+                                                        <span *ngIf="this.content.content.type==8"><i class="fas fa-file-pdf"></i>&nbsp;PDF-Präsentation</span>
                                                     </div>
-                                                    Verortung: {{ this.content.content.locator }}
                                                 </td>
                                             </tr>
                                         </table>
-
+                                        <p>Verortung: {{ eduo.locator }}</p>
                                         <div class="btn-group btn-group-sm" role="group" aria-label="...">
                                             <a [href]="this.content.content.url" target="_blank" class="btn btn-primary" (click)="this.contents.visitContent()"><i class="fas fa-play-circle"></i>&nbsp;Lernmittel nutzen</a>
-                                            <button type="button" class="btn btn-secondary"><i class="fas fa-share-alt-square"></i>&nbsp;Teilen</button>
-                                            <button type="button" class="btn btn-secondary"><i class="fas fa-comment"></i>&nbsp;Bewerten</button>
-                                            <button type="button" class="btn btn-secondary"><i class="fas fa-list-alt"></i>&nbsp;Auf meine Playlist</button>
+                                            <button *ngIf="this.appConfig.togShareContent" type="button" class="btn btn-secondary"><i class="fas fa-share-alt-square"></i>&nbsp;Teilen</button>
+                                            <button *ngIf="this.appConfig.togRateContent" type="button" class="btn btn-secondary"><i class="fas fa-comment"></i>&nbsp;Bewerten</button>
+                                            <button *ngIf="this.appConfig.togPlaylist" type="button" class="btn btn-secondary"><i class="fas fa-list-alt"></i>&nbsp;Auf meine Playlist</button>
                                         </div>
-
                                         </div>
                                     </div>
-                                    
-                                    
                                     </td>
-                                    
                                 </tr>
                             </tbody>
                         </table>

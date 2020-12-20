@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { APP_CONFIG } from '../app-variables';
 import { EduobjectiveService } from '../eduobjective/eduobjective.service';
 import { UserService } from '../user/user.service';
 import { ContentService } from '../content/content.service';
@@ -20,6 +21,7 @@ export class EduobjectiveComponent implements OnInit {
   private editselfassess: boolean = false;
   private contentid: string;
   private showContentDetails: boolean = false;
+  private appConfig: any = APP_CONFIG;
   
   constructor(private route:ActivatedRoute, private eduobjective: EduobjectiveService, private users:UserService, private content: ContentService) {
     this.route.params.subscribe( params => {
@@ -32,6 +34,7 @@ export class EduobjectiveComponent implements OnInit {
 
   ngOnInit() {
     console.log("EduObjective Init:", this.eduobjective.eduobjective, this.eduobjectiveid)
+    console.log("App-Parameter", APP_CONFIG, this.appConfig);
   }
 
   public selfassess(): void {

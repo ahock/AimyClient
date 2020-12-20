@@ -429,6 +429,7 @@ export class UserService {
         switch(achievement) {
           case 0:
             result.text = this.activeuser.eduobjectives[i].resume;
+            
             break;
           case 1:
             // PreKnowledge

@@ -21,7 +21,7 @@
       </div>
     </div>
     <div class="card-body">
-      <h5 class="card-title">{{ dialog.content }}</h5>
+      <div class="card-title">{{ dialog.content }}</div>
       <div [ngSwitch]="dialog.type">
         <!-- the same view can be shown in more than one case -->
         <div *ngSwitchCase="1">

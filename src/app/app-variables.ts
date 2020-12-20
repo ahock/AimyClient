@@ -6,6 +6,9 @@ interface AppConfig {
   togPlaylist: boolean;
   togSkillCat: boolean;
   togStatus: boolean;
+  togShareContent: boolean;
+  togRateContent: boolean;
+  togEduoShowAchievement: boolean;
 }
 
 export const APP_CONFIG: AppConfig = {
@@ -17,11 +20,14 @@ export const APP_CONFIG: AppConfig = {
   // Production  API Gateway
   
   apiVersion: '0.0.1',
-  version: '0.0.22',
+  version: '0.0.23',
   // Feature toggler activate or deactivate a specific functionality
   togStatus: false,
-  togPlaylist: false,
-  togSkillCat: true
+  togPlaylist: false, // play list functions in main menue and learning content 
+  togSkillCat: true,
+  togShareContent: false,
+  togRateContent: false,
+  togEduoShowAchievement: false
 };
 
 interface AuthConfig {
@@ -38,7 +44,7 @@ export const AUTH_CONFIG: AuthConfig = {
 //  callbackURL: 'http://aimyp.s3-website.eu-central-1.amazonaws.com/#comp2'
 
   
-//  callbackURL: 'http://showcase.aimyonline.com:8080/comp2'
-  callbackURL: 'http://aimyc.s3-website.eu-central-1.amazonaws.com/#comp2'
+  callbackURL: 'http://showcase.aimyonline.com:8080/comp2'
+//  callbackURL: 'http://aimyc.s3-website.eu-central-1.amazonaws.com/#comp2'
 
 };

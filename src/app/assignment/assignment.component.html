@@ -209,16 +209,15 @@
       <div class="col">&nbsp;</div>
     </div>
     <div class="card">
-            <div class="btn-group btn-group-sm" role="group" aria-label="...">
-              <button type="button" class="btn btn-primary" (click)="this.cancleAssignment()" [ngClass]="{'active':this.contenttype==1}"><i class="far fa-window-close"></i>&nbsp;Abbrechen</button>
-              <button type="button" class="btn btn-secondary" (click)="this.prevChallenge()" [ngClass]="{'active':this.contenttype==2}"><i class="fas fa-chevron-left"></i>&nbsp;</button>
-              <button type="button" class="btn btn-secondary" (click)="this.showWarning=true" [ngClass]="{'active':this.contenttype==3}"><i class="fas fa-info-circle"></i>&nbsp;Info</button>
-              <button type="button" class="btn btn-secondary" [ngClass]="{'active':this.contenttype==4}"><i class="fas fa-bookmark"></i>&nbsp;Gemerkt</button>
-              <button type="button" class="btn btn-secondary" [ngClass]="{'active':this.contenttype==5}"><i class="far fa-clock"></i>&nbsp;Mehr Zeit [{{this.getElapsedTimeString()}}]
-              </button>
-              <button type="button" class="btn btn-primary" (click)="this.finishAssignment()" [ngClass]="{'active':this.contenttype==6}"><i class="fas fa-check-square"></i>&nbsp;Fertig</button>
-              <button type="button" class="btn btn-secondary" (click)="this.nextChallenge()" [ngClass]="{'active':this.contenttype==7}"><i class="fas fa-chevron-right"></i>&nbsp;</button>
-            </div>            
+      <div class="btn-group btn-group-sm" role="group" aria-label="...">
+        <button type="button" class="btn btn-primary" (click)="this.cancleAssignment()" [ngClass]="{'active':this.contenttype==1}"><i class="far fa-window-close"></i>&nbsp;Abbrechen</button>
+        <button type="button" class="btn btn-secondary" (click)="this.prevChallenge()" [ngClass]="{'active':this.contenttype==2}"><i class="fas fa-chevron-left"></i>&nbsp;</button>
+        <button type="button" class="btn btn-secondary" (click)="this.showWarning=true" [ngClass]="{'active':this.contenttype==3}"><i class="fas fa-info-circle"></i>&nbsp;Info</button>
+        <button type="button" class="btn btn-secondary" [ngClass]="{'active':this.contenttype==4}"><i class="fas fa-bookmark"></i>&nbsp;Gemerkt</button>
+        <button type="button" class="btn btn-secondary" [ngClass]="{'active':this.contenttype==5}"><i class="far fa-clock"></i>&nbsp;Mehr Zeit [{{this.getElapsedTimeString()}}]</button>
+        <button type="button" class="btn" (click)="this.finishAssignment()" [ngClass]="{'btn-secondary': this.challengeid < this.aservice.assignment.challenges.length-1, 'btn-primary': this.challengeid == this.aservice.assignment.challenges.length-1}"><i class="fas fa-check-square"></i>&nbsp;Fertig</button>
+        <button type="button" class="btn btn-secondary" (click)="this.nextChallenge()" [ngClass]="{'active':this.contenttype==7}"><i class="fas fa-chevron-right"></i>&nbsp;</button>
+      </div>            
     </div>
     <!-- Different types of challenges -->
     <div [ngSwitch]="this.aservice.assignment.challengemode">
@@ -230,7 +229,7 @@
                 <div class="card-header bg-light">
                   <div class="d-flex justify-content-between">
                     <div>
-                      <span class="col text-right">{{ this.challengeid + 1 }}</span>
+                      <span class="col text-right">{{ this.challengeid + 1 }}/{{ this.aservice.assignment.challenges.length }}</span>
                       <strong>{{ this.challenges.challenges[this.challengeid].name }}</strong>
                     </div>
                     <div>
