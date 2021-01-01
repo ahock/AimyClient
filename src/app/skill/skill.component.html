@@ -9,7 +9,7 @@
                 <div class="card-text card-block"><h3>{{ this.skills.skill.name }}</h3></div>
                 <div class="card-text card-block">{{ this.skills.skill.description }}</div>
                 <div class="card-text card-block">
-                <table>
+                <table *ngIf="this.appConfig.togSkillShowMetric">
                     <tr>
                         <td>Feld</td>
                         <td style="position: relative;  float: right; padding-left: 50px">{{ this.skills.skill.field }}</td>
@@ -18,13 +18,21 @@
                         <td>Modul</td>
                         <td style="position: relative;  float: right; padding-left: 50px">{{ this.skills.skill.modul }}</td>
                     </tr>
+                    
                     <tr>
                         <td>Rating</td>
                         <td style="position: relative;  float: right; padding-left: 50px">{{ this.users.getUserSkillRating(this.skillid) }}</td>
                     </tr>
                     <tr>
                         <td>ToGo</td>
-                        <td style="position: relative;  float: right; padding-left: 50px"><div class="progress-bar" role="progressbar" style="width: 65%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">{{ this.users.getUserSkillRating(this.skillid) }}</div></td>
+                        <td style="position: relative;  float: right; padding-left: 50px">
+                            <!--
+                            <div class="progress-bar" role="progressbar" style="width: 65%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
+                                {{ this.users.getUserSkillRating(this.skillid) }}
+                            </div>
+                            -->
+                            {{ this.users.getUserSkillRating(this.skillid) }}
+                        </td>
                     </tr>
                     <tr>
                         <td>Aging</td>
@@ -38,7 +46,7 @@
                   <div class="progress-bar" role="progressbar" style="width: 65%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">{{ this.users.getUserSkillRating(this.skillid) }}</div>
                 </div>
 -->
-                <div *ngIf="this.skills.skill.statistic">
+                <div *ngIf="this.skills.skill.statistic && this.appConfig.togSkillShowStat">
                     <div class="card-text card-block">Statistik:
                         <table>
                             <tr><td>Tests</td><td style="position: relative;  float: right; padding-left: 50px">{{ this.skills.skill.statistic.ass_count }}</td></tr>
@@ -92,7 +100,7 @@
                             <tr *ngFor="let eduo of this.skills.skill.eduobjectiveref" routerLink="/eduobjective/{{ eduo._id }}">
                                 <td>
                                     {{ eduo.name }}
-                                    <table width="100%">
+                                    <table *ngIf="this.users.getUserEduO(2, eduo._id)['valid']" width="100%">
                                         <tr><th>Pass</th><th>Art</th><th>#</th><th>Fr</th><th>Ok</th><th>%</th></tr>
                                         <tr *ngIf="this.users.getUserEduO(2, eduo._id)['valid']">
                                             <td>

@@ -159,8 +159,8 @@
                                         <table>
                                             <tr>
                                                 <td>
-                                                    <img *ngIf="this.content.content.lang=='en'" src="https://img.freeflagicons.com/thumb/round_icon/united_states_of_america/united_states_of_america_64.png" alt="Language: English">
-                                                    <img *ngIf="this.content.content.lang=='de'" src="https://img.freeflagicons.com/thumb/round_icon/germany/germany_64.png" alt="Sprache: Deutsch">
+                                                    <img *ngIf="this.content.content.lang=='en'" src="assets/united_states_of_america_64.png" alt="Language: English">
+                                                    <img *ngIf="this.content.content.lang=='de'" src="assets/germany_64.png" alt="Sprache: Deutsch">
                                                 </td>
                                                 <td>
                                                     <div>
@@ -169,9 +169,10 @@
                                                         <span *ngIf="this.content.content.type==3"><i class="fas fa-book-open"></i>&nbsp;Buch</span>
                                                         <span *ngIf="this.content.content.type==4"><i class="far fa-map"></i>&nbsp;Tutorial</span>
                                                         <span *ngIf="this.content.content.type==5"><i class="fas fa-file-audio"></i>&nbsp;Hörbuch</span>
-                                                        <span *ngIf="this.content.content.type==6"><i class="fas fa-calendar-alt"></i>&nbsp;Event</span>
-                                                        <span *ngIf="this.content.content.type==7"><i class="fas fa-graduation-cap"></i>&nbsp;Kurs</span>
+                                                        <span *ngIf="this.content.content.type==6"><i class="fas fa-calendar-alt"></i>&nbsp;Online-Event</span>
+                                                        <span *ngIf="this.content.content.type==7"><i class="fas fa-graduation-cap"></i>&nbsp;Online-Präsentation</span>
                                                         <span *ngIf="this.content.content.type==8"><i class="fas fa-file-pdf"></i>&nbsp;PDF-Präsentation</span>
+                                                        <span *ngIf="this.content.content.type==9"><i class="fas fa-graduation-cap"></i>&nbsp;Präsenz-Kurs</span>
                                                     </div>
                                                 </td>
                                             </tr>

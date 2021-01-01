@@ -23,6 +23,7 @@ import { APP_CONFIG } from '../app-variables';
   ]
 })
 export class SkillComponent implements OnInit {
+  private appConfig: any = APP_CONFIG;
   private skillid: string;
   private skillevaluation: boolean[];
   

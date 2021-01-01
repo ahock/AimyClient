@@ -99,10 +99,10 @@ lang
       <label class="col-sm-2 col-form-label" for="inputLanguage"></label>
       <div class="col-sm-10">
         <div [ngSwitch]="this.user.plan">
-          <p *ngSwitchCase="'free'">Der frei Plan ermöglicht das kostenfrei Ausprobieren von Aimy. Sie haben Zugriff auf alle freien Kompetenzen, Lernziele und Lernmittel. Wenn nicht gesondert vermerkt, verhalten sich alle Funktionen so wie bei den anderen Varianten. Ein Umstieg ist jederzeit möglich.</p>
-          <p *ngSwitchCase="'abo'">Erklärung zum Monatsabonnement</p>
-          <p *ngSwitchCase="'school'">Erklärung zur Schul-Variante</p>
-          <p *ngSwitchCase="'company'">Erklärung zum Firmen-Plan Variante</p>
+          <p *ngSwitchCase="'free'">{{ this.appConfig.textPlanDescription[0] }}</p>
+          <p *ngSwitchCase="'abo'">{{ this.appConfig.textPlanDescription[1] }}</p>
+          <p *ngSwitchCase="'school'">{{ this.appConfig.textPlanDescription[2] }}</p>
+          <p *ngSwitchCase="'company'">{{ this.appConfig.textPlanDescription[3] }}</p>
           <p *ngSwitchDefault>Bitte wählen Sie einen Beteiligungsplan</p>
         </div>
       </div>

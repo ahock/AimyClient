@@ -3,6 +3,7 @@ import { FormsModule }   from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthServiceService } from '../auth-service/auth-service.service';
 import { UserService, User, SkillRef, AssignmentRefs } from '../user/user.service';
+import { APP_CONFIG } from '../app-variables';
 
 @Component({
   selector: 'app-registration',
@@ -11,6 +12,7 @@ import { UserService, User, SkillRef, AssignmentRefs } from '../user/user.servic
 })
 
 export class RegistrationComponent implements OnInit {
+  private appConfig: any = APP_CONFIG;
   private defaultskills = [
     {
       id: "5d0f3b972729c02f6ca6624b",
@@ -62,15 +64,17 @@ export class RegistrationComponent implements OnInit {
   public setDefaultSkills(): void {
     this.user.activeuser.skillref = new Array();
     this.user.activeuser.skillref.push(this.defaultskills[0]);
-    this.user.activeuser.skillref.push(this.defaultskills[1]);
+//    this.user.activeuser.skillref.push(this.defaultskills[1]);
 
     this.user.activeuser.assignmentrefs = new Array();    
-    this.user.activeuser.assignmentrefs.push(this.defaultassignments[0]);
+//    this.user.activeuser.assignmentrefs.push(this.defaultassignments[0]);
     
   }
 
   public doRegistration(): void {
     this.setDefaultSkills();
+    this.user.activeuser.groups = this.appConfig.defaultGroups;
+    this.user.activeuser.plan = "school";
     this.user.doRegistration();
     setTimeout(() => {
       this.user.loadUserData(() => {

@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { FormsModule }   from '@angular/forms';
 
 import { FormGroup, FormControl } from '@angular/forms';
-
+import { APP_CONFIG } from '../app-variables';
 import { AssignmentService, Assignment } from '../assignment/assignment.service';
 import { ChallengeService } from '../challenge/challenge.service';
 import { UserService, AssignmentResult } from '../user/user.service';
@@ -16,6 +16,7 @@ import { LogService, Log } from '../log/log.service';
   styles: []
 })
 export class AssignmentComponent implements OnInit {
+  private appConfig: any = APP_CONFIG;
   
   private assignmentid: string;
   private mode: number = 0;//0: show details, 1: run assignment
@@ -31,10 +32,16 @@ export class AssignmentComponent implements OnInit {
   private eduoresult = [];
   private overallresult: number = 0;
   private challengeid;
-  private elem;
+  private elem ;
   private starttime: Date;
   private elapsedtime: Date;
   private intervalID;
+  
+  private assignmentOver: boolean = false; // indicates the end of the assignment
+  
+  private showChallengeResults: boolean = false;
+  private showTotalResults: boolean = true;
+  private showEduoResults: boolean = false;
 
   preparatoryForm = new FormGroup({
       physically: new FormControl('noinfo'),
@@ -58,7 +65,7 @@ export class AssignmentComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.elem = this;
+    this.elem = this; //document.documentElement;
     
 //    (event) => {
 //       event.preventDefault();
@@ -72,9 +79,14 @@ export class AssignmentComponent implements OnInit {
 
   public leaveAssignment(): void {
     alert("Du darfst den Browser nicht verlassen");
+    this.log.createLog(<Log>{token: this.users.getUserToken(), message: "Assignment left", type: 3, area: "assignment", content: "Assignment "+this.assignmentid+" left"});
   }
   
-  openFullscreen() {
+  private openFullscreen() {
+    console.log("openFullscreen");
+    
+    this.elem = document.documentElement;
+    
     if (this.elem.requestFullscreen) {
       this.elem.requestFullscreen();
     } else if (this.elem.mozRequestFullScreen) {
@@ -90,13 +102,20 @@ export class AssignmentComponent implements OnInit {
   }
 
   /* Close fullscreen */
-  closeFullscreen() {
+  private closeFullscreen() {
 // https://stackoverflow.com/questions/51998594/how-to-make-google-chrome-go-full-screen-in-angular-4-application
+    if (document.exitFullscreen) {
+      document.exitFullscreen();
+    }
   }  
   
   public runAssignment(): void {
     console.log("Run Assignment", this.users.getUserToken(), this.assignmentid, this.aservice.assignment);
-//    window.addEventListener("blur", this.leaveAssignment);
+
+    this.openFullscreen();
+    window.addEventListener("blur", this.leaveAssignment);
+
+
     // Log the start of the assignment
     this.log.createLog(<Log>{token: this.users.getUserToken(), message: "Assignment startet", type: 2, area: "assignment", content: "Assignment "+this.assignmentid+" startet"});
     // For Masteries the self assessment questions always will be shown.
@@ -133,8 +152,12 @@ export class AssignmentComponent implements OnInit {
     // Start the time for this assignment
     this.intervalID = setInterval( () => {
       this.elapsedtime =  new Date((new Date).getTime() - this.starttime.getTime());
-
+      this.assignmentOver = this.isElapsed();
       console.log("Zeit abgelaufen:", this.elapsedtime.getHours()-1, this.elapsedtime.getMinutes(), this.elapsedtime.getSeconds());
+      if(this.assignmentOver) {
+        this.log.createLog(<Log>{token: this.users.getUserToken(), message: "Assignment time elapsed", type: 3, area: "assignment", content: "Assignment "+this.assignmentid+" elapsed"});
+        this.finishAssignment();
+      }
     } , 10000);
   }
   
@@ -166,7 +189,20 @@ export class AssignmentComponent implements OnInit {
     }
     return elapsedTimeString;
   }
+  public isElapsed(): boolean {
+//    console.log("Elapsed");
     
+    console.log("Minutes", this.aservice.assignment.duration, this.elapsedtime.getMinutes());
+    
+//    console.log("Time", this.elapsedtime);
+
+    if(this.elapsedtime.getMinutes() >= this.aservice.assignment.duration) {
+      return true;
+    } else {
+      return false; 
+    }
+  } 
+  
   public nextChallenge() {
     // Go to next, if not at the last challenge
     if(this.challengeid < this.challenges.challenges.length-1) {
@@ -193,6 +229,7 @@ export class AssignmentComponent implements OnInit {
   }
   
   public cancleAssignment(): void {
+    this.closeFullscreen();
     this.mode = 0;
     window.removeEventListener("blur", this.leaveAssignment);
     clearInterval(this.intervalID);
@@ -266,11 +303,37 @@ export class AssignmentComponent implements OnInit {
   /////////////////////////////////
   public finishAssignment(): void {
     this.eduoresult = [];
+
+    window.removeEventListener("blur", this.leaveAssignment);
+    clearInterval(this.intervalID); // Stop timer
     
-    // Stop timer
-    clearInterval(this.intervalID);
 //    console.log("answerlist", this.answerlist);
-//    console.log("assignment type", this.aservice.assignment.type);
+    console.log("assignment type", this.aservice.assignment.type);
+    console.log("Challeng", this.showChallengeResults);
+    console.log("Total", this.showTotalResults);
+    console.log("EduO", this.showEduoResults);
+    
+    switch (this.aservice.assignment.type) {
+      case 'PK':
+        this.showChallengeResults = true;
+        this.showTotalResults = true;
+        this.showEduoResults = true;
+        break;
+      case 'SA':
+        this.showChallengeResults = true;
+        this.showTotalResults = true;
+        this.showEduoResults = true;
+        break;
+      case 'MA':
+        this.showChallengeResults = false;
+        this.showTotalResults = true;
+        this.showEduoResults = false;
+        break;
+      default:
+        this.showChallengeResults = true;
+        this.showTotalResults = true;
+        this.showEduoResults = true;
+    }
 
     // Save last answer to answerlist
     this.answerlist[this.challengeid] = this.answers.value.answer;
@@ -329,7 +392,7 @@ export class AssignmentComponent implements OnInit {
   //
   /////////////////////////////////
   public closeAssignment(): void {
-    clearInterval(this.intervalID);
+    this.closeFullscreen();
     
     // Save results to user
     var assresult: AssignmentResult = { create_date: new Date() };

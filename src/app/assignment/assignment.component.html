@@ -12,30 +12,55 @@
                    {{ this.aservice.assignment.name }}
                 </div>
                 <div>
-                   <span class="col text-right" (click)="this.runAssignment()"><i class="fas fa-play-circle"></i>&nbsp;Durchführen</span>
+                   <span *ngIf="aservice.isAvailable().available" class="col text-right" (click)="this.runAssignment()"><i class="fas fa-play-circle"></i>&nbsp;Durchführen</span>
                 </div>
              </div>
             </h5>           
             
             <div class="card-body">
-              <h5 class="card-title">{{ this.aservice.assignment.modul }} / {{ this.aservice.assignment.field }}</h5>
               <p class="card-text">{{ this.aservice.assignment.description }}</p>
+              <p class="card-text">{{ this.aservice.assignment.modul }} / {{ this.aservice.assignment.field }}</p>
             </div>
             <div class="card-body">
-              <h5 class="card-title">Offen: von <strong>{{ this.aservice.assignment.earlieststart | date : 'dd.MM.yyyy - H:mm' : '+0200' }}</strong> bis <strong>{{ this.aservice.assignment.latestend | date : 'dd.MM.yyyy - H:mm' : '+0200' }}</strong></h5>
+              <h5 class="card-title">
+                
+                <span *ngIf="aservice.isAvailable().available"><i class="fas fa-lock-open" style="color: green;"></i>&nbsp;Verfügbar für <strong>{{aservice.isAvailable().until_mon}} Monate, {{aservice.isAvailable().until_day}} Tage, {{aservice.isAvailable().until_hr}} Stunden und {{aservice.isAvailable().until_min}} Minuten</strong></span>
+                <span *ngIf="!aservice.isAvailable().available"><i class="fas fa-lock" style="color: red;"></i>&nbsp;Verfügbar in <strong>{{aservice.isAvailable().in_mon}} Monat(en), {{aservice.isAvailable().in_day}} Tagen, {{aservice.isAvailable().in_hr}} Stunden und {{aservice.isAvailable().in_min}} Minuten</strong></span>
+
+<!--                {{ this.aservice.isAvailable() }} - Offen: von {{ this.aservice.assignment.earlieststart | date : 'dd.MM.yyyy - H:mm' : '+0200' }} bis {{ this.aservice.assignment.latestend | date : 'dd.MM.yyyy - H:mm' : '+0200' }}-->
+              </h5>
               <table class="table">
                 <tbody>
                   <tr>
                     <td>Anzahl Aufgaben</td>
                     <td>{{ this.aservice.assignment.challenges.length }}</td>
                     <td>&nbsp;</td>
-                    <td>Coach</td>
-                    <td>{{ this.aservice.assignment.coach }}</td>
-                  </tr>
-                  <tr>
                     <td>Zeit</td>
                     <td>{{ this.aservice.assignment.duration }} {{ this.aservice.assignment.durationunit }}</td>
+                  </tr>
+                  <tr>
+                    <td>Minimalziel</td>
+                    <td>{{ this.aservice.assignment.unitpass }} / {{ this.aservice.assignment.unitmax }} {{ this.aservice.assignment.unit }}</td>
                     <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                  </tr>
+                  <tr>
+                    <td>Durchführungen</td>
+                    <td>
+                      <p *ngIf="this.users.getAssignmentRuns(this.aservice.assignment._id).length<1">Noch keine</p>
+                      <p *ngFor="let assref of this.users.getAssignmentRuns(this.aservice.assignment._id)">
+                      {{ assref.create_date | date : 'dd.MM.yyyy - H:mm' : this.appConfig.daylightSavingTime }}:
+                      <span *ngIf="assref.pass"><i class="fas fa-circle" style="color: green;"></i></span>
+                      <span *ngIf="!assref.pass"><i class="fas fa-circle" style="color: red;"></i></span>
+                      - [{{assref.rightanswers}}/{{assref.questioncount}}]
+                      </p>
+                    </td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                  </tr>
+                  <tr>
                     <td>Auftragstyp</td>
                     <td>
                       <div [ngSwitch]="this.aservice.assignment.type">
@@ -46,27 +71,23 @@
                         <span *ngSwitchDefault>{{ this.aservice.assignment.type }}</span>
                       </div>
                     </td>
+                    <td>&nbsp;</td>
+                    <td>Coach</td>
+                    <td>{{ this.aservice.assignment.coach }}</td>
                   </tr>
                   <tr>
-                    <td>Minimalziel</td>
-                    <td>{{ this.aservice.assignment.unitpass }} / {{ this.aservice.assignment.unitmax }} {{ this.aservice.assignment.unit }}</td>
-                    <td>&nbsp;</td>
                     <td>Bewertungsraster</td>
                     <td>{{ this.aservice.assignment.rubic }}</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
                   </tr>
                   <tr>
-                    <td>Durchführungen</td>
-                    <td>
-                      <p *ngFor="let assref of this.users.getAssignmentRuns(this.aservice.assignment._id)">
-                      {{ assref.create_date | date : 'dd.MM.yyyy - H:mm' : '+0200' }}:
-                      <span *ngIf="assref.pass"><i class="fas fa-circle" style="color: green;"></i></span>
-                      <span *ngIf="!assref.pass"><i class="fas fa-circle" style="color: red;"></i></span>
-                      - [{{assref.rightanswers}}/{{assref.questioncount}}]
-                      </p>
-                    </td>
+                    <td>Verfügbar von</td>
+                    <td>{{ this.aservice.assignment.earlieststart | date : 'dd.MM.yyyy - HH:mm' : this.appConfig.daylightSavingTime }}</td>
                     <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
+                    <td>Verfügbar bis</td>
+                    <td>{{ this.aservice.assignment.latestend | date : 'dd.MM.yyyy - HH:mm' : this.appConfig.daylightSavingTime }}</td>
                   </tr>
                 </tbody>
               </table>
@@ -212,10 +233,22 @@
       <div class="btn-group btn-group-sm" role="group" aria-label="...">
         <button type="button" class="btn btn-primary" (click)="this.cancleAssignment()" [ngClass]="{'active':this.contenttype==1}"><i class="far fa-window-close"></i>&nbsp;Abbrechen</button>
         <button type="button" class="btn btn-secondary" (click)="this.prevChallenge()" [ngClass]="{'active':this.contenttype==2}"><i class="fas fa-chevron-left"></i>&nbsp;</button>
+        
+        <!--
         <button type="button" class="btn btn-secondary" (click)="this.showWarning=true" [ngClass]="{'active':this.contenttype==3}"><i class="fas fa-info-circle"></i>&nbsp;Info</button>
         <button type="button" class="btn btn-secondary" [ngClass]="{'active':this.contenttype==4}"><i class="fas fa-bookmark"></i>&nbsp;Gemerkt</button>
-        <button type="button" class="btn btn-secondary" [ngClass]="{'active':this.contenttype==5}"><i class="far fa-clock"></i>&nbsp;Mehr Zeit [{{this.getElapsedTimeString()}}]</button>
-        <button type="button" class="btn" (click)="this.finishAssignment()" [ngClass]="{'btn-secondary': this.challengeid < this.aservice.assignment.challenges.length-1, 'btn-primary': this.challengeid == this.aservice.assignment.challenges.length-1}"><i class="fas fa-check-square"></i>&nbsp;Fertig</button>
+        -->
+        
+        <!--
+        <button type="button" class="btn btn-secondary" (click)="this.openFullscreen()"><i class="fas fa-expand-arrows-alt"></i>&nbsp;auf</button>
+        <button type="button" class="btn btn-secondary" (click)="this.closeFullscreen()"><i class="fas fa-compress-arrows-alt"></i>&nbsp;zu</button>
+        -->
+        
+        <button *ngIf="this.assignmentOver" type="button" class="btn btn-secondary"><i class="fas fa-skull-crossbones"></i>&nbsp;abgelaufen</button>
+        
+        <button type="button" class="btn btn-secondary" [ngClass]="{'active':this.contenttype==5}"><i class="far fa-clock"></i>&nbsp;Zeit abgelaufen [<strong>{{this.getElapsedTimeString()}}</strong>] - von {{ this.aservice.assignment.duration }} {{ this.aservice.assignment.durationunit }}</button>
+        
+        <button *ngIf="this.challengeid==this.aservice.assignment.challenges.length-1" type="button" class="btn" (click)="this.finishAssignment()" [ngClass]="{'btn-secondary': this.challengeid < this.aservice.assignment.challenges.length-1, 'btn-primary': this.challengeid == this.aservice.assignment.challenges.length-1}"><i class="fas fa-check-square"></i>&nbsp;Fertig</button>
         <button type="button" class="btn btn-secondary" (click)="this.nextChallenge()" [ngClass]="{'active':this.contenttype==7}"><i class="fas fa-chevron-right"></i>&nbsp;</button>
       </div>            
     </div>
@@ -447,32 +480,36 @@
       
       <div class="card-text">{{ this.aservice.assignment.description }}</div>
       <div>&nbsp;</div>
-      <table class="table">
-            <thead>
-              <tr>
-                <th scope="col">Aufgabe</th>
-                <th scope="col">Name</th>
-                <th scope="col">Status</th>
-                <th scope="col">Ergebnis</th>
-                <th scope="col">Antwort</th>
-                <th scope="col">Richtig</th>
-                <th scope="col">Gemerkt</th>
-              </tr>          
-            </thead>
-            <tbody>
-              <tr *ngFor="let ch of this.challenges.challenges; index as i">
-                <td class="text-center">{{ i }}</td>
-                <td>{{ ch.name }}</td>
-                <td>{{ ch.status }}</td>
-                <td class="text-center"><i *ngIf="answerlist[i]==ch.correct" class="fas fa-check-circle" style="color: green;"></i></td>
-                <td class="text-center">{{ answerlist[i] }}</td>
-                <td class="text-center">{{ ch.correct }}</td>
-                <td class="text-center"><i *ngIf="markerlist[i]" class="fas fa-bookmark"></i></td>
-              </tr>
-            </tbody>
-      </table>
+      <div *ngIf="showChallengeResults">
+        <table class="table">
+              <thead>
+                <tr>
+                  <th scope="col">Aufgabe</th>
+                  <th scope="col">Name</th>
+                  <th scope="col">Status</th>
+                  <th scope="col">Ergebnis</th>
+                  <th scope="col">Antwort</th>
+                  <th scope="col">Richtig</th>
+                  <th scope="col">Gemerkt</th>
+                </tr>          
+              </thead>
+              <tbody>
+                <tr *ngFor="let ch of this.challenges.challenges; index as i">
+                  <td class="text-center">{{ i }}</td>
+                  <td>{{ ch.name }}</td>
+                  <td>{{ ch.status }}</td>
+                  <td class="text-center"><i *ngIf="answerlist[i]==ch.correct" class="fas fa-check-circle" style="color: green;"></i></td>
+                  <td class="text-center">{{ answerlist[i] }}</td>
+                  <td class="text-center">{{ ch.correct }}</td>
+                  <td class="text-center"><i *ngIf="markerlist[i]" class="fas fa-bookmark"></i></td>
+                </tr>
+              </tbody>
+        </table>
+      </div>
     </div>
-    <div class="card-body">
+
+
+    <div *ngIf="showTotalResults" class="card-body">
               <h5 class="card-title"><strong>Gesamtergebnis</strong></h5>
               <table class="table">
                 <tbody>
@@ -493,17 +530,10 @@
                     <td>Erlaubt</td>
                     <td>{{ this.aservice.assignment.duration }} {{ this.aservice.assignment.durationunit }}</td>
                   </tr>
-                  <tr>
-                    <td>Bewertungsraster</td>
-                    <td>{{ this.aservice.assignment.rubic }}</td>
-                    <td>&nbsp;</td>
-                    <td></td>
-                    <td></td>
-                  </tr>
                 </tbody>
               </table>
     </div>
-    <div class="card-body">
+    <div *ngIf="showEduoResults" class="card-body">
 <!--              <h5 class="card-title">Details</h5>  -->
               <table class="table">
                 <thead>
