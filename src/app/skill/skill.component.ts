@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SkillService } from '../skill/skill.service';
 import { UserService } from '../user/user.service';
+import { LogService, Log } from '../log/log.service';
 import { APP_CONFIG } from '../app-variables';
 
 @Component({

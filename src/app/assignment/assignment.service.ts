@@ -37,6 +37,8 @@ export interface Assignment {
 
 export interface Availability {
   available: boolean;
+  before: boolean;
+  after: boolean;
   until: Date;
   until_mon: number;
   until_day: number;
@@ -79,30 +81,32 @@ export class AssignmentService {
     var start = new Date(this.assignment.earlieststart);
     var stop = new Date(this.assignment.latestend);
     
-    console.log("Dates - now:  ", now);
-    console.log("Dates - start:", start);
-    console.log("Dates - end:", stop);
+//    console.log("Dates - now:  ", now);
+//    console.log("Dates - start:", start);
+//    console.log("Dates - end:", stop);
     
-    console.log("start", now >= start);
-    console.log("end", now > stop);
+//    console.log("start", now >= start);
+//    console.log("end", now > stop);
 
     var available_until = new Date(stop.valueOf() - now.valueOf());
     var available_in = new Date(start.valueOf() - now.valueOf());
 
-    console.log("available: until:", available_until.getMonth(), available_until.getDate());
-    console.log("available in: ", available_in.getMonth(), available_in.getDate());
+//    console.log("available: until:", available_until.getMonth(), available_until.getDate());
+//    console.log("available in: ", available_in.getMonth(), available_in.getDate());
 
     return { 
       available: ((now >= start) && (now <= stop)),
+      before: (now < start)?true:false,
+      after: (now > stop)?true:false,
       until: available_until,
       in: available_in,
       in_mon: available_in.getMonth(),
       in_day: available_in.getDate()-1,
-      in_hr: available_in.getHours(),
+      in_hr: available_in.getHours()-1,
       in_min: available_in.getMinutes(),
       until_mon: available_until.getMonth(),
       until_day: available_until.getDate()-1,
-      until_hr: available_until.getHours(),
+      until_hr: available_until.getHours()-1,
       until_min: available_until.getMinutes()
     };
   }

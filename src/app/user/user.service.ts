@@ -543,4 +543,22 @@ export class UserService {
           callback(data['evaluation']);
     });
   }
+  public isAssignmentOngoing(assid: string): boolean {
+    var ongoing: boolean = false;
+    
+//    console.log("Ass",this.activeuser.assignmentrefs);
+    
+    if(this.activeuser) {
+      for(var i=0;i<this.activeuser.assignmentrefs.length;i++) {
+        
+        if(this.activeuser.assignmentrefs[i].id==assid) {
+          console.log(this.activeuser.assignmentrefs[i].id);
+          for(var j=0;j<this.activeuser.assignmentrefs[i]['results'].length;j++) {
+            console.log(this.activeuser.assignmentrefs[i]['results'][j]);
+          }
+        }
+      }
+    }
+    return ongoing;
+  }
 }

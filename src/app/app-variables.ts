@@ -3,6 +3,7 @@ interface AppConfig {
   storageURL: string;
   apiVersion: string;
   version: string;
+  releaseComment: string;
   daylightSavingTime: string;
   togPlaylist: boolean;
   togSkillCat: boolean;
@@ -25,7 +26,8 @@ export const APP_CONFIG: AppConfig = {
   // Production  API Gateway
   
   apiVersion: '0.0.1',
-  version: '0.0.24',
+  version: '0.1.0.0',
+  releaseComment: 'Resume assignment - step 1',
   daylightSavingTime: '+0100',
   // Feature toggler activate or deactivate a specific functionality
   togStatus: false,

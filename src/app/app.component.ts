@@ -5,6 +5,7 @@ import { AuthServiceService } from './auth-service/auth-service.service';
 import { UserService } from './user/user.service';
 import { StatusService } from './status/status.service';
 import { DialogService } from './dialog/dialog.service';
+import { LogService, Log } from './log/log.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import * as ngxBootstrap from 'ngx-bootstrap';
 
@@ -23,8 +24,14 @@ export class AppComponent {
   togPlaylist = APP_CONFIG.togPlaylist;
   togSkillCat = APP_CONFIG.togSkillCat;
 
-  constructor(private router: Router, private location:Location, public user: UserService, public auth: AuthServiceService, public status: StatusService, public dialogs:DialogService) {
-    console.log("AppComponent: constructor");
+  constructor(private route:ActivatedRoute, private router: Router, private location:Location, public user: UserService, public auth: AuthServiceService, public status: StatusService, public dialogs:DialogService, private log:LogService) {
+    this.route.params.subscribe( params => {
+      console.log("Main page param: ", params);
+    });
+    this.route.paramMap.subscribe(params => {
+      console.log(params);
+    });
+//    console.log("AppComponent: constructor");
 //    auth.setLoginCallback( () => {console.log("LoginCallback1",this.user);});
     auth.handleAuthentication((token: string) => {
       console.log("LoginCallback2",token);

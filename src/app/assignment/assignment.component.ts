@@ -75,11 +75,15 @@ export class AssignmentComponent implements OnInit {
 //    });
 
     this.aservice.getAssignmentById(this.assignmentid);
+    
+    console.log("ngOnInit", this.assignmentid, this.users.isAssignmentOngoing(this.assignmentid));
+    
   }
 
   public leaveAssignment(): void {
+//    this.log.createLog(<Log>{token: this.users.getUserToken(), message: "Assignment left", type: 3, area: "assignment", content: "Assignment "+this.assignmentid+" left"});
     alert("Du darfst den Browser nicht verlassen");
-    this.log.createLog(<Log>{token: this.users.getUserToken(), message: "Assignment left", type: 3, area: "assignment", content: "Assignment "+this.assignmentid+" left"});
+    this.openFullscreen();
   }
   
   private openFullscreen() {

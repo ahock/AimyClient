@@ -13,6 +13,8 @@ import { ContentComponent } from './content/content.component';
 import { PromoteComponent } from './promote/promote.component';
 
 const routes: Routes = [
+//  {path: '', pathMatch: 'full', redirectTo: 'contacts'}  
+//  {path: '', component: AppComponent},
   {path: 'comp1', component: Component1Component},
   {path: 'comp2', component: Component2Component},
   {path: 'competence', component: CompetenceComponent},

@@ -12,7 +12,8 @@
                    {{ this.aservice.assignment.name }}
                 </div>
                 <div>
-                   <span *ngIf="aservice.isAvailable().available" class="col text-right" (click)="this.runAssignment()"><i class="fas fa-play-circle"></i>&nbsp;Durchführen</span>
+                  <span *ngIf="aservice.isAvailable().available" class="col text-right" (click)="this.runAssignment()"><i class="fas fa-play-circle"></i>&nbsp;Durchführen</span>
+                  <span *ngIf="users.getAssignmentRuns(this.aservice.assignment._id).length>0" class="col text-right" (click)="this.runAssignment()"><i class="fas fa-play-circle"></i>&nbsp;Weiter</span>
                 </div>
              </div>
             </h5>           
@@ -25,7 +26,21 @@
               <h5 class="card-title">
                 
                 <span *ngIf="aservice.isAvailable().available"><i class="fas fa-lock-open" style="color: green;"></i>&nbsp;Verfügbar für <strong>{{aservice.isAvailable().until_mon}} Monate, {{aservice.isAvailable().until_day}} Tage, {{aservice.isAvailable().until_hr}} Stunden und {{aservice.isAvailable().until_min}} Minuten</strong></span>
-                <span *ngIf="!aservice.isAvailable().available"><i class="fas fa-lock" style="color: red;"></i>&nbsp;Verfügbar in <strong>{{aservice.isAvailable().in_mon}} Monat(en), {{aservice.isAvailable().in_day}} Tagen, {{aservice.isAvailable().in_hr}} Stunden und {{aservice.isAvailable().in_min}} Minuten</strong></span>
+                <span *ngIf="!aservice.isAvailable().available&&aservice.isAvailable().before"><i class="fas fa-lock" style="color: red;"></i>&nbsp;Verfügbar in 
+                  <span *ngIf="aservice.isAvailable().in_mon>0">
+                    <strong>{{aservice.isAvailable().in_mon}}</strong> Monat(en), 
+                  </span>
+                  <span *ngIf="aservice.isAvailable().in_day>0">
+                    <strong>{{aservice.isAvailable().in_day}}</strong> Tagen, 
+                  </span>
+                  <span *ngIf="aservice.isAvailable().in_hr>0">
+                    <strong>{{aservice.isAvailable().in_hr}}</strong> Stunden und 
+                  </span>
+                  <span>
+                    <strong>{{aservice.isAvailable().in_min}}</strong> Minuten
+                  </span>
+                </span>
+                <span *ngIf="!aservice.isAvailable().available&&aservice.isAvailable().after"><i class="fas fa-lock" style="color: red;"></i>&nbsp;Nicht mehr zur Durchführung verfügbar</span>
 
 <!--                {{ this.aservice.isAvailable() }} - Offen: von {{ this.aservice.assignment.earlieststart | date : 'dd.MM.yyyy - H:mm' : '+0200' }} bis {{ this.aservice.assignment.latestend | date : 'dd.MM.yyyy - H:mm' : '+0200' }}-->
               </h5>

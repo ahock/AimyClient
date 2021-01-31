@@ -9,6 +9,7 @@ import { APP_CONFIG } from '../app-variables';
 })
 export class StatusComponent implements OnInit {
   private version: string = APP_CONFIG.version;
+  private releaseComment: string = APP_CONFIG.releaseComment;
   
   constructor(public status: StatusService) { }
 
