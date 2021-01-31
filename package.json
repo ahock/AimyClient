@@ -23,7 +23,7 @@
     "auth0-js": ">=9.13.2",
     "bootstrap": "^4.3.1",
     "core-js": "^2.5.4",
-    "jquery": "^3.4.0",
+    "jquery": "^3.5.0",
     "ngx-bootstrap": "^4.0.1",
     "popper.js": "^1.15.0",
     "rxjs": "^6.4.0",
