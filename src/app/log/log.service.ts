@@ -7,7 +7,9 @@ export interface Log {
   token: string; 
   message: string, 
   type: number, 
-  area: string, 
+  area: string,
+  scopeId?: string,
+  extedId?: string,
   content: string, 
   lang?: string, 
   create_date: Date 
@@ -47,6 +49,8 @@ export class LogService {
         token:logentry.token,
         message:logentry.message,
         area:logentry.area,
+        scopeId: logentry.scopeId,
+        extedId: logentry.extedId,
         content:logentry.content
       }})
       .subscribe((data) => {

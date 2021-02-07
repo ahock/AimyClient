@@ -26,8 +26,8 @@ export const APP_CONFIG: AppConfig = {
   // Production  API Gateway
   
   apiVersion: '0.0.1',
-  version: '0.1.0.0',
-  releaseComment: 'Resume assignment - step 1',
+  version: '0.1.0.1',
+  releaseComment: 'Resume assignment',
   daylightSavingTime: '+0100',
   // Feature toggler activate or deactivate a specific functionality
   togStatus: false,
@@ -44,7 +44,7 @@ export const APP_CONFIG: AppConfig = {
     "Speziell für das Bildungszentrum kv pro zusammengestellte Kompetenzen, Lernziele und Lernmittel.",
     "Speziell für Firmen zusammengestellte Kompetenzen, Lernziele und Lernmittel."
   ],
-  defaultGroups: ["dswi19h","user2021"]
+  defaultGroups: ["dswi18h","user2021"]
 };
 
 interface AuthConfig {

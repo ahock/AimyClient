@@ -61,6 +61,7 @@ export class AssignmentComponent implements OnInit {
       console.log("Param: ", params, this.assignmentid)
       this.assignmentid = params.id
       this.aservice.getAssignmentById(this.assignmentid);
+      console.log("assignmentcomponent:constructor", this.assignmentid, this.users.isAssignmentOngoing(this.assignmentid));
     })
   }
 
@@ -76,7 +77,7 @@ export class AssignmentComponent implements OnInit {
 
     this.aservice.getAssignmentById(this.assignmentid);
     
-    console.log("ngOnInit", this.assignmentid, this.users.isAssignmentOngoing(this.assignmentid));
+    console.log("assignmentcomponent:ngOnInit", this.assignmentid, this.users.isAssignmentOngoing(this.assignmentid));
     
   }
 
@@ -113,53 +114,76 @@ export class AssignmentComponent implements OnInit {
     }
   }  
   
-  public runAssignment(): void {
-    console.log("Run Assignment", this.users.getUserToken(), this.assignmentid, this.aservice.assignment);
+  public runAssignment(start: boolean): void {
+    ////////////////////////////////////
+    //
+    // Start the assignment
+    //
+    ////////////////////////////////////
+    var tempresult: AssignmentResult;
+    
+    console.log("Run Assignment", start, this.users.getUserToken(), this.assignmentid, this.aservice.assignment);
 
-    this.openFullscreen();
-    window.addEventListener("blur", this.leaveAssignment);
-
+    if(start) {
+      // run assignment from the beginning
+      console.log("Start fresh");
+      tempresult = undefined;
+    } else {
+      // continue assignment at a specific challenge
+      tempresult = this.users.getTempResults(this.assignmentid);
+      
+      console.log("Continue", tempresult);
+    }
+    if(this.aservice.assignment.type=='MA') {
+      this.openFullscreen();
+      window.addEventListener("blur", this.leaveAssignment);
+    }
 
     // Log the start of the assignment
-    this.log.createLog(<Log>{token: this.users.getUserToken(), message: "Assignment startet", type: 2, area: "assignment", content: "Assignment "+this.assignmentid+" startet"});
+    this.log.createLog(<Log>{token: this.users.getUserToken(), message:"Assignment startet", type:2, area:"assignment", scopeId:this.assignmentid, content:"Assignment "+this.assignmentid+" startet"});
+    
     // For Masteries the self assessment questions always will be shown.
     if( this.aservice.assignment.type == "MA") {
       this.showWarning = true;
     }
     this.challenges.loadChallenges(this.aservice.assignment.challenges);
-    this.challengeid = 0;
+    
+    if(start) {
+      this.challengeid = 0;
+      this.starttime = new Date;
+      if(!this.answerlist||this.answerlist.length==0) {
+        for(var i=0;i<this.aservice.assignment.challenges.length;i++) {
+          this.answerlist.push("");
+        }
+      }
+    } else {
+      // continue assignment at a specific challenge, rightanswers is used to store the id of the aborted challange
+      this.challengeid = tempresult.rightanswers;
+      
+      this.starttime = new Date;
+      var setback = new Date(tempresult.elapsedtime);
+      this.starttime = new Date(this.starttime.getTime() - setback.getTime());
+      this.elapsedtime =  new Date(setback.getTime());
+
+      // load temp ansers
+      this.answerlist = [];
+      for(var i=0;i<tempresult.result.length;i++) {
+        this.answerlist.push(tempresult.result[i].ans);
+        this.answers.setValue({'answer': tempresult.result[i].ans});
+      }
+//      console.log("answerlist:", this.answerlist);
+//      console.log("FormGroup", this.answers);
+    }
     this.mode = 1;
     this.markerlist = [];
-    this.starttime = new Date;
     
-    //Initiate the form control and answer list for all challenges in the assignment
-    console.log("# Challenges: ", this.aservice.assignment.challenges.length);
-//    console.log("FormGroup", this.answers);
-    if(!this.answerlist||this.answerlist.length==0) {
-      for(var i=0;i<this.aservice.assignment.challenges.length;i++) {
-        this.answerlist.push("");
-      }
-    }
-    console.log("answerlist:", this.answerlist);
-
-/*    
-    this.formAnswers[0] = new FormControl('2');
-    for(var fc=1;fc<this.aservice.assignment.challenges.length;fc++){
-        this.formAnswers.push(new FormControl(fc.toString));
-    }
-    console.log("FormControlArray", this.formAnswers);
-*/
-    
-//    answers = new FormGroup({
-//    answer: new FormControl('')
-
     // Start the time for this assignment
     this.intervalID = setInterval( () => {
       this.elapsedtime =  new Date((new Date).getTime() - this.starttime.getTime());
       this.assignmentOver = this.isElapsed();
       console.log("Zeit abgelaufen:", this.elapsedtime.getHours()-1, this.elapsedtime.getMinutes(), this.elapsedtime.getSeconds());
       if(this.assignmentOver) {
-        this.log.createLog(<Log>{token: this.users.getUserToken(), message: "Assignment time elapsed", type: 3, area: "assignment", content: "Assignment "+this.assignmentid+" elapsed"});
+        this.log.createLog(<Log>{token: this.users.getUserToken(), message:"Assignment time elapsed", type:3, area:"assignment", scopeId:this.assignmentid, content:"Assignment "+this.assignmentid+" elapsed"});
         this.finishAssignment();
       }
     } , 10000);
@@ -218,6 +242,36 @@ export class AssignmentComponent implements OnInit {
       //Bevor rendering the next challenge
       this.answers.setValue({'answer': this.answerlist[this.challengeid]});
       
+      /////////////////////////////////
+      //
+      // save temp result
+      //
+      /////////////////////////////////
+
+      /*    
+        export interface AssignmentResult {
+          pass?: boolean;
+          create_date: Date;
+          elapsedtime?: Date;
+          rightanswers?: number;
+          questioncount?: number;
+          eduobj?: any[];
+          result?: any[];
+        }  
+      */    
+
+      var assresult: AssignmentResult = {
+        create_date: new Date(),
+        elapsedtime: this.elapsedtime,
+        // index of last challende
+        rightanswers: this.challengeid,
+        result: []
+      };
+      for(var i=0; i<this.challenges.challenges.length;i++) {
+        assresult.result.push({id:this.challenges.challenges[i]._id,cor:this.challenges.challenges[i].correct[0],ans:this.answerlist[i]});
+      }
+      console.log("assignmentcomponent.setTempAssmentResult", assresult);
+      this.users.setTempAssmentResult(this.users.getUserToken(), this.assignmentid, assresult,'TEMP');
     }
   }
   public prevChallenge() {
@@ -237,7 +291,7 @@ export class AssignmentComponent implements OnInit {
     this.mode = 0;
     window.removeEventListener("blur", this.leaveAssignment);
     clearInterval(this.intervalID);
-    this.log.createLog(<Log>{token: this.users.getUserToken(), message: "Assignment cancled", type: 2, area: "assignment", content: "Assignment "+this.assignmentid+" cancled"});
+    this.log.createLog(<Log>{token: this.users.getUserToken(), message:"Assignment cancled", type:2, area:"assignment", scopeId:this.assignmentid, content:"Assignment "+this.assignmentid+" cancled"});
   }
   public toggleHint(event: MouseEvent, id: number) {
     console.log("Toggle Hint:", event.currentTarget, id);
@@ -262,6 +316,11 @@ export class AssignmentComponent implements OnInit {
     console.log("markerlist", this.markerlist);
   }
   public answerChallenge(id: number, ans: number):void {
+    ////////////////////////////////////
+    //
+    // Answer question
+    //
+    ////////////////////////////////////
     console.log("answerChallenge, type:", id, this.challenges.challenges[id].type[0]);
     
     // Create answerlist with appropriate number of fields
@@ -297,7 +356,6 @@ export class AssignmentComponent implements OnInit {
         break;
     }
     console.log("answerlist", this.answerlist);
-    
   }
   
   /////////////////////////////////
@@ -344,7 +402,7 @@ export class AssignmentComponent implements OnInit {
     this.answers.setValue({'answer': this.answerlist[this.challengeid]});
     console.log("answerlist complete:", this.challengeid, this.answerlist);
 
-    this.log.createLog(<Log>{token: this.users.getUserToken(), message: "Assignment finished", type: 2, area: "assignment", content: "Assignment "+this.assignmentid+" finished"});
+    this.log.createLog(<Log>{token: this.users.getUserToken(), message:"Assignment finished", type:2, area:"assignment", scopeId:this.assignmentid, content:"Assignment "+this.assignmentid+" finished"});
 
     // Calculate right and wrong answers by educational objective  
     for(var i=0; i<this.aservice.assignment.eduobjref.length ;i++) {

@@ -523,6 +523,14 @@ export class UserService {
           console.log("saveAssessmentResult", data);
     });
   }
+  public setTempAssmentResult(token: string, assessmentid: string, assessmentresult: AssignmentResult, assmenttype: string) {
+    console.log("userservice.setTempAssmentResult:", token, assessmentid, assessmentresult);
+    this.http
+        .get(APP_CONFIG.storageURL+"/api/0.1.0/user/settempassessmentresult", {params:{token: this.auth.getToken(), assignment: assessmentid, result: JSON.stringify(assessmentresult), asstype: assmenttype}})
+        .subscribe((data) => {
+          console.log("saveTempResult", data);
+    });
+  }
   public getAssignmentRuns(assid: string): any {
     var assignment: any;
     
@@ -533,6 +541,17 @@ export class UserService {
       }  
     }
     return assignment.results;
+  }
+  public getTempResults(assid: string): any {
+    var assignment: any;
+    
+    for(var i=0;i<this.activeuser.assignmentrefs.length;i++) {
+      if(this.activeuser.assignmentrefs[i].id==assid) {
+        assignment = this.activeuser.assignmentrefs[i];
+        break;
+      }  
+    }
+    return assignment.tempresult;
   }
   public getSkillEvaluation(skillid: string, mode: number, refid: string, threshold: number , callback: any): void {
     console.log("getSkillEvaluation:", skillid, mode, refid, threshold);
@@ -552,10 +571,14 @@ export class UserService {
       for(var i=0;i<this.activeuser.assignmentrefs.length;i++) {
         
         if(this.activeuser.assignmentrefs[i].id==assid) {
-          console.log(this.activeuser.assignmentrefs[i].id);
-          for(var j=0;j<this.activeuser.assignmentrefs[i]['results'].length;j++) {
-            console.log(this.activeuser.assignmentrefs[i]['results'][j]);
+          // assignment found
+          if(this.activeuser.assignmentrefs[i]['tempresult']) {
+            // assignment ongoing
+            ongoing = true;
+          } else {
+            ongoing = false;
           }
+          // console.log("isAssignmentOngoing", this.activeuser.assignmentrefs[i]['tempresult']);
         }
       }
     }
