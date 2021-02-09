@@ -68,11 +68,6 @@
                       <span *ngIf="!assref.pass"><i class="fas fa-circle" style="color: red;"></i></span>
                       - [{{assref.rightanswers}}/{{assref.questioncount}}]
                       </p>
-                      <p *ngIf="users.isAssignmentOngoing(this.aservice.assignment._id)">
-                        {{ assref.create_date | date : 'dd.MM.yyyy - H:mm' : this.appConfig.daylightSavingTime }}
-                        &nbsp;&nbsp;-&nbsp;&nbsp;
-                        Letzte Durchführunh Abgebrochen
-                      </p>
                     </td>
                   </tr>
                   <tr>

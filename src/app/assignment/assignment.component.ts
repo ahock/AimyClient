@@ -478,7 +478,11 @@ export class AssignmentComponent implements OnInit {
 
     this.users.setAssmentResult(this.users.getUserToken(), this.assignmentid, assresult,this.aservice.assignment.type);
     this.mode = 0;
-    this.router.navigate(["/"]);
+    
+    this.users.loadUserData( ()=>{
+      console.log("User data reloaded after assignment is closed");
+      this.router.navigate(["/"]);
+    });
   }
   public selectEduObjective(id: string): void {
     console.log("selectEduObjective", id);

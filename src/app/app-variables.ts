@@ -26,8 +26,8 @@ export const APP_CONFIG: AppConfig = {
   // Production  API Gateway
   
   apiVersion: '0.0.1',
-  version: '0.1.0.1',
-  releaseComment: 'Resume assignment',
+  version: '0.1.0.2',
+  releaseComment: 'Fix resume assignment',
   daylightSavingTime: '+0100',
   // Feature toggler activate or deactivate a specific functionality
   togStatus: false,
